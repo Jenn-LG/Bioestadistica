@@ -1,0 +1,44 @@
+[
+  {
+    "objectID": "inicial.html",
+    "href": "inicial.html",
+    "title": "Exploración inicial",
+    "section": "",
+    "text": "Para preparar los datos de clorofila (Chl-a) y temperatura superficial del mar (TSM) para su análisis conjunto, se llevó a cabo un proceso de limpieza, transformación e integración, compuesto por las siguientes etapas:\nFECHA\nAÑO\nMES\nESTACIÓN DEL AÑO\nEVENTO INTERANUAL\nEstacion\nChla\nLongitud\nLatitud\nTSM\n\n\n\n\n0\n1997-09-01\n1997\nSeptiembre\nOtoño\nNiño\n1\n0.1351\n-109.3\n23.8\n31.4417\n\n\n1\n1997-10-01\n1997\nOctubre\nOtoño\nNiño\n1\n0.1281\n-109.3\n23.8\n30.5750\n\n\n2\n1997-11-01\n1997\nNoviembre\nOtoño\nNiño\n1\n0.2229\n-109.3\n23.8\n27.8917\n\n\n3\n1997-12-01\n1997\nDiciembre\nInvierno\nNiño\n1\n0.4121\n-109.3\n23.8\n25.8250\n\n\n4\n1998-01-01\n1998\nEnero\nInvierno\nNiño\n1\n0.4254\n-109.3\n23.8\n24.8000\nUna vez consolidado el conjunto de datos, se procedió a verificar la presencia de valores faltantes en cada una de las variables. Esta revisión permitió identificar posibles omisiones que pudieran afectar el análisis posterior.\nValores nulos por columna: \n FECHA                0\nAÑO                  0\nMES                  0\nESTACIÓN DEL AÑO     0\nEVENTO INTERANUAL    0\nEstacion             0\nChla                 0\nLongitud             0\nLatitud              0\nTSM                  0\ndtype: int64\nAdemás, se verificaron los tipos de datos asociados a cada variable del conjunto consolidado, con el fin de asegurar que fueran consistentes con su naturaleza (por ejemplo, fechas como tipo datetime, identificadores numéricos como int, y variables categóricas como object).\nTipos de dato originales:\n FECHA                datetime64[ns]\nAÑO                           int64\nMES                          object\nESTACIÓN DEL AÑO             object\nEVENTO INTERANUAL            object\nEstacion                      int64\nChla                        float64\nLongitud                    float64\nLatitud                     float64\nTSM                         float64\ndtype: object"
+  },
+  {
+    "objectID": "inicial.html#visualización-exploratoria",
+    "href": "inicial.html#visualización-exploratoria",
+    "title": "Exploración inicial",
+    "section": "Visualización exploratoria",
+    "text": "Visualización exploratoria\n\nPromedio mensual de la Temperatura Superficial del Mar (TSM) por estación\nLa siguiente gráfica muestra la variación promedio mensual de la temperatura superficial del mar (TSM) en cada una de las estaciones monitoreadas durante el periodo de estudio. Para su elaboración, se calcularon los promedios mensuales de TSM agrupando por estación y mes calendario.\n\n\n        \n        \n        \n\n\n                            \n                                            \n\n\nEn la gráfica se evidencia un comportamiento claramente estacional: las temperaturas más bajas se registran en los meses de invierno (enero a marzo), mientras que las más altas se concentran en verano, alcanzando su pico entre julio y septiembre.\nTodas las estaciones presentan una tendencia térmica similar, lo que sugiere una influencia regional dominante en la variación de la TSM. Sin embargo, se aprecian diferencias leves entre estaciones, particularmente en los valores mínimos de invierno y los máximos de verano, lo cual podría estar asociado con factores locales como la latitud, profundidad, o cercanía a la costa.\n\n\nPromedio mensual de la concentración de clorofila a (Chl-a) por estación\nLa siguiente gráfica presenta la variación promedio mensual de la concentración de clorofila a (Chl-a) en las 17 estaciones consideradas en el estudio. A diferencia del patrón relativamente uniforme observado en la temperatura superficial del mar (TSM), los valores de Chl-a muestran una mayor variabilidad entre estaciones.\n\n\n                            \n                                            \n\n\nSe identifican picos de concentración durante los primeros meses del año (principalmente entre febrero y mayo), así como algunos repuntes en los meses de otoño en estaciones puntuales. Esta dinámica sugiere la posible influencia de factores locales como surgencias, descargas fluviales, variabilidad del viento o interacción con eventos interanuales como El Niño o La Niña.\nAdemás, en varias estaciones se observa una marcada disminución en los valores de Chl-a durante los meses de verano, lo cual puede estar asociado con un mayor estratificamiento de la columna de agua y menor disponibilidad de nutrientes en la superficie.\n\n\nDistribución espacial del promedio de TSM en el Golfo de California\nLa figura muestra la distribución espacial del promedio de la temperatura superficial del mar (TSM) a lo largo del Golfo de California, basada en la ubicación de las estaciones de muestreo. Cada punto representa una estación, cuya posición geográfica está determinada por sus coordenadas de latitud y longitud, y cuyo color indica el valor promedio de TSM registrado durante el periodo de análisis.\nSe observa un gradiente térmico claro de norte a sur: las estaciones ubicadas en la parte norte del golfo presentan temperaturas más bajas (colores azulados), mientras que las del sur alcanzan temperaturas más elevadas (colores rojizos). Esta distribución es consistente con la influencia de la latitud sobre la dinámica térmica, y también podría estar relacionada con factores como la profundidad del agua, la circulación oceánica y la estacionalidad climática.\n\n\n\nDistribución espacial del promedio de clorofila a (Chl-a) en el Golfo de California\nLa figura presenta la distribución geoespacial del promedio de concentración de clorofila a (Chl-a) registrada en las estaciones del Golfo de California. Cada punto representa una estación de monitoreo y su intensidad de color refleja el valor medio de Chl-a calculado durante el periodo analizado.\nLa distribución de Chl-a muestra un patrón inverso a la de la TSM: las mayores concentraciones se registran en la región norte y centro del golfo, disminuyendo hacia el sur. Esta distribución sugiere una relación inversa entre la temperatura del mar y la productividad fitoplanctónica, posiblemente asociada con procesos de surgencia y mezcla vertical más intensos en el norte, los cuales favorecen el afloramiento de nutrientes esenciales para el crecimiento del fitoplancton."
+  },
+  {
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "Objetivos",
+    "section": "",
+    "text": "Analizar la variabilidad ambiental y dinámica oceanográfica espacio-temporal de la zona costera occidental del Golfo de California a través del análisis de la Temperatura Superficial del Mar (TSM) y de Clorofila a (Chl a) medidas vía percepción remota."
+  },
+  {
+    "objectID": "about.html#objetivo-general",
+    "href": "about.html#objetivo-general",
+    "title": "Objetivos",
+    "section": "",
+    "text": "Analizar la variabilidad ambiental y dinámica oceanográfica espacio-temporal de la zona costera occidental del Golfo de California a través del análisis de la Temperatura Superficial del Mar (TSM) y de Clorofila a (Chl a) medidas vía percepción remota."
+  },
+  {
+    "objectID": "about.html#objetivos-específicos",
+    "href": "about.html#objetivos-específicos",
+    "title": "Objetivos",
+    "section": "Objetivos específicos",
+    "text": "Objetivos específicos\n\nDeterminar variabilidad de la Temperatura Superficial del Mar (TSM) entre 1981 y 2018 y de Clorofila a (Chl a) de 1997 a 2018 y sus principales frecuencias de variación en la zona costera occidental del Golfo de California.\nEstablecimiento de una regionalización del noroeste de México mediante el análisis de Temperatura Superficial del Mar (TSM) y Clorofila a (Chl a).\nAnalizar el efecto interanual, intranual y estacional del ENSO en los niveles de Temperatura Superficial del Mar (TSM) y concentración de Clorofila a (Chl a)."
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Introducción",
+    "section": "",
+    "text": "Aquí va la introducción\n\n\n\n Back to top"
+  }
+]

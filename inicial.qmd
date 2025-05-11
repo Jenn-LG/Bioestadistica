@@ -1,0 +1,226 @@
+---
+title: "Exploración inicial"
+jupyter: python3
+---
+
+```{python}
+#| echo: false
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+import plotly.express as px
+from sklearn.linear_model import LinearRegression
+import statsmodels.api as sm
+from scipy.stats import f_oneway
+from sklearn.preprocessing import StandardScaler
+from sklearn.cluster import KMeans
+```
+
+```{python}
+#| echo: false
+# Cargar los archivos
+tsm_df = pd.read_excel("data/Base de datos TSM consultoria estadística.xlsx")
+chla_df = pd.read_excel("data/Base de datos Chla consultoria estadística.xlsx")
+coords_raw = pd.read_csv("data/Coordenadas zona costera occidental GC.csv", header=None)
+```
+
+Para preparar los datos de clorofila (Chl-a) y temperatura superficial del mar (TSM) para su análisis conjunto, se llevó a cabo un proceso de limpieza, transformación e integración, compuesto por las siguientes etapas:
+
+1.   Se eliminó la columna `ORDEN` de ambos conjuntos de datos (`chla_df` y `tsm_df`), ya que no aportaba información útil para el análisis.
+
+2.   Ambos conjuntos de datos se encontraban en formato ancho, con una columna por estación. Se aplicó la función `melt()` para transformarlos a formato largo, de modo que cada fila represente una combinación única de fecha y estación, junto con su medición correspondiente.
+
+3.  Se estandarizaron los nombres de las estaciones eliminando prefijos como "Est" y símbolos como el grado (`°`). Además, se convirtió la columna `Estacion` a tipo entero para asegurar una correcta fusión posterior.
+
+4.   Se detectó una inconsistencia en la columna `EVENTO INTERANUAL` del dataset de TSM, donde aparecían las etiquetas `'Normal'` y `'Neutro'`, aunque ambas hacen referencia al mismo fenómeno. Para evitar errores en los cruces de datos, se reemplazó la etiqueta `'Neutro'` por `'Normal'`.
+
+5.   Se convirtieron las columnas de año (`AÑO`) a tipo entero, imputando valores faltantes con un valor numérico de control. También se validó que no hubiera nulos en las variables claves antes de continuar.
+
+6.  Se asignaron a cada estación sus respectivas coordenadas de latitud y longitud, obtenidas de un archivo externo (`coords_raw`). La fusión se realizó por el número de estación (`Estacion`).
+
+7.  Al comparar las fechas de inicio y fin de ambos datasets, se identificó una diferencia:
+
+    -    TSM cubría desde **1981-09-01** hasta **2018-10-01**
+
+    -    Chl-a cubría desde **1997-09-01** hasta **2018-10-01**
+
+    Para asegurar una comparación válida entre ambas variables, se recortaron ambos conjuntos de datos al rango común: **desde 1997-09-01 hasta 2018-10-01**.
+
+8.   Finalmente, se integraron los datos de TSM y Chl-a en un único `DataFrame`, combinando las mediciones con sus coordenadas geográficas y metadatos temporales. Este conjunto consolidado es la base para los análisis exploratorios y modelado posteriores.
+
+```{python}
+#| echo: false 
+# Eliminar la columna ORDEN
+chla_df = chla_df.drop(columns=["ORDEN"])
+tsm_df = tsm_df.drop(columns=["ORDEN"])
+
+# Preparar coordenadas
+coords_df = coords_raw[[0, 2]]
+coords_df.columns = ["Longitud", "Latitud"]
+coords_df["Estacion"] = range(1, len(coords_df) + 1)
+
+# Verificar y eliminar última fila vacía de TSM si existe
+tsm_df = tsm_df.iloc[:-1]
+
+# Reemplazar etiqueta 'Neutro' por 'Normal' en EVENTO INTERANUAL
+tsm_df["EVENTO INTERANUAL"] = tsm_df["EVENTO INTERANUAL"].replace("Neutro", "Normal")
+
+# Reestructurar TSM a formato largo
+tsm_long = tsm_df.melt(
+    id_vars=["FECHA", "AÑO", "MES", "ESTACIÓN DEL AÑO", "EVENTO INTERANUAL"],
+    var_name="Estacion",
+    value_name="TSM"
+)
+
+# Limpiar nombres de estaciones en TSM
+tsm_long["Estacion"] = tsm_long["Estacion"].str.replace("Est ", "").str.replace("°", "").str.strip()
+
+# Reestructurar Chl-a a formato largo
+chla_long = chla_df.melt(
+    id_vars=["FECHA", "AÑO", "MES", "ESTACIÓN DEL AÑO", "EVENTO INTERANUAL"],
+    var_name="Estacion",
+    value_name="Chla"
+)
+
+# Limpiar nombres de estaciones en Chl-a
+chla_long["Estacion"] = chla_long["Estacion"].str.replace("Est ", "").str.replace("°", "").str.strip()
+
+# Conversión de tipos
+tsm_long["Estacion"] = tsm_long["Estacion"].astype(int)
+tsm_long["AÑO"] = tsm_long["AÑO"].fillna(-1).astype(int)
+
+chla_long["Estacion"] = chla_long["Estacion"].astype(int)
+chla_long["AÑO"] = chla_long["AÑO"].astype(int)
+
+# Convertir columnas FECHA a datetime
+tsm_long["FECHA"] = pd.to_datetime(tsm_long["FECHA"])
+chla_long["FECHA"] = pd.to_datetime(chla_long["FECHA"])
+
+# Recortar ambos conjuntos al mismo rango de fechas
+fecha_inicio = max(tsm_long["FECHA"].min(), chla_long["FECHA"].min())
+fecha_fin = min(tsm_long["FECHA"].max(), chla_long["FECHA"].max())
+
+tsm_long = tsm_long[(tsm_long["FECHA"] >= fecha_inicio) & (tsm_long["FECHA"] <= fecha_fin)]
+chla_long = chla_long[(chla_long["FECHA"] >= fecha_inicio) & (chla_long["FECHA"] <= fecha_fin)]
+
+# Integrar coordenadas geográficas
+tsm_geo = pd.merge(tsm_long, coords_df, on="Estacion", how="left")
+chla_geo = pd.merge(chla_long, coords_df, on="Estacion", how="left")
+```
+
+```{python}
+#| echo: false
+# Unir los datos en un solo dataframe
+df = pd.merge(
+    chla_geo,
+    tsm_geo[["FECHA", "AÑO", "MES", "EVENTO INTERANUAL", "Estacion", "TSM"]],
+    on=["FECHA", "AÑO", "MES", "EVENTO INTERANUAL", "Estacion"],
+    how="inner"
+)
+df.head()
+```
+
+Una vez consolidado el conjunto de datos, se procedió a verificar la presencia de valores faltantes en cada una de las variables. Esta revisión permitió identificar posibles omisiones que pudieran afectar el análisis posterior.
+
+```{python}
+#| echo: false
+print("Valores nulos por columna: \n", df.isnull().sum())
+```
+
+Además, se verificaron los tipos de datos asociados a cada variable del conjunto consolidado, con el fin de asegurar que fueran consistentes con su naturaleza (por ejemplo, fechas como tipo datetime, identificadores numéricos como int, y variables categóricas como object).
+
+```{python}
+#| echo: false
+#Verificar tipos de dato
+print("Tipos de dato originales:\n", df.dtypes)
+```
+
+## Visualización exploratoria
+
+### Promedio mensual de la Temperatura Superficial del Mar (TSM) por estación
+
+La siguiente gráfica muestra la variación promedio mensual de la temperatura superficial del mar (TSM) en cada una de las estaciones monitoreadas durante el periodo de estudio. Para su elaboración, se calcularon los promedios mensuales de TSM agrupando por estación y mes calendario.
+
+```{python}
+#| echo: false
+import pandas as pd
+import plotly.express as px
+
+# Asegurar que FECHA sea datetime
+df["FECHA"] = pd.to_datetime(df["FECHA"])
+
+# Crear columna MES abreviada (3 letras)
+df["MES"] = df["FECHA"].dt.month_name().str.slice(stop=3)
+
+# Definir orden cronológico de los meses
+orden_meses = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", 
+               "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+
+# Convertir MES a categoría ordenada
+df["MES"] = pd.Categorical(df["MES"], categories=orden_meses, ordered=True)
+# Agrupar y calcular promedio mensual de TSM por estación
+tsm_mensual = (
+    df.groupby(["Estacion", "MES"], observed=True).agg(TSM_prom=("TSM", "mean")).reset_index()
+)
+
+# Plot interactivo con Plotly
+fig_tsm = px.line(
+    tsm_mensual,
+    x="MES",
+    y="TSM_prom",
+    color="Estacion",
+    title="Promedio mensual de TSM por estación",
+    labels={"TSM_prom": "TSM (°C)"}
+)
+fig_tsm.update_layout(template="simple_white")
+fig_tsm.show()
+
+```
+
+En la gráfica se evidencia un comportamiento claramente estacional: las temperaturas más bajas se registran en los meses de invierno (enero a marzo), mientras que las más altas se concentran en verano, alcanzando su pico entre julio y septiembre.
+
+Todas las estaciones presentan una tendencia térmica similar, lo que sugiere una influencia regional dominante en la variación de la TSM. Sin embargo, se aprecian diferencias leves entre estaciones, particularmente en los valores mínimos de invierno y los máximos de verano, lo cual podría estar asociado con factores locales como la latitud, profundidad, o cercanía a la costa.
+
+### Promedio mensual de la concentración de clorofila a (Chl-a) por estación
+
+La siguiente gráfica presenta la variación promedio mensual de la concentración de clorofila a (Chl-a) en las 17 estaciones consideradas en el estudio. A diferencia del patrón relativamente uniforme observado en la temperatura superficial del mar (TSM), los valores de Chl-a muestran una mayor variabilidad entre estaciones.
+
+```{python}
+#| echo: false
+# Agrupar y calcular promedio mensual de TSM por estación
+chla_mensual = (
+    df.groupby(["Estacion", "MES"], observed=True).agg(Chla_prom=("Chla", "mean")).reset_index()
+)
+
+# Plot interactivo con Plotly
+fig_chla = px.line(
+    chla_mensual,
+    x="MES",
+    y="Chla_prom",
+    color="Estacion",
+    title="Promedio mensual de Chla por estación",
+    labels={"Chla_prom": "Clorofila a (mg/m³)"}
+)
+fig_chla.update_layout(template="simple_white")
+fig_chla.show()
+```
+
+Se identifican picos de concentración durante los primeros meses del año (principalmente entre febrero y mayo), así como algunos repuntes en los meses de otoño en estaciones puntuales. Esta dinámica sugiere la posible influencia de factores locales como surgencias, descargas fluviales, variabilidad del viento o interacción con eventos interanuales como El Niño o La Niña.
+
+Además, en varias estaciones se observa una marcada disminución en los valores de Chl-a durante los meses de verano, lo cual puede estar asociado con un mayor estratificamiento de la columna de agua y menor disponibilidad de nutrientes en la superficie.
+
+### Distribución espacial del promedio de TSM en el Golfo de California
+
+La figura muestra la distribución espacial del promedio de la temperatura superficial del mar (TSM) a lo largo del Golfo de California, basada en la ubicación de las estaciones de muestreo. Cada punto representa una estación, cuya posición geográfica está determinada por sus coordenadas de latitud y longitud, y cuyo color indica el valor promedio de TSM registrado durante el periodo de análisis.
+
+Se observa un gradiente térmico claro de norte a sur: las estaciones ubicadas en la parte norte del golfo presentan temperaturas más bajas (colores azulados), mientras que las del sur alcanzan temperaturas más elevadas (colores rojizos). Esta distribución es consistente con la influencia de la latitud sobre la dinámica térmica, y también podría estar relacionada con factores como la profundidad del agua, la circulación oceánica y la estacionalidad climática.
+
+![](images/clipboard-1937260311.png)
+
+### Distribución espacial del promedio de clorofila a (Chl-a) en el Golfo de California
+
+La figura presenta la distribución geoespacial del promedio de concentración de clorofila a (Chl-a) registrada en las estaciones del Golfo de California. Cada punto representa una estación de monitoreo y su intensidad de color refleja el valor medio de Chl-a calculado durante el periodo analizado.
+
+La distribución de Chl-a muestra un patrón inverso a la de la TSM: las mayores concentraciones se registran en la región norte y centro del golfo, disminuyendo hacia el sur. Esta distribución sugiere una relación inversa entre la temperatura del mar y la productividad fitoplanctónica, posiblemente asociada con procesos de surgencia y mezcla vertical más intensos en el norte, los cuales favorecen el afloramiento de nutrientes esenciales para el crecimiento del fitoplancton.
+
+![](images/clipboard-2974735225.png)

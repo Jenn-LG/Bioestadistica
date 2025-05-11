@@ -1,0 +1,33 @@
+project:
+  type: website
+  output-dir: docs
+  
+execute:
+  python: "env/Scripts/python.exe"
+
+website:
+  title: "Consultoría Bioestadística"
+  favicon: img/mcdlogo.png
+  image: img/mcdlogo.png
+  open-graph: true
+  twitter-card: true
+  page-navigation: true
+  back-to-top-navigation: true
+  navbar:
+    left:
+      - href: index.qmd
+        text: Introducción
+      - about.qmd
+      - inicial.qmd
+      
+
+format:
+  html:
+    theme:
+      - cosmo
+      - brand
+    css: styles.css
+    toc: true
+
+editor: visual
+
