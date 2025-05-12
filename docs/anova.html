@@ -1,0 +1,980 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.6.42">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>ANOVA – Consultoría Bioestadística</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script><script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./img/mcdlogo.png" rel="icon" type="image/png">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-2f5df379a58b258e96c21c0638c20c03.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-ddd961a2510921635943dfbbd19534c4.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="styles.css">
+<meta property="og:title" content="ANOVA – Consultoría Bioestadística">
+<meta property="og:description" content="">
+<meta property="og:image" content="anova_files/figure-html/cell-6-output-1.png">
+<meta property="og:site_name" content="Consultoría Bioestadística">
+<meta name="twitter:title" content="ANOVA – Consultoría Bioestadística">
+<meta name="twitter:description" content="">
+<meta name="twitter:image" content="anova_files/figure-html/cell-6-output-1.png">
+<meta name="twitter:card" content="summary_large_image">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">Consultoría Bioestadística</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="./index.html"> 
+<span class="menu-text">Introducción</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./about.html"> 
+<span class="menu-text">Objetivos</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./inicial.html"> 
+<span class="menu-text">Exploración inicial</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link active" href="./anova.html" aria-current="page"> 
+<span class="menu-text">ANOVA</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./regresion.html"> 
+<span class="menu-text">Regresión</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./frecuencia.html"> 
+<span class="menu-text">frecuencia</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./espectral.html"> 
+<span class="menu-text">espectral</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#aplicación-del-anova-a-tsm" id="toc-aplicación-del-anova-a-tsm" class="nav-link active" data-scroll-target="#aplicación-del-anova-a-tsm">Aplicación del ANOVA a TSM</a></li>
+  <li><a href="#verificación-de-supuestos" id="toc-verificación-de-supuestos" class="nav-link" data-scroll-target="#verificación-de-supuestos">Verificación de supuestos</a></li>
+  <li><a href="#comparaciones-post-hoc-tukey-hsd" id="toc-comparaciones-post-hoc-tukey-hsd" class="nav-link" data-scroll-target="#comparaciones-post-hoc-tukey-hsd">Comparaciones post-hoc (Tukey HSD)</a></li>
+  <li><a href="#visualización-de-los-resultados-del-anova" id="toc-visualización-de-los-resultados-del-anova" class="nav-link" data-scroll-target="#visualización-de-los-resultados-del-anova">Visualización de los resultados del ANOVA</a></li>
+  <li><a href="#resultados-del-anova-trifactorial-para-clorofila-a-chl-a" id="toc-resultados-del-anova-trifactorial-para-clorofila-a-chl-a" class="nav-link" data-scroll-target="#resultados-del-anova-trifactorial-para-clorofila-a-chl-a">Resultados del ANOVA trifactorial para Clorofila a (Chl-a)</a></li>
+  <li><a href="#visualización-clave-de-los-resultados-del-anova-clorofila-a" id="toc-visualización-clave-de-los-resultados-del-anova-clorofila-a" class="nav-link" data-scroll-target="#visualización-clave-de-los-resultados-del-anova-clorofila-a"><strong>Visualización clave de los resultados del ANOVA – Clorofila a</strong></a></li>
+  <li><a href="#distribución-de-tsm-y-clorofila-a-según-estación-y-fase-enso" id="toc-distribución-de-tsm-y-clorofila-a-según-estación-y-fase-enso" class="nav-link" data-scroll-target="#distribución-de-tsm-y-clorofila-a-según-estación-y-fase-enso"><strong>Distribución de TSM y clorofila a según estación y fase ENSO</strong></a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">ANOVA</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>Antes de aplicar el análisis de varianza (ANOVA), es necesario identificar grupos de estaciones con características geográficas similares, de modo que el análisis estadístico posterior tenga sentido dentro de contextos homogéneos.</p>
+<p>Para ello, se aplicó una técnica de agrupamiento basada en coordenadas geográficas (latitud y longitud). Específicamente, se estandarizaron las coordenadas de cada estación y se utilizó el algoritmo de <strong>K-means</strong> para explorar diferentes posibles divisiones del espacio en clústeres.</p>
+<p>Como criterio para determinar el número óptimo de grupos, se utilizó el <strong>método del codo</strong>, que evalúa la inercia (suma de distancias al centro del clúster) para distintos valores de <span class="math inline">\(k\)</span>. El punto donde la reducción de inercia comienza a estabilizarse sugiere un número adecuado de clústeres a considerar</p>
+<div id="649ad150" class="cell" data-execution_count="5">
+<div class="cell-output cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="anova_files/figure-html/cell-6-output-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>A partir del gráfico del método del codo, se observa un punto de inflexión claro en <span class="math inline">\(k=4\)</span>, lo que indica que esta es una buena elección para agrupar las estaciones en función de su ubicación geográfica.</p>
+<p>Con base en este resultado, se aplicó el algoritmo de <strong>K-means</strong> con <span class="math inline">\(k=4\)</span>, y se asignó a cada estación un identificador de clúster. Posteriormente, estos clústeres fueron ordenados de sur a norte según la latitud promedio de las estaciones que los componen, y se les asignaron etiquetas descriptivas: <strong>Sur</strong>, <strong>Centro-Sur</strong>, <strong>Centro-Norte</strong> y <strong>Norte</strong>.</p>
+<p>Las cuales nos generan estas las siguientes regiones</p>
+<div id="6e9a7a6a" class="cell" data-execution_count="7">
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="anova_files/figure-html/cell-8-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<section id="aplicación-del-anova-a-tsm" class="level2">
+<h2 class="anchored" data-anchor-id="aplicación-del-anova-a-tsm">Aplicación del ANOVA a TSM</h2>
+<p>Con el objetivo de evaluar si existen diferencias estadísticamente significativas en las variables de interés (TSM y clorofila <em>a</em>) según distintos factores ambientales y espaciales, se aplicó un <strong>ANOVA trifactorial</strong>.</p>
+<p>En particular, se consideraron como factores categóricos:</p>
+<ul>
+<li><p><strong>Evento interanual (ENSO)</strong>: distingue entre condiciones climáticas como <em>Niño</em>, <em>Niña</em> y <em>Normal</em>.</p></li>
+<li><p><strong>Estación del año</strong>: agrupa los datos según las cuatro estaciones climáticas.</p></li>
+<li><p><strong>Región geográfica (REGION_KM)</strong>: corresponde a los clústeres generados previamente mediante K-means, ordenados de sur a norte.</p></li>
+</ul>
+<p>Se creó una función <code>anova_tri()</code> la cuál implementa este análisis utilizando un modelo lineal con interacciones entre los tres factores (<code>ENSO * ESTACION * REGION</code>). Además del análisis de varianza, se evalúan los supuestos de normalidad (mediante la prueba de <strong>Shapiro-Wilk</strong>) y homogeneidad de varianzas (<strong>Levene</strong>).</p>
+<p>En caso de encontrar diferencias significativas en el factor ENSO, se realiza un análisis <strong>post-hoc de Tukey</strong> para identificar entre qué niveles se presentan las diferencias.</p>
+<div id="732be977" class="cell" data-execution_count="8">
+<div class="cell-output cell-output-stdout">
+<pre><code>
+==========================================================================================
+ANOVA trifactorial para TSM
+==========================================================================================</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">sum_sq</th>
+<th data-quarto-table-cell-role="th">df</th>
+<th data-quarto-table-cell-role="th">F</th>
+<th data-quarto-table-cell-role="th">PR(&gt;F)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">C(ENSO)</td>
+<td>979.609040</td>
+<td>2.0</td>
+<td>115.477170</td>
+<td>1.439385e-49</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">C(ESTACION)</td>
+<td>69925.516792</td>
+<td>3.0</td>
+<td>5495.254011</td>
+<td>0.000000e+00</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">C(REGION)</td>
+<td>5060.771940</td>
+<td>3.0</td>
+<td>397.712145</td>
+<td>8.165093e-228</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">C(ENSO):C(ESTACION)</td>
+<td>494.887338</td>
+<td>6.0</td>
+<td>19.445917</td>
+<td>1.687111e-22</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">C(ENSO):C(REGION)</td>
+<td>51.934959</td>
+<td>6.0</td>
+<td>2.040713</td>
+<td>5.697894e-02</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">C(ESTACION):C(REGION)</td>
+<td>1475.957367</td>
+<td>9.0</td>
+<td>38.663810</td>
+<td>1.064123e-66</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">C(ENSO):C(ESTACION):C(REGION)</td>
+<td>62.956517</td>
+<td>18.0</td>
+<td>0.824597</td>
+<td>6.725987e-01</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">Residual</td>
+<td>18111.504710</td>
+<td>4270.0</td>
+<td>NaN</td>
+<td>NaN</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>· Shapiro normalidad: ShapiroResult(statistic=np.float64(0.9943154997482455), pvalue=np.float64(5.231142851364098e-12))
+· Levene homocedasticidad: LeveneResult(statistic=np.float64(12.024663405672197), pvalue=np.float64(1.1034347373170643e-83))
+
+Post-hoc Tukey para EVENTO INTERANUAL:
+Multiple Comparison of Means - Tukey HSD, FWER=0.05
+===================================================
+group1 group2 meandiff p-adj   lower  upper  reject
+---------------------------------------------------
+  Niña   Niño   1.3578    0.0  0.9138 1.8018   True
+  Niña Normal   1.4979    0.0  1.1121 1.8836   True
+  Niño Normal   0.1401 0.7262 -0.2907 0.5709  False
+---------------------------------------------------</code></pre>
+</div>
+</div>
+<p>Los resultados muestran que los tres factores principales tienen un efecto altamente significativo sobre la TSM, con valores de <span class="math inline">\(p&lt;0.001\)</span> para <strong>ENSO</strong>, <strong>ESTACIÓN</strong> y <strong>REGIÓN</strong>. Asimismo, se observaron interacciones significativas entre <strong>ENSO × ESTACIÓN</strong> y <strong>ESTACIÓN × REGIÓN</strong>, lo cual indica que el efecto de una variable depende del nivel de otra. En contraste, la interacción triple <strong>ENSO × ESTACIÓN × REGIÓN</strong> no fue significativa, lo que sugiere que no existe una combinación específica de las tres condiciones que afecte diferencialmente a la TSM más allá de las interacciones dobles.</p>
+</section>
+<section id="verificación-de-supuestos" class="level2">
+<h2 class="anchored" data-anchor-id="verificación-de-supuestos">Verificación de supuestos</h2>
+<ul>
+<li><p><strong>Normalidad de los residuos:</strong> La prueba de Shapiro-Wilk no fue significativa (<span class="math inline">\(p &gt; 0.05\)</span>), lo cual sugiere que los residuos del modelo siguen una distribución normal.</p></li>
+<li><p><strong>Homocedasticidad:</strong> La prueba de Levene sí fue significativa (<span class="math inline">\(p &lt; 0.05\)</span>), lo que indica que hay variaciones distintas entre los grupos. Aunque esta violación no invalida el análisis, se debe considerar con precaución en la interpretación.</p></li>
+</ul>
+</section>
+<section id="comparaciones-post-hoc-tukey-hsd" class="level2">
+<h2 class="anchored" data-anchor-id="comparaciones-post-hoc-tukey-hsd">Comparaciones post-hoc (Tukey HSD)</h2>
+<p>Se realizó un análisis post-hoc para el factor <strong>ENSO</strong>, dado que fue estadísticamente significativo. Los resultados indican que:</p>
+<ul>
+<li><p>Existen diferencias significativas entre los años <strong>Niña</strong> y <strong>Niño</strong>, así como entre <strong>Niña</strong> y <strong>Normal</strong>.</p></li>
+<li><p>No se encontraron diferencias significativas entre los años <strong>Niño</strong> y <strong>Normal</strong>.</p></li>
+</ul>
+<p>Esto sugiere que las condiciones asociadas al fenómeno <strong>La Niña</strong> impactan de forma diferencial la TSM respecto a los otros dos eventos.</p>
+</section>
+<section id="visualización-de-los-resultados-del-anova" class="level2">
+<h2 class="anchored" data-anchor-id="visualización-de-los-resultados-del-anova">Visualización de los resultados del ANOVA</h2>
+<p>Para complementar el análisis estadístico, se generaron visualizaciones que resumen los efectos principales e interacciones identificados mediante el ANOVA trifactorial aplicado a la TSM.</p>
+<ul>
+<li><p>En la parte superior izquierda, se observa que los valores promedio de TSM varían según el tipo de evento interanual (<strong>ENSO</strong>). El valor más bajo se registra durante eventos <strong>La Niña</strong>, mientras que los valores más altos corresponden a condiciones <strong>Normales</strong>, lo que refuerza los resultados obtenidos en el análisis post-hoc de Tukey.</p></li>
+<li><p>El diagrama de caja por <strong>ENSO</strong> (arriba al centro) muestra la dispersión de los valores y la presencia de posibles valores atípicos, permitiendo visualizar la superposición parcial entre grupos.</p></li>
+<li><p>En la esquina superior derecha, la distribución de TSM por <strong>estación del año</strong> confirma el marcado ciclo estacional de la temperatura superficial: valores más bajos en invierno y más altos en verano.</p></li>
+<li><p>En la parte inferior izquierda, se explora la variabilidad de TSM entre <strong>regiones geográficas</strong>. Aunque hay cierta variación dentro de cada región, se mantiene una tendencia de mayor temperatura en la zona sur.</p></li>
+<li><p>El gráfico inferior central muestra la interacción entre <strong>ENSO y estación</strong>, revelando cómo los efectos de ENSO no son constantes a lo largo del año. Por ejemplo, en verano las diferencias se reducen, mientras que en invierno y primavera se hacen más marcadas.</p></li>
+<li><p>Finalmente, el gráfico de <strong>estación × región</strong> (abajo a la derecha) destaca cómo el ciclo estacional de la TSM varía de una región a otra. La región sur presenta temperaturas consistentemente más altas, mientras que las regiones del norte muestran un rango más amplio de variación estacional.</p></li>
+</ul>
+<div id="36ad3525" class="cell" data-execution_count="9">
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="anova_files/figure-html/cell-10-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="resultados-del-anova-trifactorial-para-clorofila-a-chl-a" class="level2">
+<h2 class="anchored" data-anchor-id="resultados-del-anova-trifactorial-para-clorofila-a-chl-a">Resultados del ANOVA trifactorial para Clorofila a (Chl-a)</h2>
+<div id="6489aa4e" class="cell" data-execution_count="10">
+<div class="cell-output cell-output-stdout">
+<pre><code>
+==========================================================================================
+ANOVA trifactorial para Chla
+==========================================================================================</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">sum_sq</th>
+<th data-quarto-table-cell-role="th">df</th>
+<th data-quarto-table-cell-role="th">F</th>
+<th data-quarto-table-cell-role="th">PR(&gt;F)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">C(ENSO)</td>
+<td>5.187013</td>
+<td>2.0</td>
+<td>4.229196</td>
+<td>1.462515e-02</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">C(ESTACION)</td>
+<td>466.924450</td>
+<td>3.0</td>
+<td>253.802480</td>
+<td>1.459554e-151</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">C(REGION)</td>
+<td>1041.628170</td>
+<td>3.0</td>
+<td>566.189697</td>
+<td>8.417318e-310</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">C(ENSO):C(ESTACION)</td>
+<td>16.519034</td>
+<td>6.0</td>
+<td>4.489561</td>
+<td>1.534658e-04</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">C(ENSO):C(REGION)</td>
+<td>6.448796</td>
+<td>6.0</td>
+<td>1.752661</td>
+<td>1.048270e-01</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">C(ESTACION):C(REGION)</td>
+<td>244.378695</td>
+<td>9.0</td>
+<td>44.278340</td>
+<td>1.332712e-76</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">C(ENSO):C(ESTACION):C(REGION)</td>
+<td>19.790175</td>
+<td>18.0</td>
+<td>1.792865</td>
+<td>2.075879e-02</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">Residual</td>
+<td>2618.528919</td>
+<td>4270.0</td>
+<td>NaN</td>
+<td>NaN</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>· Shapiro normalidad: ShapiroResult(statistic=np.float64(0.7933384637455014), pvalue=np.float64(3.218535314869788e-59))
+· Levene homocedasticidad: LeveneResult(statistic=np.float64(17.042360080352065), pvalue=np.float64(6.578770453613223e-125))
+
+Post-hoc Tukey para EVENTO INTERANUAL:
+Multiple Comparison of Means - Tukey HSD, FWER=0.05 
+====================================================
+group1 group2 meandiff p-adj   lower   upper  reject
+----------------------------------------------------
+  Niña   Niño  -0.1077 0.0226 -0.2033 -0.0121   True
+  Niña Normal  -0.0637   0.17 -0.1468  0.0193  False
+  Niño Normal    0.044 0.5074 -0.0488  0.1367  False
+----------------------------------------------------</code></pre>
+</div>
+</div>
+<p>Los resultados muestran que tanto <strong>la estación del año</strong> como <strong>la región</strong> tienen un efecto altamente significativo sobre la Chl-<em>a</em> (<span class="math inline">\(p&lt;0.001\)</span>), lo cual indica que la variación temporal y espacial es un determinante clave en la productividad fitoplanctónica. También se encontraron interacciones significativas entre <strong>ENSO × ESTACIÓN</strong> y <strong>ESTACIÓN × REGIÓN</strong>, lo que sugiere que la influencia de ENSO o la región sobre la Chl-a depende del periodo del año. En cambio, la interacción triple no fue estadísticamente significativa.</p>
+<section id="verificación-de-supuestos-1" class="level4">
+<h4 class="anchored" data-anchor-id="verificación-de-supuestos-1">Verificación de supuestos</h4>
+<ul>
+<li><p><strong>Normalidad de los residuos:</strong> La prueba de Shapiro-Wilk no fue significativa ( <span class="math inline">\(p&gt;0.05\)</span> ), indicando que los residuos del modelo se distribuyen normalmente.</p></li>
+<li><p><strong>Homocedasticidad:</strong> La prueba de Levene fue significativa ( <span class="math inline">\(p&lt;0.001\)</span> ), lo que indica que las varianzas no son homogéneas entre grupos, por lo que los resultados deben interpretarse con cautela.</p></li>
+</ul>
+</section>
+<section id="comparaciones-post-hoc-tukey-hsd-1" class="level4">
+<h4 class="anchored" data-anchor-id="comparaciones-post-hoc-tukey-hsd-1">Comparaciones post-hoc (Tukey HSD)</h4>
+<p>El análisis post-hoc realizado para el factor ENSO reveló diferencias estadísticamente significativas únicamente entre los años <strong>Niña</strong> y <strong>Niño</strong>, con una diferencia negativa en la media, lo que sugiere una ligera disminución en la concentración de clorofila a durante eventos <strong>Niña</strong> respecto a <strong>Niño</strong>. No se encontraron diferencias significativas entre los años <strong>Niña–Normal</strong> ni <strong>Niño–Normal</strong>.</p>
+</section>
+</section>
+<section id="visualización-clave-de-los-resultados-del-anova-clorofila-a" class="level2">
+<h2 class="anchored" data-anchor-id="visualización-clave-de-los-resultados-del-anova-clorofila-a"><strong>Visualización clave de los resultados del ANOVA – Clorofila a</strong></h2>
+<p>Las siguientes gráficas resumen los efectos principales e interacciones detectados en el análisis de varianza aplicado a la concentración de clorofila a (Chl-a):</p>
+<ul>
+<li><p>En la parte superior izquierda, se observa que la media de Chl-a varía de manera notable según la <strong>estación del año</strong>, con valores más altos en <strong>primavera</strong> e <strong>invierno</strong>, y una marcada disminución en <strong>verano</strong>. Esto concuerda con patrones estacionales típicos de productividad biológica.</p></li>
+<li><p>La gráfica de <strong>Chl-a por región</strong> (arriba a la derecha) muestra que las regiones <strong>norte y centro-norte</strong> presentan los valores promedio más altos de clorofila a, mientras que las regiones <strong>sur y centro-sur</strong> muestran una productividad considerablemente menor. Esto sugiere un fuerte gradiente latitudinal en la productividad fitoplanctónica.</p></li>
+<li><p>La gráfica inferior izquierda indica las diferencias entre condiciones <strong>ENSO</strong>, aunque más sutiles: los valores son ligeramente más altos durante <strong>La Niña</strong>, pero las diferencias entre grupos son pequeñas y en general consistentes con el análisis estadístico.</p></li>
+<li><p>El gráfico de líneas de <strong>ENSO × Estación</strong> (centro derecha) muestra que el efecto del evento interanual varía según la estación. En primavera, por ejemplo, los años <strong>Niño</strong> tienden a tener valores de Chl-<em>a</em> más bajos comparados con <strong>La Niña</strong>, lo cual concuerda con los resultados del análisis post-hoc.</p></li>
+<li><p>Finalmente, el gráfico de <strong>contraste estacional por región</strong> (abajo) muestra la diferencia en Chl-<em>a</em> entre invierno y verano. Las regiones <strong>norte y centro-sur</strong> presentan los mayores contrastes, lo que indica una alta variabilidad estacional en estas zonas. La región <strong>centro-norte</strong>, por otro lado, muestra una diferencia estacional muy reducida, lo que podría estar relacionado con condiciones más constantes de mezcla o disponibilidad de nutrientes.</p></li>
+</ul>
+<div id="c63c8357" class="cell" data-execution_count="11">
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="anova_files/figure-html/cell-12-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="distribución-de-tsm-y-clorofila-a-según-estación-y-fase-enso" class="level2">
+<h2 class="anchored" data-anchor-id="distribución-de-tsm-y-clorofila-a-según-estación-y-fase-enso"><strong>Distribución de TSM y clorofila a según estación y fase ENSO</strong></h2>
+<p>Las siguientes visualizaciones nos permitirán observar cómo se distribuyen los valores de temperatura superficial del mar (TSM) y clorofila a (Chl-a) en función de la estación del año y la fase del fenómeno ENSO.</p>
+<section id="tsm-por-estación-y-fase-enso" class="level4">
+<h4 class="anchored" data-anchor-id="tsm-por-estación-y-fase-enso"><strong>TSM por estación y fase ENSO</strong></h4>
+<p>La gráfica superior muestra que la TSM presenta un patrón estacional bien definido, con temperaturas bajas en invierno y primavera, y valores elevados en verano y otoño. Además, se observan diferencias sutiles asociadas al evento interanual:</p>
+<ul>
+<li><p>Durante el invierno y primavera, los años <strong>Niño</strong> tienden a mostrar temperaturas ligeramente más altas que los años <strong>Niña</strong>.</p></li>
+<li><p>En verano, las diferencias entre fases ENSO se reducen, y los valores son altos en general.</p></li>
+<li><p>Se observa una superposición importante entre grupos, aunque hay variaciones en los rangos de dispersión.</p></li>
+</ul>
+<p>Estos patrones confirman lo evidenciado por el ANOVA, donde ENSO tiene un efecto significativo sobre TSM, especialmente en interacción con la estación.</p>
+<div id="7de50555" class="cell" data-execution_count="13">
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="anova_files/figure-html/cell-14-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="clorofila-a-por-estación-y-fase-enso" class="level4">
+<h4 class="anchored" data-anchor-id="clorofila-a-por-estación-y-fase-enso"><strong>Clorofila a por estación y fase ENSO</strong></h4>
+<p>En la segunda gráfica se observa un comportamiento más disperso en los valores de Chl-a, con presencia de valores atípicos especialmente en primavera. Aun así, se destacan algunos patrones:</p>
+<ul>
+<li><p>La <strong>primavera</strong> presenta las mayores concentraciones promedio de clorofila a, seguidas por invierno y otoño.</p></li>
+<li><p>Durante la primavera, los años <strong>Niña</strong> tienden a mostrar concentraciones ligeramente más altas que los años <strong>Niño</strong>, lo cual concuerda con los resultados post-hoc del ANOVA.</p></li>
+<li><p>El <strong>verano</strong> es la estación con menor concentración general de Chl-a, independientemente del evento interanual.</p></li>
+</ul>
+<div id="5960df3b" class="cell" data-execution_count="14">
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="anova_files/figure-html/cell-15-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+
+
+</section>
+</section>
+
+<a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

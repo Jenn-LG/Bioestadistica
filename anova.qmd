@@ -1,0 +1,428 @@
+---
+title: "ANOVA"
+jupyter: python3
+---
+
+Antes de aplicar el análisis de varianza (ANOVA), es necesario identificar grupos de estaciones con características geográficas similares, de modo que el análisis estadístico posterior tenga sentido dentro de contextos homogéneos.
+
+Para ello, se aplicó una técnica de agrupamiento basada en coordenadas geográficas (latitud y longitud). Específicamente, se estandarizaron las coordenadas de cada estación y se utilizó el algoritmo de **K-means** para explorar diferentes posibles divisiones del espacio en clústeres.
+
+Como criterio para determinar el número óptimo de grupos, se utilizó el **método del codo**, que evalúa la inercia (suma de distancias al centro del clúster) para distintos valores de $k$. El punto donde la reducción de inercia comienza a estabilizarse sugiere un número adecuado de clústeres a considerar
+
+```{python}
+#| echo: false
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+from scipy.stats import shapiro, levene
+import statsmodels.api as sm
+import statsmodels.formula.api as smf
+from statsmodels.stats.multicomp import pairwise_tukeyhsd
+
+from sklearn.preprocessing import StandardScaler
+from sklearn.decomposition import PCA
+from sklearn.cluster import KMeans
+from sklearn.mixture import GaussianMixture
+from sklearn.metrics import silhouette_score
+
+import geopandas as gpd
+import contextily as ctx
+
+sns.set_style('whitegrid')
+```
+
+```{python}
+#| echo: false
+tsm = pd.read_excel("data/Base de datos TSM consultoria estadística.xlsx")
+chla = pd.read_excel("data/Base de datos Chla consultoria estadística.xlsx")
+pts = pd.read_csv("data/Coordenadas zona costera occidental GC.csv", header=None, names=['lon','drop','lat'])[['lon','lat']]
+pts['id_punto'] = np.arange(1, len(pts) + 1)
+```
+
+```{python}
+#| echo: false
+meta_cols = ['FECHA', 'AÑO', 'MES', 'ESTACIÓN DEL AÑO', 'EVENTO INTERANUAL']
+station_cols = [c for c in tsm.columns if c.strip().startswith('Est')]
+
+# Reemplazar 'Neutro' por 'Normal' en EVENTO INTERANUAL
+tsm['EVENTO INTERANUAL'] = tsm['EVENTO INTERANUAL'].replace('Neutro', 'Normal')
+
+# Función para convertir a formato largo
+def to_long(df, value_name):
+    long_df = df.melt(id_vars=meta_cols,
+                      value_vars=station_cols,
+                      var_name='ESTACION_PUNTO',
+                      value_name=value_name)
+    long_df['id_punto'] = long_df['ESTACION_PUNTO'].str.extract(r'(\d+)').astype(int)
+    long_df['Fecha'] = pd.to_datetime(long_df['FECHA'], dayfirst=True)
+    long_df = long_df.drop(columns=['ESTACION_PUNTO', 'FECHA'])
+    return long_df
+tsm_long = to_long(tsm, 'TSM')
+chla_long = to_long(chla, 'Chla')
+```
+
+```{python}
+#| echo: false
+# Recorte al rango común de fechas
+fecha_inicio = pd.to_datetime("1997-09-01")
+fecha_fin    = pd.to_datetime("2018-10-01")
+
+tsm_long = tsm_long[(tsm_long['Fecha'] >= fecha_inicio) & (tsm_long['Fecha'] <= fecha_fin)]
+chla_long = chla_long[(chla_long['Fecha'] >= fecha_inicio) & (chla_long['Fecha'] <= fecha_fin)]
+```
+
+```{python}
+#| echo: false
+#| warning: false
+#| fig-align: center
+XY = pts[['lon','lat']].values
+XY_std = StandardScaler().fit_transform(XY)
+
+ks = range(1, 9)
+inertias = []
+for k in ks:
+    km = KMeans(n_clusters=k, random_state=42, n_init='auto').fit(XY_std)
+    inertias.append(km.inertia_)
+
+plt.figure(figsize=(6,4))
+plt.plot(ks, inertias, marker='o')
+plt.title('Método del codo\nInercia vs número de clústeres')
+plt.xlabel('k (número de clústeres)')
+plt.ylabel('Inercia (WCSS)')
+plt.grid(True)
+plt.show()
+```
+
+A partir del gráfico del método del codo, se observa un punto de inflexión claro en $k=4$, lo que indica que esta es una buena elección para agrupar las estaciones en función de su ubicación geográfica.
+
+Con base en este resultado, se aplicó el algoritmo de **K-means** con $k=4$, y se asignó a cada estación un identificador de clúster. Posteriormente, estos clústeres fueron ordenados de sur a norte según la latitud promedio de las estaciones que los componen, y se les asignaron etiquetas descriptivas: **Sur**, **Centro-Sur**, **Centro-Norte** y **Norte**.
+
+```{python}
+#| echo: false
+k = 4
+kmeans = KMeans(n_clusters=k, random_state=42, n_init='auto').fit(XY_std)
+pts['cluster_id'] = kmeans.labels_
+
+order = (
+    pts.groupby('cluster_id')['lat']
+        .mean()
+        .sort_values()
+        .index
+        .tolist()
+)
+name_map = {
+    order[0]: 'Sur',
+    order[1]: 'Centro-Sur',
+    order[2]: 'Centro-Norte',
+    order[3]: 'Norte'
+}
+pts['REGION_KM'] = pts['cluster_id'].map(name_map)
+
+tsm_long  = tsm_long .merge(pts[['id_punto','REGION_KM']], on='id_punto', how='left')
+chla_long = chla_long.merge(pts[['id_punto','REGION_KM']], on='id_punto', how='left')
+```
+
+Las cuales nos generan estas las siguientes regiones
+
+```{python}
+#| echo: false
+gdf = gpd.GeoDataFrame(
+    pts,
+    geometry=gpd.points_from_xy(pts.lon, pts.lat),
+    crs='EPSG:4326').to_crs(epsg=3857)
+
+cmap = 'Set2'
+
+fig, ax = plt.subplots(figsize=(8,10))
+gdf.plot(ax=ax,
+         column='REGION_KM',
+         categorical=True,
+         legend=True,
+         cmap=cmap,
+         markersize=80,
+         edgecolor='black')
+
+for _, row in gdf.iterrows():
+    ax.text(row.geometry.x, row.geometry.y + 1.5e4,
+            row['REGION_KM'],
+            fontsize=8, ha='center')
+ctx.add_basemap(ax, source=ctx.providers.OpenStreetMap.Mapnik)
+buffer = 1.5e5
+xmin, ymin, xmax, ymax = gdf.total_bounds
+ax.set_xlim(xmin - buffer, xmax + buffer)
+ax.set_ylim(ymin - buffer, ymax + buffer)
+
+ax.set_title('Regiones obtenidas por K-means (k = 4)', pad=12)
+ax.set_axis_off()
+plt.show()
+```
+
+## Aplicación del ANOVA a TSM
+
+Con el objetivo de evaluar si existen diferencias estadísticamente significativas en las variables de interés (TSM y clorofila *a*) según distintos factores ambientales y espaciales, se aplicó un **ANOVA trifactorial**.
+
+En particular, se consideraron como factores categóricos:
+
+-   **Evento interanual (ENSO)**: distingue entre condiciones climáticas como *Niño*, *Niña* y *Normal*.
+
+-   **Estación del año**: agrupa los datos según las cuatro estaciones climáticas.
+
+-   **Región geográfica (REGION_KM)**: corresponde a los clústeres generados previamente mediante K-means, ordenados de sur a norte.
+
+Se creó una función `anova_tri()` la cuál implementa este análisis utilizando un modelo lineal con interacciones entre los tres factores (`ENSO * ESTACION * REGION`). Además del análisis de varianza, se evalúan los supuestos de normalidad (mediante la prueba de **Shapiro-Wilk**) y homogeneidad de varianzas (**Levene**).
+
+En caso de encontrar diferencias significativas en el factor ENSO, se realiza un análisis **post-hoc de Tukey** para identificar entre qué niveles se presentan las diferencias.
+
+```{python}
+#| echo: false
+#| fig-align: center
+def anova_tri(df_original, respuesta):
+    alias = {
+        'EVENTO INTERANUAL': 'ENSO',
+        'ESTACIÓN DEL AÑO' : 'ESTACION',
+        'REGION_KM'           : 'REGION'
+    }
+    df = df_original.rename(columns=alias).copy()
+    formula = f'{respuesta} ~ C(ENSO) * C(ESTACION) * C(REGION)'
+    print('\n' + '='*90)
+    print(f'ANOVA trifactorial para {respuesta}')
+    print('='*90)
+    modelo = smf.ols(formula, data=df).fit()
+    tabla  = sm.stats.anova_lm(modelo, typ=2)
+    display(tabla)
+    resid = modelo.resid
+    print('· Shapiro normalidad:', shapiro(resid))
+    grupos = [g[respuesta].dropna() for _, g in
+              df.groupby(['ENSO','ESTACION','REGION'])]
+    print('· Levene homocedasticidad:', levene(*grupos))
+    if tabla.loc['C(ENSO)', 'PR(>F)'] < 0.05:
+        print('\nPost-hoc Tukey para EVENTO INTERANUAL:')
+        tmp = df[['ENSO', respuesta]].dropna(subset=['ENSO', respuesta]).copy()
+        tmp['ENSO'] = tmp['ENSO'].astype(str)
+        print(pairwise_tukeyhsd(tmp[respuesta], tmp['ENSO']).summary())
+        
+anova_tri(tsm_long, 'TSM')
+```
+
+Los resultados muestran que los tres factores principales tienen un efecto altamente significativo sobre la TSM, con valores de $p<0.001$ para **ENSO**, **ESTACIÓN** y **REGIÓN**. Asimismo, se observaron interacciones significativas entre **ENSO × ESTACIÓN** y **ESTACIÓN × REGIÓN**, lo cual indica que el efecto de una variable depende del nivel de otra. En contraste, la interacción triple **ENSO × ESTACIÓN × REGIÓN** no fue significativa, lo que sugiere que no existe una combinación específica de las tres condiciones que afecte diferencialmente a la TSM más allá de las interacciones dobles.
+
+## Verificación de supuestos
+
+-    **Normalidad de los residuos:** La prueba de Shapiro-Wilk no fue significativa ($p > 0.05$), lo cual sugiere que los residuos del modelo siguen una distribución normal.
+
+-    **Homocedasticidad:** La prueba de Levene sí fue significativa ($p < 0.05$), lo que indica que hay variaciones distintas entre los grupos. Aunque esta violación no invalida el análisis, se debe considerar con precaución en la interpretación.
+
+## Comparaciones post-hoc (Tukey HSD)
+
+Se realizó un análisis post-hoc para el factor **ENSO**, dado que fue estadísticamente significativo. Los resultados indican que:
+
+-    Existen diferencias significativas entre los años **Niña** y **Niño**, así como entre **Niña** y **Normal**.
+
+-    No se encontraron diferencias significativas entre los años **Niño** y **Normal**.
+
+Esto sugiere que las condiciones asociadas al fenómeno **La Niña** impactan de forma diferencial la TSM respecto a los otros dos eventos.
+
+## Visualización de los resultados del ANOVA
+
+Para complementar el análisis estadístico, se generaron visualizaciones que resumen los efectos principales e interacciones identificados mediante el ANOVA trifactorial aplicado a la TSM.
+
+-    En la parte superior izquierda, se observa que los valores promedio de TSM varían según el tipo de evento interanual (**ENSO**). El valor más bajo se registra durante eventos **La Niña**, mientras que los valores más altos corresponden a condiciones **Normales**, lo que refuerza los resultados obtenidos en el análisis post-hoc de Tukey.
+
+-    El diagrama de caja por **ENSO** (arriba al centro) muestra la dispersión de los valores y la presencia de posibles valores atípicos, permitiendo visualizar la superposición parcial entre grupos.
+
+-    En la esquina superior derecha, la distribución de TSM por **estación del año** confirma el marcado ciclo estacional de la temperatura superficial: valores más bajos en invierno y más altos en verano.
+
+-    En la parte inferior izquierda, se explora la variabilidad de TSM entre **regiones geográficas**. Aunque hay cierta variación dentro de cada región, se mantiene una tendencia de mayor temperatura en la zona sur.
+
+-    El gráfico inferior central muestra la interacción entre **ENSO y estación**, revelando cómo los efectos de ENSO no son constantes a lo largo del año. Por ejemplo, en verano las diferencias se reducen, mientras que en invierno y primavera se hacen más marcadas.
+
+-    Finalmente, el gráfico de **estación × región** (abajo a la derecha) destaca cómo el ciclo estacional de la TSM varía de una región a otra. La región sur presenta temperaturas consistentemente más altas, mientras que las regiones del norte muestran un rango más amplio de variación estacional.
+
+```{python}
+#| echo: false
+plot_df = (
+    tsm_long
+      .rename(columns={
+          'EVENTO INTERANUAL': 'ENSO',
+          'ESTACIÓN DEL AÑO' : 'ESTACION',
+          'REGION_KM'        : 'REGION'
+      })
+      .copy()
+)
+
+order_enso = ['Niña', 'Niño', 'Normal']
+order_est  = ['Invierno', 'Primavera', 'Verano', 'Otoño']
+order_reg  = ['Sur', 'Centro-Sur', 'Centro-Norte', 'Norte']
+
+fig, axs = plt.subplots(2, 3, figsize=(15, 8))
+ax = axs[0,0]
+plot_df.groupby('ENSO')['TSM'].mean().reindex(order_enso).plot(kind='bar', ax=ax)
+ax.set_title('Media TSM por ENSO'); ax.set_ylabel('°C')
+
+plot_df.boxplot(column='TSM', by='ENSO', ax=axs[0,1])
+axs[0,1].set_title('TSM por ENSO'); axs[0,1].set_xlabel(''); axs[0,1].set_ylabel('°C')
+
+plot_df.boxplot(column='TSM', by='ESTACION', ax=axs[0,2])
+axs[0,2].set_title('TSM por Estación'); axs[0,2].set_xlabel(''); axs[0,2].set_ylabel('°C')
+
+plot_df.boxplot(column='TSM', by='REGION', ax=axs[1,0])
+axs[1,0].set_title('TSM por Región'); axs[1,0].set_xlabel(''); axs[1,0].set_ylabel('°C')
+
+avg_ie = plot_df.groupby(['ESTACION','ENSO'])['TSM'].mean().unstack('ENSO')
+for enso in order_enso:
+    axs[1,1].plot(order_est, avg_ie.loc[order_est, enso], marker='o', label=enso)
+axs[1,1].set_title('ENSO × Estación'); axs[1,1].set_ylabel('°C'); axs[1,1].legend()
+
+avg_er = plot_df.groupby(['REGION','ESTACION'])['TSM'].mean().unstack('ESTACION')
+for est in order_est:
+    axs[1,2].plot(order_reg, avg_er.loc[order_reg, est], marker='o', label=est)
+axs[1,2].set_title('Estación × Región'); axs[1,2].set_ylabel('°C'); axs[1,2].legend()
+
+plt.suptitle('Visualización sintética de los resultados ANOVA', fontsize=14)
+plt.tight_layout(rect=[0,0.03,1,0.97])
+plt.show()
+```
+
+## Resultados del ANOVA trifactorial para Clorofila a (Chl-a)
+
+```{python}
+#| echo: false
+anova_tri(chla_long, 'Chla')
+```
+
+Los resultados muestran que tanto **la estación del año** como **la región** tienen un efecto altamente significativo sobre la Chl-*a* ($p<0.001$), lo cual indica que la variación temporal y espacial es un determinante clave en la productividad fitoplanctónica. También se encontraron interacciones significativas entre **ENSO × ESTACIÓN** y **ESTACIÓN × REGIÓN**, lo que sugiere que la influencia de ENSO o la región sobre la Chl-a depende del periodo del año. En cambio, la interacción triple no fue estadísticamente significativa.
+
+#### Verificación de supuestos
+
+-   **Normalidad de los residuos:** La prueba de Shapiro-Wilk no fue significativa ( $p>0.05$ ), indicando que los residuos del modelo se distribuyen normalmente.
+
+-    **Homocedasticidad:** La prueba de Levene fue significativa ( $p<0.001$ ), lo que indica que las varianzas no son homogéneas entre grupos, por lo que los resultados deben interpretarse con cautela.
+
+#### Comparaciones post-hoc (Tukey HSD)
+
+El análisis post-hoc realizado para el factor ENSO reveló diferencias estadísticamente significativas únicamente entre los años **Niña** y **Niño**, con una diferencia negativa en la media, lo que sugiere una ligera disminución en la concentración de clorofila a durante eventos **Niña** respecto a **Niño**. No se encontraron diferencias significativas entre los años **Niña–Normal** ni **Niño–Normal**.
+
+## **Visualización clave de los resultados del ANOVA – Clorofila a**
+
+Las siguientes gráficas resumen los efectos principales e interacciones detectados en el análisis de varianza aplicado a la concentración de clorofila a (Chl-a):
+
+-    En la parte superior izquierda, se observa que la media de Chl-a varía de manera notable según la **estación del año**, con valores más altos en **primavera** e **invierno**, y una marcada disminución en **verano**. Esto concuerda con patrones estacionales típicos de productividad biológica.
+
+-    La gráfica de **Chl-a por región** (arriba a la derecha) muestra que las regiones **norte y centro-norte** presentan los valores promedio más altos de clorofila a, mientras que las regiones **sur y centro-sur** muestran una productividad considerablemente menor. Esto sugiere un fuerte gradiente latitudinal en la productividad fitoplanctónica.
+
+-    La gráfica inferior izquierda indica las diferencias entre condiciones **ENSO**, aunque más sutiles: los valores son ligeramente más altos durante **La Niña**, pero las diferencias entre grupos son pequeñas y en general consistentes con el análisis estadístico.
+
+-    El gráfico de líneas de **ENSO × Estación** (centro derecha) muestra que el efecto del evento interanual varía según la estación. En primavera, por ejemplo, los años **Niño** tienden a tener valores de Chl-*a* más bajos comparados con **La Niña**, lo cual concuerda con los resultados del análisis post-hoc.
+
+-    Finalmente, el gráfico de **contraste estacional por región** (abajo) muestra la diferencia en Chl-*a* entre invierno y verano. Las regiones **norte y centro-sur** presentan los mayores contrastes, lo que indica una alta variabilidad estacional en estas zonas. La región **centro-norte**, por otro lado, muestra una diferencia estacional muy reducida, lo que podría estar relacionado con condiciones más constantes de mezcla o disponibilidad de nutrientes.
+
+```{python}
+#| echo: false
+df = (
+    chla_long
+        .rename(columns={
+            'EVENTO INTERANUAL':'ENSO',
+            'ESTACIÓN DEL AÑO':'ESTACION',
+            'REGION_KM':'REGION'})
+        .copy()
+)
+
+order_enso = ['Niña', 'Niño', 'Normal'] if 'Normal' in df['ENSO'].unique() else ['Niña', 'Niño', 'Neutro']
+order_est = ['Invierno', 'Primavera', 'Verano', 'Otoño']
+
+order_reg = (
+    df.groupby('REGION')['Chla']
+      .mean()
+      .sort_values(ascending=False)
+      .index
+      .tolist()
+)
+
+fig, axs = plt.subplots(3, 2, figsize=(14, 12))
+fig.delaxes(axs[2,1])
+
+(df.groupby('ESTACION')['Chla'].mean()
+   .reindex(order_est)
+   .plot(kind='bar', ax=axs[0,0], color='coral'))
+axs[0,0].set_title('Media Chl a por Estación')
+axs[0,0].set_ylabel('mg m$^{-3}$')
+
+(df.groupby('REGION')['Chla'].mean()
+   .reindex(order_reg)
+   .plot(kind='bar', ax=axs[0,1], color='mediumseagreen'))
+axs[0,1].set_title('Media Chl a por Región')
+axs[0,1].set_ylabel('mg m$^{-3}$')
+
+(df.groupby('ENSO')['Chla'].mean()
+   .reindex(order_enso)
+   .plot(kind='bar', ax=axs[1,0], color='steelblue'))
+axs[1,0].set_title('Media Chl a por ENSO')
+axs[1,0].set_ylabel('mg m$^{-3}$')
+
+avg_ie = df.groupby(['ESTACION','ENSO'])['Chla'].mean().unstack('ENSO')
+for enso in order_enso:
+    if enso in avg_ie.columns:
+        axs[1,1].plot(order_est, avg_ie.loc[order_est, enso], marker='o', label=enso)
+axs[1,1].set_title('ENSO × Estación (media Chl a)')
+axs[1,1].set_ylabel('mg m$^{-3}$')
+axs[1,1].legend()
+
+pivot = (df.pivot_table(index='REGION', columns='ESTACION', values='Chla', aggfunc='mean')
+           .reindex(order_reg))
+amplitud = pivot['Invierno'] - pivot['Verano']
+amplitud.plot(kind='bar', ax=axs[2,0], color='darkorange')
+axs[2,0].set_title('Contraste estacional (Invierno − Verano)')
+axs[2,0].set_ylabel('mg m$^{-3}$')
+
+plt.suptitle('Visualización clave de los resultados ANOVA – Chl a', fontsize=14)
+plt.tight_layout(rect=[0,0.03,1,0.95])
+plt.show()
+```
+
+## **Distribución de TSM y clorofila a según estación y fase ENSO**
+
+Las siguientes visualizaciones nos permitirán observar cómo se distribuyen los valores de temperatura superficial del mar (TSM) y clorofila a (Chl-a) en función de la estación del año y la fase del fenómeno ENSO.
+
+```{python}
+#| echo: false
+def boxplot_factor(df, yvar, title):
+    plt.figure(figsize=(14,5))
+    sns.boxplot(x='ESTACIÓN DEL AÑO', y=yvar, hue='EVENTO INTERANUAL',
+                data=df, palette='Set2')
+    plt.title(title); plt.xlabel('Estación'); plt.ylabel(yvar)
+    plt.show()
+```
+
+#### **TSM por estación y fase ENSO**
+
+La gráfica superior muestra que la TSM presenta un patrón estacional bien definido, con temperaturas bajas en invierno y primavera, y valores elevados en verano y otoño. Además, se observan diferencias sutiles asociadas al evento interanual:
+
+-   Durante el invierno y primavera, los años **Niño** tienden a mostrar temperaturas ligeramente más altas que los años **Niña**.
+
+-   En verano, las diferencias entre fases ENSO se reducen, y los valores son altos en general.
+
+-   Se observa una superposición importante entre grupos, aunque hay variaciones en los rangos de dispersión.
+
+Estos patrones confirman lo evidenciado por el ANOVA, donde ENSO tiene un efecto significativo sobre TSM, especialmente en interacción con la estación.
+
+```{python}
+#| echo: false
+boxplot_factor(tsm_long , 'TSM' , 'TSM por estación y fase ENSO')
+```
+
+#### **Clorofila a por estación y fase ENSO**
+
+En la segunda gráfica se observa un comportamiento más disperso en los valores de Chl-a, con presencia de valores atípicos especialmente en primavera. Aun así, se destacan algunos patrones:
+
+-   La **primavera** presenta las mayores concentraciones promedio de clorofila a, seguidas por invierno y otoño.
+
+-   Durante la primavera, los años **Niña** tienden a mostrar concentraciones ligeramente más altas que los años **Niño**, lo cual concuerda con los resultados post-hoc del ANOVA.
+
+-   El **verano** es la estación con menor concentración general de Chl-a, independientemente del evento interanual.
+
+```{python}
+#| echo: false
+boxplot_factor(chla_long, 'Chla', 'Chla por estación y fase ENSO')
+```

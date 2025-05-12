@@ -19,7 +19,10 @@ website:
         text: Introducción
       - about.qmd
       - inicial.qmd
-      
+      - anova.qmd
+      - regresion.qmd
+      - frecuencia.qmd
+      - espectral.qmd
 
 format:
   html:
