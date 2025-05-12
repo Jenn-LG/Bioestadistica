@@ -3,4 +3,8 @@ title: "Introducción"
 jupyter: python3
 ---
 
-Aquí va la introducción
+El Golfo de California constituye un sistema marino de alta relevancia científica por su gran productividad biológica y la complejidad de sus procesos oceanográficos y ambientales. Como un mar semicerrado, está sujeto a una considerable variabilidad climática e hidrológica que influye en sus características físicas, químicas y biológicas. En este marco, dos variables son esenciales para describir su dinámica ecológica: la Temperatura Superficial del Mar (TSM) y la concentración de Clorofila a (Chl a), esta última utilizada como proxy del nivel de biomasa fitoplanctónica.\
+\
+El análisis conjunto de TSM y Chl a adquiere especial importancia al considerar su vínculo con fenómenos climáticos globales como El Niño–Oscilación del Sur (ENSO), los cuales inducen variaciones interanuales que modifican la dinámica ambiental y productiva de la región. A pesar de su relevancia, aún existen interrogantes sobre cómo estas variables responden en el espacio y en el tiempo ante los diferentes estados del ENSO (Niño, Niña, Neutro), así como ante los ciclos estacionales.
+
+![](https://th.bing.com/th/id/R.edaaa8dbe92d1f3301b08b55bd23d8cb?rik=0RJ7tqrVGUAPFg&riu=http%3a%2f%2fsaberesyciencias.com.mx%2fwp-content%2fuploads%2f2016%2f06%2fp-10-y-11.jpg&ehk=4nK%2bUU1E8wOronjBJ%2btVQ%2fYtbMYLXkpZeWs2gIcKbFY%3d&risl=&pid=ImgRaw&r=0&sres=1&sresct=1){fig-align="center" width="419"}

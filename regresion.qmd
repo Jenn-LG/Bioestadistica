@@ -281,6 +281,12 @@ La figura muestra los resultados de un análisis de agrupamiento (clustering) ap
 
 Cada subgráfico representa el comportamiento de las estaciones bajo un evento ENSO específico. Se observa cómo la relación entre temperatura y clorofila tiende a organizarse en patrones distintos según la fase del evento. Por ejemplo, bajo condiciones *Niña* y *Normal* se identifican agrupamientos más diferenciados en términos de temperatura y concentración de clorofila, mientras que durante *Niño* se advierte una mayor dispersión en algunos clusters, sugiriendo una respuesta más variable entre estaciones.
 
+![](images/clipboard-1639305797.png){fig-align="center" width="378"}
+
+![](images/clipboard-839644276.png){fig-align="center" width="378"}
+
+![](images/clipboard-1031740523.png){fig-align="center" width="373"}
+
 ```{python}
 #| echo: false
 import matplotlib.pyplot as plt
@@ -293,25 +299,6 @@ X = StandardScaler().fit_transform(tabla_kmeans.drop(columns='cluster', errors='
 # KMeans con 3 clusters
 kmeans = KMeans(n_clusters=3, random_state=42)
 tabla_kmeans['cluster'] = kmeans.fit_predict(X)
-
-# Crear figura con 3 subplots
-fig, axs = plt.subplots(1, 3, figsize=(18, 5), sharey=True)
-
-# Títulos de cada evento
-eventos = ['Niña', 'Niño', 'Normal']
-
-for i, evento in enumerate(eventos):
-    axs[i].scatter(tabla_kmeans[f'Temp_{evento}'], tabla_kmeans[f'Cloro_{evento}'],
-                   c=tabla_kmeans['cluster'], cmap='viridis', s=100, edgecolor='k')
-    axs[i].set_xlabel(f'Temperatura promedio ({evento})')
-    axs[i].set_title(f'Evento: {evento}')
-    axs[i].grid(True, linestyle='--', alpha=0.3)
-
-axs[0].set_ylabel('Clorofila promedio')
-fig.suptitle('Clusters ENSO por evento (KMeans, k=3)', fontsize=16)
-plt.tight_layout()
-plt.subplots_adjust(top=0.85)
-plt.show()
 ```
 
 ```{python}
@@ -430,6 +417,7 @@ for est in estaciones:
 Haciendo lo propio para la clorofila
 
 ```{python}
+#| echo: false
 for i in sorted(df_cloro_long['cluster'].unique()):
     print(f"\n=== Cluster {i} ===")
     cluster_data = df_cloro_long[df_cloro_long['cluster'] == i]
@@ -463,3 +451,45 @@ Las estaciones **1 a 8** presentan, en su mayoría, características que no son 
 En este grupo, compuesto por las **estaciones 12 y 13**, todas las variables consideradas en el modelo resultan significativas, indicando un ajuste más consistente entre los predictores y los valores observados de clorofila.
 
 No obstante, es importante señalar que, a diferencia del análisis realizado sobre la temperatura superficial del mar, los modelos aplicados a la clorofila a presentan valores de **R² ajustado considerablemente más bajos**, con un promedio aproximado de **0.5**. Esto sugiere que el modelo explica solo una parte moderada de la variabilidad, y que otros factores —no incluidos en esta formulación— podrían estar influyendo en los niveles de clorofila. Esta limitación también se refleja visualmente en los gráficos de ajuste, donde las predicciones no siguen tan de cerca a los valores reales como lo hacían en el caso de la temperatura.
+
+```{python}
+#| echo: false
+import statsmodels.api as sm
+import matplotlib.pyplot as plt
+
+# Obtener estaciones únicas
+estaciones = df_cloro_long['Estación'].unique()
+
+for est in estaciones:
+    subset = df_cloro_long[df_cloro_long['Estación'] == est]
+
+    X = subset[[col for col in subset.columns if col.startswith('AÑO') or
+                col.startswith('EVENTO INTERANUAL_') or
+                col.startswith('MES_') or
+                col.startswith('ESTACIÓN DEL AÑO_')]]
+    X = sm.add_constant(X)
+    y = subset['Chl_a']
+
+    modelo = sm.OLS(y, X).fit()
+    y_pred = modelo.predict(X)
+
+    # Graficar
+    plt.figure(figsize=(12, 5))
+    plt.plot(subset['FECHA'], y, label='Real', color='blue')
+    plt.plot(subset['FECHA'], y_pred, label='Modelo', color='red', linestyle='--')
+    plt.title(f'Clorofila real vs modelo - {est}')
+    plt.xlabel('Fecha')
+    plt.ylabel('Clorofila (Chl-a)')
+    plt.legend()
+    plt.grid(True, linestyle='--', alpha=0.3)
+    plt.tight_layout()
+    plt.show()
+```
+
+## Conclusión
+
+Hemos logrado una regionalización de las estaciones costeras basada en la temperatura superficial media durante distintos eventos interanuales (Niño, Niña y condiciones normales), lo cual revela una organización espacial coherente de las estaciones.
+
+Sin embargo, al aplicar modelos de regresión lineal para cada estación y analizar los resultados dentro de cada cluster, observamos que las variables asociadas a los eventos interanuales no muestran un efecto consistente ni estadísticamente significativo en todos los casos. En contraste, los meses de agosto y septiembre destacan con comportamientos particulares, especialmente en relación con la temperatura, lo cual podría reflejar fenómenos estacionales específicos.
+
+Por otro lado, la variabilidad de la clorofila resulta más difícil de modelar con las variables actuales. La falta de significancia en la mayoría de los coeficientes sugiere que su dinámica depende de factores más complejos que no Sestán bien representados por los predictores considerados.

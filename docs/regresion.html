@@ -20,40 +20,6 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-/* CSS for syntax highlighting */
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
-}
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-  }
-pre.numberSource { margin-left: 3em;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
-}
 </style>
 
 
@@ -222,6 +188,7 @@ window.Quarto = {
   <li><a href="#análisis-por-clúster-modelos-aplicados-a-tsm" id="toc-análisis-por-clúster-modelos-aplicados-a-tsm" class="nav-link" data-scroll-target="#análisis-por-clúster-modelos-aplicados-a-tsm">Análisis por clúster Modelos aplicados a TSM</a></li>
   <li><a href="#análisis-por-clúster-modelos-aplicados-a-clorofila-a-chl-a" id="toc-análisis-por-clúster-modelos-aplicados-a-clorofila-a-chl-a" class="nav-link" data-scroll-target="#análisis-por-clúster-modelos-aplicados-a-clorofila-a-chl-a">Análisis por clúster – Modelos aplicados a clorofila a (Chl-a)</a></li>
   </ul></li>
+  <li><a href="#conclusión" id="toc-conclusión" class="nav-link" data-scroll-target="#conclusión">Conclusión</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/Jenn-LG/Bioestadistica/issues/new" class="toc-action"><i class="bi bi-github"></i>Informar de un problema</a></li><li><a href="https://github.com/Jenn-LG/Bioestadistica/blob/main/regresion.qmd" class="toc-action"><i class="bi empty"></i>Ver el código</a></li></ul></div></nav>
     </div>
@@ -248,7 +215,7 @@ window.Quarto = {
 
 
 <p>Con el objetivo de analizar la relación entre la temperatura superficial del mar (TSM) y la concentración de clorofila a (Chl-a), se construyó un resumen estadístico por estación, que incluye la media y desviación estándar tanto de la temperatura como de la clorofila. Este resumen proporciona una primera aproximación al comportamiento espacial de ambas variables y servirá como referencia para comparar patrones y relaciones.</p>
-<div id="aaf59134" class="cell" data-execution_count="1">
+<div id="49b4f770" class="cell" data-execution_count="1">
 <div class="cell-output cell-output-stdout">
 <pre><code>Resumen de métricas por estación:
          temp_mean  temp_std  cloro_mean  cloro_std
@@ -276,7 +243,7 @@ Est 17°  24.228451  5.259505    1.954616   1.070397</code></pre>
 <p>Antes de ajustar el modelo de regresión, se buscó identificar <strong>grupos de estaciones con características similares</strong> en cuanto a sus promedios de temperatura y clorofila. Para ello, se aplicó un análisis de <strong>clustering con K-means</strong>, utilizando como variables las métricas resumen por estación: media y desviación estándar tanto de la temperatura (TSM) como de la clorofila a (Chl-a).</p>
 <p>Los datos fueron previamente <strong>escalados</strong> para asegurar que todas las variables numéricas tuvieran igual peso en el agrupamiento, eliminando efectos de escala.</p>
 <p>Para determinar el número óptimo de clústeres, se aplicó el <strong>método del codo</strong>. La gráfica resultante muestra una disminución pronunciada de la inercia hasta <span class="math inline">\(k=3\)</span>, donde comienza a estabilizarse, indicando que <strong>tres grupos representan una buena partición</strong> de las estaciones sin sobreajustar el modelo.</p>
-<div id="1eb53985" class="cell" data-execution_count="2">
+<div id="616d1f28" class="cell" data-execution_count="2">
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -286,7 +253,7 @@ Est 17°  24.228451  5.259505    1.954616   1.070397</code></pre>
 </div>
 </div>
 <p>Una vez determinado que tres grupos representan una buena estructura de los datos, se aplicó el algoritmo <strong>K-means con</strong> <span class="math inline">\(k=3\)</span> sobre las estaciones, utilizando como variables de entrada la <strong>temperatura media</strong> y la <strong>clorofila media</strong> de cada una.</p>
-<div id="cc15fb63" class="cell" data-execution_count="3">
+<div id="f269f2b5" class="cell" data-execution_count="3">
 <div class="cell-output cell-output-stdout">
 <pre><code>Clusters asignados por estación:
          cluster
@@ -348,8 +315,8 @@ Est 17°        1</code></pre>
 <li><p>En las estaciones más al norte (Est. 1° a Est. 6°), la temperatura es consistentemente mayor y la clorofila menor en comparación con las estaciones del sur.</p></li>
 <li><p>En las estaciones del sur (Est. 12° a Est. 17°), los valores de clorofila aumentan notablemente durante eventos <strong>Niña</strong>, lo que puede reflejar una mayor productividad biológica asociada a condiciones más frías.</p></li>
 </ul>
-<div id="f1613c61" class="cell" data-execution_count="5">
-<div class="cell-output cell-output-display" data-execution_count="5">
+<div id="90752b83" class="cell" data-execution_count="5">
+<div class="cell-output cell-output-display" data-execution_count="16">
 <div>
 
 
@@ -536,7 +503,7 @@ Est 17°        1</code></pre>
 </div>
 <p>Para identificar patrones entre estaciones en función de sus promedios de temperatura y clorofila bajo diferentes fases de ENSO, aplicamos un análisis de clustering. Como paso previo, utilizamos el método del codo para seleccionar el número óptimo de grupos (clusters).</p>
 <p>En el gráfico generado se observa claramente el punto de inflexión, lo que sugiere que un número óptimo de clusters sería <strong>k = 3.</strong></p>
-<div id="ec849bd1" class="cell" data-execution_count="6">
+<div id="7342cba5" class="cell" data-execution_count="6">
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -549,14 +516,20 @@ Est 17°        1</code></pre>
 <h3 class="anchored" data-anchor-id="distribución-de-clusters-por-evento-enso"><strong>Distribución de clusters por evento ENSO</strong></h3>
 <p>La figura muestra los resultados de un análisis de agrupamiento (clustering) aplicado a las estaciones de monitoreo, considerando como variables las temperaturas y concentraciones promedio de clorofila a, separadas por tipo de evento interanual: <em>Niña</em>, <em>Niño</em> y <em>Normal</em>. Se utilizaron 3 clusters determinados previamente mediante el método del codo, y el modelo fue ajustado mediante KMeans.</p>
 <p>Cada subgráfico representa el comportamiento de las estaciones bajo un evento ENSO específico. Se observa cómo la relación entre temperatura y clorofila tiende a organizarse en patrones distintos según la fase del evento. Por ejemplo, bajo condiciones <em>Niña</em> y <em>Normal</em> se identifican agrupamientos más diferenciados en términos de temperatura y concentración de clorofila, mientras que durante <em>Niño</em> se advierte una mayor dispersión en algunos clusters, sugiriendo una respuesta más variable entre estaciones.</p>
-<div id="d627dfc3" class="cell" data-execution_count="7">
-<div class="cell-output cell-output-display">
-<div>
+<div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="regresion_files/figure-html/cell-8-output-1.png" class="img-fluid figure-img"></p>
+<p><img src="images/clipboard-1639305797.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="378"></p>
 </figure>
 </div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/clipboard-839644276.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="378"></p>
+</figure>
 </div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/clipboard-1031740523.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="373"></p>
+</figure>
 </div>
 <p><img src="images/clipboard-1950012899.png" class="img-fluid"></p>
 <p>Notemos que el clúster en amarillo son las estaciones 12 y 13. Las estaciones que menor correlacion muestran con las demas.</p>
@@ -567,7 +540,7 @@ Est 17°        1</code></pre>
 <h2 class="anchored" data-anchor-id="regresión-lineal-por-zonas">Regresión lineal por zonas</h2>
 <p>Con base en la segmentación previa de las estaciones en tres zonas o clusters, se procede a realizar un análisis de regresión lineal simple para cada estación, agrupadas por cluster. Es decir, para cada estación dentro de un cluster, se ajustará un modelo de regresión lineal en el que se busca explicar la temperatura superficial del mar (TSM) a partir de variables categóricas como el año, el evento interanual (ENSO), el mes y la estación del año.</p>
 <p>El propósito de esta sección <strong>no es construir un modelo predictivo óptimo</strong>, sino más bien obtener una visión general de <strong>qué variables parecen influir más en la variabilidad de la temperatura</strong> en cada estación, dentro del contexto espacial definido por los clusters. En particular, se busca identificar patrones comunes dentro de cada zona y contrastar su comportamiento entre zonas con características térmicas y biológicas distintas.</p>
-<div id="9c227ca7" class="cell" data-execution_count="9">
+<div id="935bf04d" class="cell" data-execution_count="9">
 <div class="cell-output cell-output-stdout">
 <pre><code>
 === Cluster 0 ===
@@ -579,7 +552,7 @@ Dep. Variable:                    TSM   R-squared:                       0.942
 Model:                            OLS   Adj. R-squared:                  0.939
 Method:                 Least Squares   F-statistic:                     277.8
 Date:                Sun, 11 May 2025   Prob (F-statistic):          4.66e-139
-Time:                        22:00:49   Log-Likelihood:                -330.63
+Time:                        22:36:05   Log-Likelihood:                -330.63
 No. Observations:                 254   AIC:                             691.3
 Df Residuals:                     239   BIC:                             744.3
 Df Model:                          14                                         
@@ -627,7 +600,7 @@ Dep. Variable:                    TSM   R-squared:                       0.957
 Model:                            OLS   Adj. R-squared:                  0.955
 Method:                 Least Squares   F-statistic:                     380.6
 Date:                Sun, 11 May 2025   Prob (F-statistic):          1.52e-154
-Time:                        22:00:49   Log-Likelihood:                -310.58
+Time:                        22:36:05   Log-Likelihood:                -310.58
 No. Observations:                 254   AIC:                             651.2
 Df Residuals:                     239   BIC:                             704.2
 Df Model:                          14                                         
@@ -675,7 +648,7 @@ Dep. Variable:                    TSM   R-squared:                       0.959
 Model:                            OLS   Adj. R-squared:                  0.957
 Method:                 Least Squares   F-statistic:                     402.2
 Date:                Sun, 11 May 2025   Prob (F-statistic):          2.80e-157
-Time:                        22:00:49   Log-Likelihood:                -314.25
+Time:                        22:36:05   Log-Likelihood:                -314.25
 No. Observations:                 254   AIC:                             658.5
 Df Residuals:                     239   BIC:                             711.6
 Df Model:                          14                                         
@@ -723,7 +696,7 @@ Dep. Variable:                    TSM   R-squared:                       0.964
 Model:                            OLS   Adj. R-squared:                  0.962
 Method:                 Least Squares   F-statistic:                     452.5
 Date:                Sun, 11 May 2025   Prob (F-statistic):          3.72e-163
-Time:                        22:00:49   Log-Likelihood:                -315.66
+Time:                        22:36:05   Log-Likelihood:                -315.66
 No. Observations:                 254   AIC:                             661.3
 Df Residuals:                     239   BIC:                             714.4
 Df Model:                          14                                         
@@ -771,7 +744,7 @@ Dep. Variable:                    TSM   R-squared:                       0.967
 Model:                            OLS   Adj. R-squared:                  0.965
 Method:                 Least Squares   F-statistic:                     498.5
 Date:                Sun, 11 May 2025   Prob (F-statistic):          5.37e-168
-Time:                        22:00:49   Log-Likelihood:                -319.09
+Time:                        22:36:05   Log-Likelihood:                -319.09
 No. Observations:                 254   AIC:                             668.2
 Df Residuals:                     239   BIC:                             721.2
 Df Model:                          14                                         
@@ -819,7 +792,7 @@ Dep. Variable:                    TSM   R-squared:                       0.962
 Model:                            OLS   Adj. R-squared:                  0.960
 Method:                 Least Squares   F-statistic:                     436.3
 Date:                Sun, 11 May 2025   Prob (F-statistic):          2.44e-161
-Time:                        22:00:49   Log-Likelihood:                -337.56
+Time:                        22:36:05   Log-Likelihood:                -337.56
 No. Observations:                 254   AIC:                             705.1
 Df Residuals:                     239   BIC:                             758.2
 Df Model:                          14                                         
@@ -869,7 +842,7 @@ Dep. Variable:                    TSM   R-squared:                       0.957
 Model:                            OLS   Adj. R-squared:                  0.954
 Method:                 Least Squares   F-statistic:                     378.8
 Date:                Sun, 11 May 2025   Prob (F-statistic):          2.64e-154
-Time:                        22:00:49   Log-Likelihood:                -363.38
+Time:                        22:36:05   Log-Likelihood:                -363.38
 No. Observations:                 254   AIC:                             756.8
 Df Residuals:                     239   BIC:                             809.8
 Df Model:                          14                                         
@@ -917,7 +890,7 @@ Dep. Variable:                    TSM   R-squared:                       0.950
 Model:                            OLS   Adj. R-squared:                  0.947
 Method:                 Least Squares   F-statistic:                     322.8
 Date:                Sun, 11 May 2025   Prob (F-statistic):          2.04e-146
-Time:                        22:00:49   Log-Likelihood:                -393.35
+Time:                        22:36:05   Log-Likelihood:                -393.35
 No. Observations:                 254   AIC:                             816.7
 Df Residuals:                     239   BIC:                             869.8
 Df Model:                          14                                         
@@ -965,7 +938,7 @@ Dep. Variable:                    TSM   R-squared:                       0.960
 Model:                            OLS   Adj. R-squared:                  0.958
 Method:                 Least Squares   F-statistic:                     410.5
 Date:                Sun, 11 May 2025   Prob (F-statistic):          2.65e-158
-Time:                        22:00:49   Log-Likelihood:                -357.09
+Time:                        22:36:05   Log-Likelihood:                -357.09
 No. Observations:                 254   AIC:                             744.2
 Df Residuals:                     239   BIC:                             797.2
 Df Model:                          14                                         
@@ -1013,7 +986,7 @@ Dep. Variable:                    TSM   R-squared:                       0.973
 Model:                            OLS   Adj. R-squared:                  0.972
 Method:                 Least Squares   F-statistic:                     624.6
 Date:                Sun, 11 May 2025   Prob (F-statistic):          2.48e-179
-Time:                        22:00:49   Log-Likelihood:                -304.18
+Time:                        22:36:05   Log-Likelihood:                -304.18
 No. Observations:                 254   AIC:                             638.4
 Df Residuals:                     239   BIC:                             691.4
 Df Model:                          14                                         
@@ -1061,7 +1034,7 @@ Dep. Variable:                    TSM   R-squared:                       0.898
 Model:                            OLS   Adj. R-squared:                  0.892
 Method:                 Least Squares   F-statistic:                     150.5
 Date:                Sun, 11 May 2025   Prob (F-statistic):          7.23e-110
-Time:                        22:00:49   Log-Likelihood:                -509.95
+Time:                        22:36:05   Log-Likelihood:                -509.95
 No. Observations:                 254   AIC:                             1050.
 Df Residuals:                     239   BIC:                             1103.
 Df Model:                          14                                         
@@ -1109,7 +1082,7 @@ Dep. Variable:                    TSM   R-squared:                       0.969
 Model:                            OLS   Adj. R-squared:                  0.968
 Method:                 Least Squares   F-statistic:                     539.5
 Date:                Sun, 11 May 2025   Prob (F-statistic):          5.91e-172
-Time:                        22:00:49   Log-Likelihood:                -326.05
+Time:                        22:36:05   Log-Likelihood:                -326.05
 No. Observations:                 254   AIC:                             682.1
 Df Residuals:                     239   BIC:                             735.2
 Df Model:                          14                                         
@@ -1157,7 +1130,7 @@ Dep. Variable:                    TSM   R-squared:                       0.966
 Model:                            OLS   Adj. R-squared:                  0.964
 Method:                 Least Squares   F-statistic:                     485.2
 Date:                Sun, 11 May 2025   Prob (F-statistic):          1.22e-166
-Time:                        22:00:49   Log-Likelihood:                -348.15
+Time:                        22:36:05   Log-Likelihood:                -348.15
 No. Observations:                 254   AIC:                             726.3
 Df Residuals:                     239   BIC:                             779.4
 Df Model:                          14                                         
@@ -1205,7 +1178,7 @@ Dep. Variable:                    TSM   R-squared:                       0.958
 Model:                            OLS   Adj. R-squared:                  0.955
 Method:                 Least Squares   F-statistic:                     386.9
 Date:                Sun, 11 May 2025   Prob (F-statistic):          2.36e-155
-Time:                        22:00:49   Log-Likelihood:                -379.75
+Time:                        22:36:05   Log-Likelihood:                -379.75
 No. Observations:                 254   AIC:                             789.5
 Df Residuals:                     239   BIC:                             842.6
 Df Model:                          14                                         
@@ -1255,7 +1228,7 @@ Dep. Variable:                    TSM   R-squared:                       0.945
 Model:                            OLS   Adj. R-squared:                  0.941
 Method:                 Least Squares   F-statistic:                     291.8
 Date:                Sun, 11 May 2025   Prob (F-statistic):          1.82e-141
-Time:                        22:00:49   Log-Likelihood:                -315.03
+Time:                        22:36:05   Log-Likelihood:                -315.03
 No. Observations:                 254   AIC:                             660.1
 Df Residuals:                     239   BIC:                             713.1
 Df Model:                          14                                         
@@ -1303,7 +1276,7 @@ Dep. Variable:                    TSM   R-squared:                       0.947
 Model:                            OLS   Adj. R-squared:                  0.944
 Method:                 Least Squares   F-statistic:                     306.3
 Date:                Sun, 11 May 2025   Prob (F-statistic):          7.88e-144
-Time:                        22:00:49   Log-Likelihood:                -313.88
+Time:                        22:36:05   Log-Likelihood:                -313.88
 No. Observations:                 254   AIC:                             657.8
 Df Residuals:                     239   BIC:                             710.8
 Df Model:                          14                                         
@@ -1351,7 +1324,7 @@ Dep. Variable:                    TSM   R-squared:                       0.949
 Model:                            OLS   Adj. R-squared:                  0.945
 Method:                 Least Squares   F-statistic:                     314.5
 Date:                Sun, 11 May 2025   Prob (F-statistic):          3.95e-145
-Time:                        22:00:49   Log-Likelihood:                -314.60
+Time:                        22:36:05   Log-Likelihood:                -314.60
 No. Observations:                 254   AIC:                             659.2
 Df Residuals:                     239   BIC:                             712.3
 Df Model:                          14                                         
@@ -1405,7 +1378,7 @@ En estas zonas, se observa que las variables con menor contribución estadístic
 Este grupo muestra un comportamiento diferente: tanto <strong>Mes_Agosto</strong> como <strong>Mes_Septiembre</strong> resultan ser variables significativas, junto con varios meses del periodo <strong>primaveral</strong>, lo cual indica una dinámica distinta en esta zona con mayor presencia de clorofila y temperaturas más bajas.</p>
 <p>Aunque el objetivo de este estudio no es desarrollar un modelo predictivo definitivo, resulta útil visualizar el comportamiento del modelo de regresión ajustado respecto a los valores reales de temperatura superficial del mar (TSM) para cada estación.</p>
 <p>En esta sección, se representa gráficamente la serie temporal de la temperatura observada junto con las predicciones generadas por el modelo lineal ajustado, utilizando como predictores variables categóricas relacionadas con el año, el evento interanual (ENSO), el mes y la estación del año. Esta comparación permite identificar visualmente qué tan bien el modelo captura las fluctuaciones en la TSM y si existen desviaciones sistemáticas en ciertos periodos.</p>
-<div id="e1060798" class="cell" data-execution_count="10">
+<div id="6dc91936" class="cell" data-execution_count="10">
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -1527,25 +1500,7 @@ Este grupo muestra un comportamiento diferente: tanto <strong>Mes_Agosto</strong
 </div>
 </div>
 <p>Haciendo lo propio para la clorofila</p>
-<div id="5e52e949" class="cell" data-execution_count="11">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">sorted</span>(df_cloro_long[<span class="st">'cluster'</span>].unique()):</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="ch">\n</span><span class="ss">=== Cluster </span><span class="sc">{</span>i<span class="sc">}</span><span class="ss"> ==="</span>)</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    cluster_data <span class="op">=</span> df_cloro_long[df_cloro_long[<span class="st">'cluster'</span>] <span class="op">==</span> i]</span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> est <span class="kw">in</span> cluster_data[<span class="st">'Estación'</span>].unique():</span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>        subset <span class="op">=</span> cluster_data[cluster_data[<span class="st">'Estación'</span>] <span class="op">==</span> est]</span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>        X <span class="op">=</span> subset[[col <span class="cf">for</span> col <span class="kw">in</span> subset.columns <span class="cf">if</span> col.startswith(<span class="st">'AÑO'</span>) <span class="kw">or</span></span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>            col.startswith(<span class="st">'EVENTO INTERANUAL_'</span>) <span class="kw">or</span></span>
-<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>            col.startswith(<span class="st">'MES_'</span>) <span class="kw">or</span></span>
-<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>            col.startswith(<span class="st">'ESTACIÓN DEL AÑO_'</span>)]]</span>
-<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>        X <span class="op">=</span> sm.add_constant(X)</span>
-<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>        y <span class="op">=</span> subset[<span class="st">'Chl_a'</span>]</span>
-<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>        modelo <span class="op">=</span> sm.OLS(y, X).fit()</span>
-<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"</span><span class="ch">\n</span><span class="ss">--- Estación: </span><span class="sc">{</span>est<span class="sc">}</span><span class="ss"> ---"</span>)</span>
-<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(modelo.summary())</span></code><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="0742cce6" class="cell" data-execution_count="11">
 <div class="cell-output cell-output-stdout">
 <pre><code>
 === Cluster 0 ===
@@ -1557,7 +1512,7 @@ Dep. Variable:                  Chl_a   R-squared:                       0.542
 Model:                            OLS   Adj. R-squared:                  0.515
 Method:                 Least Squares   F-statistic:                     20.19
 Date:                Sun, 11 May 2025   Prob (F-statistic):           3.91e-33
-Time:                        22:00:53   Log-Likelihood:                -108.47
+Time:                        22:36:09   Log-Likelihood:                -108.47
 No. Observations:                 254   AIC:                             246.9
 Df Residuals:                     239   BIC:                             300.0
 Df Model:                          14                                         
@@ -1605,7 +1560,7 @@ Dep. Variable:                  Chl_a   R-squared:                       0.453
 Model:                            OLS   Adj. R-squared:                  0.421
 Method:                 Least Squares   F-statistic:                     14.14
 Date:                Sun, 11 May 2025   Prob (F-statistic):           2.18e-24
-Time:                        22:00:53   Log-Likelihood:                -189.49
+Time:                        22:36:09   Log-Likelihood:                -189.49
 No. Observations:                 254   AIC:                             409.0
 Df Residuals:                     239   BIC:                             462.0
 Df Model:                          14                                         
@@ -1653,7 +1608,7 @@ Dep. Variable:                  Chl_a   R-squared:                       0.544
 Model:                            OLS   Adj. R-squared:                  0.517
 Method:                 Least Squares   F-statistic:                     20.36
 Date:                Sun, 11 May 2025   Prob (F-statistic):           2.33e-33
-Time:                        22:00:53   Log-Likelihood:                -155.42
+Time:                        22:36:09   Log-Likelihood:                -155.42
 No. Observations:                 254   AIC:                             340.8
 Df Residuals:                     239   BIC:                             393.9
 Df Model:                          14                                         
@@ -1701,7 +1656,7 @@ Dep. Variable:                  Chl_a   R-squared:                       0.547
 Model:                            OLS   Adj. R-squared:                  0.520
 Method:                 Least Squares   F-statistic:                     20.60
 Date:                Sun, 11 May 2025   Prob (F-statistic):           1.11e-33
-Time:                        22:00:53   Log-Likelihood:                -109.62
+Time:                        22:36:09   Log-Likelihood:                -109.62
 No. Observations:                 254   AIC:                             249.2
 Df Residuals:                     239   BIC:                             302.3
 Df Model:                          14                                         
@@ -1749,7 +1704,7 @@ Dep. Variable:                  Chl_a   R-squared:                       0.586
 Model:                            OLS   Adj. R-squared:                  0.562
 Method:                 Least Squares   F-statistic:                     24.17
 Date:                Sun, 11 May 2025   Prob (F-statistic):           3.35e-38
-Time:                        22:00:53   Log-Likelihood:                -92.770
+Time:                        22:36:09   Log-Likelihood:                -92.770
 No. Observations:                 254   AIC:                             215.5
 Df Residuals:                     239   BIC:                             268.6
 Df Model:                          14                                         
@@ -1797,7 +1752,7 @@ Dep. Variable:                  Chl_a   R-squared:                       0.553
 Model:                            OLS   Adj. R-squared:                  0.527
 Method:                 Least Squares   F-statistic:                     21.14
 Date:                Sun, 11 May 2025   Prob (F-statistic):           2.20e-34
-Time:                        22:00:53   Log-Likelihood:                -167.00
+Time:                        22:36:09   Log-Likelihood:                -167.00
 No. Observations:                 254   AIC:                             364.0
 Df Residuals:                     239   BIC:                             417.1
 Df Model:                          14                                         
@@ -1847,7 +1802,7 @@ Dep. Variable:                  Chl_a   R-squared:                       0.420
 Model:                            OLS   Adj. R-squared:                  0.386
 Method:                 Least Squares   F-statistic:                     12.37
 Date:                Sun, 11 May 2025   Prob (F-statistic):           1.50e-21
-Time:                        22:00:53   Log-Likelihood:                -227.30
+Time:                        22:36:09   Log-Likelihood:                -227.30
 No. Observations:                 254   AIC:                             484.6
 Df Residuals:                     239   BIC:                             537.7
 Df Model:                          14                                         
@@ -1895,7 +1850,7 @@ Dep. Variable:                  Chl_a   R-squared:                       0.522
 Model:                            OLS   Adj. R-squared:                  0.494
 Method:                 Least Squares   F-statistic:                     18.64
 Date:                Sun, 11 May 2025   Prob (F-statistic):           5.11e-31
-Time:                        22:00:53   Log-Likelihood:                -218.93
+Time:                        22:36:09   Log-Likelihood:                -218.93
 No. Observations:                 254   AIC:                             467.9
 Df Residuals:                     239   BIC:                             520.9
 Df Model:                          14                                         
@@ -1943,7 +1898,7 @@ Dep. Variable:                  Chl_a   R-squared:                       0.396
 Model:                            OLS   Adj. R-squared:                  0.360
 Method:                 Least Squares   F-statistic:                     11.18
 Date:                Sun, 11 May 2025   Prob (F-statistic):           1.44e-19
-Time:                        22:00:53   Log-Likelihood:                -408.10
+Time:                        22:36:09   Log-Likelihood:                -408.10
 No. Observations:                 254   AIC:                             846.2
 Df Residuals:                     239   BIC:                             899.3
 Df Model:                          14                                         
@@ -1991,7 +1946,7 @@ Dep. Variable:                  Chl_a   R-squared:                       0.480
 Model:                            OLS   Adj. R-squared:                  0.449
 Method:                 Least Squares   F-statistic:                     15.73
 Date:                Sun, 11 May 2025   Prob (F-statistic):           7.83e-27
-Time:                        22:00:53   Log-Likelihood:                -311.63
+Time:                        22:36:09   Log-Likelihood:                -311.63
 No. Observations:                 254   AIC:                             653.3
 Df Residuals:                     239   BIC:                             706.3
 Df Model:                          14                                         
@@ -2039,7 +1994,7 @@ Dep. Variable:                  Chl_a   R-squared:                       0.456
 Model:                            OLS   Adj. R-squared:                  0.424
 Method:                 Least Squares   F-statistic:                     14.28
 Date:                Sun, 11 May 2025   Prob (F-statistic):           1.29e-24
-Time:                        22:00:53   Log-Likelihood:                -237.56
+Time:                        22:36:09   Log-Likelihood:                -237.56
 No. Observations:                 254   AIC:                             505.1
 Df Residuals:                     239   BIC:                             558.2
 Df Model:                          14                                         
@@ -2087,7 +2042,7 @@ Dep. Variable:                  Chl_a   R-squared:                       0.504
 Model:                            OLS   Adj. R-squared:                  0.475
 Method:                 Least Squares   F-statistic:                     17.33
 Date:                Sun, 11 May 2025   Prob (F-statistic):           3.53e-29
-Time:                        22:00:53   Log-Likelihood:                -282.82
+Time:                        22:36:09   Log-Likelihood:                -282.82
 No. Observations:                 254   AIC:                             595.6
 Df Residuals:                     239   BIC:                             648.7
 Df Model:                          14                                         
@@ -2135,7 +2090,7 @@ Dep. Variable:                  Chl_a   R-squared:                       0.532
 Model:                            OLS   Adj. R-squared:                  0.504
 Method:                 Least Squares   F-statistic:                     19.39
 Date:                Sun, 11 May 2025   Prob (F-statistic):           4.75e-32
-Time:                        22:00:53   Log-Likelihood:                -319.11
+Time:                        22:36:09   Log-Likelihood:                -319.11
 No. Observations:                 254   AIC:                             668.2
 Df Residuals:                     239   BIC:                             721.3
 Df Model:                          14                                         
@@ -2183,7 +2138,7 @@ Dep. Variable:                  Chl_a   R-squared:                       0.571
 Model:                            OLS   Adj. R-squared:                  0.546
 Method:                 Least Squares   F-statistic:                     22.70
 Date:                Sun, 11 May 2025   Prob (F-statistic):           2.20e-36
-Time:                        22:00:53   Log-Likelihood:                -269.77
+Time:                        22:36:09   Log-Likelihood:                -269.77
 No. Observations:                 254   AIC:                             569.5
 Df Residuals:                     239   BIC:                             622.6
 Df Model:                          14                                         
@@ -2233,7 +2188,7 @@ Dep. Variable:                  Chl_a   R-squared:                       0.695
 Model:                            OLS   Adj. R-squared:                  0.677
 Method:                 Least Squares   F-statistic:                     38.85
 Date:                Sun, 11 May 2025   Prob (F-statistic):           1.45e-53
-Time:                        22:00:53   Log-Likelihood:                 98.945
+Time:                        22:36:09   Log-Likelihood:                 98.945
 No. Observations:                 254   AIC:                            -167.9
 Df Residuals:                     239   BIC:                            -114.8
 Df Model:                          14                                         
@@ -2281,7 +2236,7 @@ Dep. Variable:                  Chl_a   R-squared:                       0.646
 Model:                            OLS   Adj. R-squared:                  0.625
 Method:                 Least Squares   F-statistic:                     31.11
 Date:                Sun, 11 May 2025   Prob (F-statistic):           5.08e-46
-Time:                        22:00:53   Log-Likelihood:                 26.547
+Time:                        22:36:09   Log-Likelihood:                 26.547
 No. Observations:                 254   AIC:                            -23.09
 Df Residuals:                     239   BIC:                             29.97
 Df Model:                          14                                         
@@ -2329,7 +2284,7 @@ Dep. Variable:                  Chl_a   R-squared:                       0.564
 Model:                            OLS   Adj. R-squared:                  0.539
 Method:                 Least Squares   F-statistic:                     22.11
 Date:                Sun, 11 May 2025   Prob (F-statistic):           1.24e-35
-Time:                        22:00:53   Log-Likelihood:                -19.569
+Time:                        22:36:09   Log-Likelihood:                -19.569
 No. Observations:                 254   AIC:                             69.14
 Df Residuals:                     239   BIC:                             122.2
 Df Model:                          14                                         
@@ -2381,9 +2336,136 @@ Las estaciones <strong>1 a 8</strong> presentan, en su mayoría, característica
 <p><strong>Cluster 2</strong><br>
 En este grupo, compuesto por las <strong>estaciones 12 y 13</strong>, todas las variables consideradas en el modelo resultan significativas, indicando un ajuste más consistente entre los predictores y los valores observados de clorofila.</p>
 <p>No obstante, es importante señalar que, a diferencia del análisis realizado sobre la temperatura superficial del mar, los modelos aplicados a la clorofila a presentan valores de <strong>R² ajustado considerablemente más bajos</strong>, con un promedio aproximado de <strong>0.5</strong>. Esto sugiere que el modelo explica solo una parte moderada de la variabilidad, y que otros factores —no incluidos en esta formulación— podrían estar influyendo en los niveles de clorofila. Esta limitación también se refleja visualmente en los gráficos de ajuste, donde las predicciones no siguen tan de cerca a los valores reales como lo hacían en el caso de la temperatura.</p>
-
-
+<div id="9bc9ba6a" class="cell" data-execution_count="12">
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="regresion_files/figure-html/cell-13-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="regresion_files/figure-html/cell-13-output-2.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="regresion_files/figure-html/cell-13-output-3.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="regresion_files/figure-html/cell-13-output-4.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="regresion_files/figure-html/cell-13-output-5.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="regresion_files/figure-html/cell-13-output-6.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="regresion_files/figure-html/cell-13-output-7.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="regresion_files/figure-html/cell-13-output-8.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="regresion_files/figure-html/cell-13-output-9.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="regresion_files/figure-html/cell-13-output-10.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="regresion_files/figure-html/cell-13-output-11.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="regresion_files/figure-html/cell-13-output-12.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="regresion_files/figure-html/cell-13-output-13.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="regresion_files/figure-html/cell-13-output-14.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="regresion_files/figure-html/cell-13-output-15.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="regresion_files/figure-html/cell-13-output-16.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="regresion_files/figure-html/cell-13-output-17.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
 </section>
+</section>
+<section id="conclusión" class="level2">
+<h2 class="anchored" data-anchor-id="conclusión">Conclusión</h2>
+<p>Hemos logrado una regionalización de las estaciones costeras basada en la temperatura superficial media durante distintos eventos interanuales (Niño, Niña y condiciones normales), lo cual revela una organización espacial coherente de las estaciones.</p>
+<p>Sin embargo, al aplicar modelos de regresión lineal para cada estación y analizar los resultados dentro de cada cluster, observamos que las variables asociadas a los eventos interanuales no muestran un efecto consistente ni estadísticamente significativo en todos los casos. En contraste, los meses de agosto y septiembre destacan con comportamientos particulares, especialmente en relación con la temperatura, lo cual podría reflejar fenómenos estacionales específicos.</p>
+<p>Por otro lado, la variabilidad de la clorofila resulta más difícil de modelar con las variables actuales. La falta de significancia en la mayoría de los coeficientes sugiere que su dinámica depende de factores más complejos que no Sestán bien representados por los predictores considerados.</p>
+
+
 </section>
 
 </main> <!-- /main -->
