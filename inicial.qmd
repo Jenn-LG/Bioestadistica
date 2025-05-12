@@ -26,27 +26,27 @@ coords_raw = pd.read_csv("data/Coordenadas zona costera occidental GC.csv", head
 
 Para preparar los datos de clorofila (Chl-a) y temperatura superficial del mar (TSM) para su análisis conjunto, se llevó a cabo un proceso de limpieza, transformación e integración, compuesto por las siguientes etapas:
 
-1.   Se eliminó la columna `ORDEN` de ambos conjuntos de datos (`chla_df` y `tsm_df`), ya que no aportaba información útil para el análisis.
+1.  Se eliminó la columna `ORDEN` de ambos conjuntos de datos (`chla_df` y `tsm_df`), ya que no aportaba información útil para el análisis.
 
-2.   Ambos conjuntos de datos se encontraban en formato ancho, con una columna por estación. Se aplicó la función `melt()` para transformarlos a formato largo, de modo que cada fila represente una combinación única de fecha y estación, junto con su medición correspondiente.
+2.  Ambos conjuntos de datos se encontraban en formato ancho, con una columna por estación. Se aplicó la función `melt()` para transformarlos a formato largo, de modo que cada fila represente una combinación única de fecha y estación, junto con su medición correspondiente.
 
 3.  Se estandarizaron los nombres de las estaciones eliminando prefijos como "Est" y símbolos como el grado (`°`). Además, se convirtió la columna `Estacion` a tipo entero para asegurar una correcta fusión posterior.
 
-4.   Se detectó una inconsistencia en la columna `EVENTO INTERANUAL` del dataset de TSM, donde aparecían las etiquetas `'Normal'` y `'Neutro'`, aunque ambas hacen referencia al mismo fenómeno. Para evitar errores en los cruces de datos, se reemplazó la etiqueta `'Neutro'` por `'Normal'`.
+4.  Se detectó una inconsistencia en la columna `EVENTO INTERANUAL` del dataset de TSM, donde aparecían las etiquetas `'Normal'` y `'Neutro'`, aunque ambas hacen referencia al mismo fenómeno. Para evitar errores en los cruces de datos, se reemplazó la etiqueta `'Neutro'` por `'Normal'`.
 
-5.   Se convirtieron las columnas de año (`AÑO`) a tipo entero, imputando valores faltantes con un valor numérico de control. También se validó que no hubiera nulos en las variables claves antes de continuar.
+5.  Se convirtieron las columnas de año (`AÑO`) a tipo entero, imputando valores faltantes con un valor numérico de control. También se validó que no hubiera nulos en las variables claves antes de continuar.
 
 6.  Se asignaron a cada estación sus respectivas coordenadas de latitud y longitud, obtenidas de un archivo externo (`coords_raw`). La fusión se realizó por el número de estación (`Estacion`).
 
 7.  Al comparar las fechas de inicio y fin de ambos datasets, se identificó una diferencia:
 
-    -    TSM cubría desde **1981-09-01** hasta **2018-10-01**
+    -   TSM cubría desde **1981-09-01** hasta **2018-10-01**
 
-    -    Chl-a cubría desde **1997-09-01** hasta **2018-10-01**
+    -   Chl-a cubría desde **1997-09-01** hasta **2018-10-01**
 
     Para asegurar una comparación válida entre ambas variables, se recortaron ambos conjuntos de datos al rango común: **desde 1997-09-01 hasta 2018-10-01**.
 
-8.   Finalmente, se integraron los datos de TSM y Chl-a en un único `DataFrame`, combinando las mediciones con sus coordenadas geográficas y metadatos temporales. Este conjunto consolidado es la base para los análisis exploratorios y modelado posteriores.
+8.  Finalmente, se integraron los datos de TSM y Chl-a en un único `DataFrame`, combinando las mediciones con sus coordenadas geográficas y metadatos temporales. Este conjunto consolidado es la base para los análisis exploratorios y modelado posteriores.
 
 ```{python}
 #| echo: false 

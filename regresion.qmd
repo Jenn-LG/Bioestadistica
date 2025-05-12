@@ -149,11 +149,11 @@ plt.show()
 
 Se pueden observar tres patrones bien diferenciados:
 
--    Un grupo con **altas concentraciones de clorofila** y **temperaturas relativamente bajas**, lo que podría corresponder a zonas más productivas del norte o afectadas por surgencias.
+-   Un grupo con **altas concentraciones de clorofila** y **temperaturas relativamente bajas**, lo que podría corresponder a zonas más productivas del norte o afectadas por surgencias.
 
 -   Un segundo grupo con **valores intermedios** en ambas variables.
 
--    Un tercer grupo con **temperaturas más altas y clorofila más baja**, típicamente asociado a regiones más cálidas y menos productivas del sur del Golfo.
+-   Un tercer grupo con **temperaturas más altas y clorofila más baja**, típicamente asociado a regiones más cálidas y menos productivas del sur del Golfo.
 
 ## Distribución espacial de los clústeres de estaciones
 

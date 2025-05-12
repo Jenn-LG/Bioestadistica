@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="es" xml:lang="es"><head>
 
 <meta charset="utf-8">
 <meta name="generator" content="quarto-1.6.42">
@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>frecuencia – Consultoría Bioestadística</title>
+<title>Análisis de frecuencia y espectral – Consultoría Bioestadística</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -39,7 +39,7 @@ ul.task-list li input[type="checkbox"] {
 <link href="site_libs/quarto-html/quarto-syntax-highlighting-2f5df379a58b258e96c21c0638c20c03.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-ddd961a2510921635943dfbbd19534c4.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-62a8aa0ec1796a0fb9ed2f5853550fec.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -54,27 +54,29 @@ ul.task-list li input[type="checkbox"] {
   ],
   "show-item-context": false,
   "language": {
-    "search-no-results-text": "No results",
-    "search-matching-documents-text": "matching documents",
-    "search-copy-link-title": "Copy link to search",
-    "search-hide-matches-text": "Hide additional matches",
-    "search-more-match-text": "more match in this document",
-    "search-more-matches-text": "more matches in this document",
-    "search-clear-button-title": "Clear",
+    "search-no-results-text": "Sin resultados",
+    "search-matching-documents-text": "documentos encontrados",
+    "search-copy-link-title": "Copiar el enlace en la búsqueda",
+    "search-hide-matches-text": "Ocultar resultados adicionales",
+    "search-more-match-text": "resultado adicional en este documento",
+    "search-more-matches-text": "resultados adicionales en este documento",
+    "search-clear-button-title": "Borrar",
     "search-text-placeholder": "",
-    "search-detached-cancel-button-title": "Cancel",
-    "search-submit-button-title": "Submit",
-    "search-label": "Search"
+    "search-detached-cancel-button-title": "Cancelar",
+    "search-submit-button-title": "Enviar",
+    "search-label": "Buscar"
   }
 }</script>
 
 
 <link rel="stylesheet" href="styles.css">
-<meta property="og:title" content="frecuencia – Consultoría Bioestadística">
-<meta property="og:image" content="img/mcdlogo.png">
+<meta property="og:title" content="Análisis de frecuencia y espectral – Consultoría Bioestadística">
+<meta property="og:description" content="">
+<meta property="og:image" content="images/clipboard-2743432803.png">
 <meta property="og:site_name" content="Consultoría Bioestadística">
-<meta name="twitter:title" content="frecuencia – Consultoría Bioestadística">
-<meta name="twitter:image" content="img/mcdlogo.png">
+<meta name="twitter:title" content="Análisis de frecuencia y espectral – Consultoría Bioestadística">
+<meta name="twitter:description" content="">
+<meta name="twitter:image" content="images/clipboard-2743432803.png">
 <meta name="twitter:card" content="summary_large_image">
 </head>
 
@@ -89,8 +91,8 @@ ul.task-list li input[type="checkbox"] {
     <span class="navbar-title">Consultoría Bioestadística</span>
     </a>
   </div>
-            <div id="quarto-search" class="" title="Search"></div>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+            <div id="quarto-search" class="" title="Buscar"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Navegación de palanca" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
   <span class="navbar-toggler-icon"></span>
 </button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
@@ -113,15 +115,11 @@ ul.task-list li input[type="checkbox"] {
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="./regresion.html"> 
-<span class="menu-text">Regresión</span></a>
+<span class="menu-text">Regresión lineal</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link active" href="./frecuencia.html" aria-current="page"> 
-<span class="menu-text">frecuencia</span></a>
-  </li>  
-  <li class="nav-item">
-    <a class="nav-link" href="./espectral.html"> 
-<span class="menu-text">espectral</span></a>
+<span class="menu-text">Análisis de frecuencia y espectral</span></a>
   </li>  
 </ul>
           </div> <!-- /navcollapse -->
@@ -134,15 +132,32 @@ ul.task-list li input[type="checkbox"] {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">En esta página</h2>
+   
+  <ul>
+  <li><a href="#análisis-de-frecuencia" id="toc-análisis-de-frecuencia" class="nav-link active" data-scroll-target="#análisis-de-frecuencia">Análisis de Frecuencia</a>
+  <ul class="collapse">
+  <li><a href="#tsm" id="toc-tsm" class="nav-link" data-scroll-target="#tsm">TSM</a></li>
+  <li><a href="#chl-a" id="toc-chl-a" class="nav-link" data-scroll-target="#chl-a">Chl <em>a</em></a></li>
+  <li><a href="#comparación-espectral-entre-tsm-y-clorofila-a" id="toc-comparación-espectral-entre-tsm-y-clorofila-a" class="nav-link" data-scroll-target="#comparación-espectral-entre-tsm-y-clorofila-a">Comparación espectral entre TSM y Clorofila a</a></li>
+  </ul></li>
+  <li><a href="#análisis-espectral-mediante-transformada-wavelet" id="toc-análisis-espectral-mediante-transformada-wavelet" class="nav-link" data-scroll-target="#análisis-espectral-mediante-transformada-wavelet">Análisis Espectral mediante transformada wavelet</a>
+  <ul class="collapse">
+  <li><a href="#tsm-1" id="toc-tsm-1" class="nav-link" data-scroll-target="#tsm-1">TSM</a></li>
+  <li><a href="#chl-a-1" id="toc-chl-a-1" class="nav-link" data-scroll-target="#chl-a-1">Chl <em>a</em></a></li>
+  <li><a href="#resumen-comparativo-variabilidad-espectral-de-tsm-y-chl-a" id="toc-resumen-comparativo-variabilidad-espectral-de-tsm-y-chl-a" class="nav-link" data-scroll-target="#resumen-comparativo-variabilidad-espectral-de-tsm-y-chl-a"><strong>Resumen Comparativo: Variabilidad Espectral de TSM y Chl a</strong></a></li>
+  </ul></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/Jenn-LG/Bioestadistica/issues/new" class="toc-action"><i class="bi bi-github"></i>Informar de un problema</a></li><li><a href="https://github.com/Jenn-LG/Bioestadistica/blob/main/frecuencia.qmd" class="toc-action"><i class="bi empty"></i>Ver el código</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">frecuencia</h1>
+<h1 class="title">Análisis de frecuencia y espectral</h1>
 </div>
 
 
@@ -159,10 +174,110 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
+<section id="análisis-de-frecuencia" class="level2">
+<h2 class="anchored" data-anchor-id="análisis-de-frecuencia">Análisis de Frecuencia</h2>
+<p>En esta sección exploramos la variabilidad temporal de la Temperatura Superficial del Mar (TSM) a través del análisis de frecuencia. El objetivo principal es identificar patrones cíclicos o estacionales que se repiten en el tiempo, y que podrían estar asociados con fenómenos climáticos como ENSO o variaciones estacionales naturales.</p>
+<section id="tsm" class="level3">
+<h3 class="anchored" data-anchor-id="tsm">TSM</h3>
+<p>La siguiente gráfica muestra la evolución temporal de la TSM para cada una de las estaciones analizadas en el periodo comprendido entre <strong>1981 y 2018</strong>. Se puede observar un patrón estacional bien definido con oscilaciones anuales regulares, además de algunas anomalías notorias en ciertos periodos (como en las estaciones 12 y 13), que podrían estar relacionadas con eventos extremos o efectos locales.</p>
+<p><img src="images/clipboard-2743432803.png" class="img-fluid"></p>
+<p>A continuación, se presenta el <strong>espectro de frecuencia</strong> de la TSM para cada una de las 17 estaciones, obtenido a partir de la <strong>Transformada Rápida de Fourier (FFT)</strong>. Este análisis permite descomponer la señal de temperatura en sus componentes de frecuencia, facilitando la identificación de ciclos predominantes en la serie temporal.</p>
+<p>Como se observa en la gráfica, todas las estaciones presentan un pico muy marcado alrededor de la frecuencia <strong>0.083 (1/mes)</strong>, lo cual corresponde a un <strong>ciclo de 12 meses</strong>, es decir, un comportamiento anual. Este resultado es consistente con la fuerte estacionalidad observada previamente en las series de TSM.</p>
+<p>Además del pico principal, también se aprecian armónicos menores que podrían estar asociados con subciclos intraanuales u otras oscilaciones menos intensas. La similitud en los espectros entre estaciones sugiere que, a grandes rasgos, todas siguen una dinámica estacional común, aunque con ligeras variaciones en la magnitud del pico dominante.</p>
+<p><img src="images/clipboard-3220776856.png" class="img-fluid"></p>
+<p>Para complementar el análisis espectral, en esta gráfica se identifican y visualizan los <strong>10 picos de frecuencia más relevantes</strong> en la señal de <strong>TSM</strong> para cada estación. Cada punto representa un valor donde la Transformada de Fourier detecta un aumento significativo en la magnitud, lo que sugiere la presencia de un <strong>patrón cíclico dominante</strong>.</p>
+<p>La mayoría de las estaciones presentan su <strong>pico más prominente cerca de la frecuencia 0</strong>, correspondiente al componente de baja frecuencia o tendencia de largo plazo. Sin embargo, el pico más importante desde el punto de vista cíclico ocurre consistentemente en la <strong>frecuencia cercana a 0.083 (1/mes)</strong>, lo cual confirma nuevamente la fuerte estacionalidad anual presente en la TSM.</p>
+<p>Además, algunas estaciones presentan picos adicionales en frecuencias más altas, posiblemente relacionados con <strong>ciclos semestrales</strong> o <strong>variaciones interanuales</strong>. Es interesante notar que la magnitud de estos picos secundarios puede diferir entre estaciones, lo que indica que <strong>la intensidad de los patrones cíclicos puede variar espacialmente a lo largo del Golfo de California</strong>.</p>
+<p>Este tipo de análisis resulta útil para entender mejor no solo qué tan estacional es la serie, sino también qué tan complejos son los patrones temporales en cada punto del sistema.</p>
+<section id="picos-de-frecuencia-en-la-serie-de-tsm" class="level4">
+<h4 class="anchored" data-anchor-id="picos-de-frecuencia-en-la-serie-de-tsm">Picos de frecuencia en la serie de TSM</h4>
+<p>En esta visualización se presentan de forma desglosada los <strong>picos de frecuencia más relevantes</strong> para la <strong>Temperatura Superficial del Mar (TSM)</strong> por cada una de las <strong>17 estaciones</strong> analizadas.</p>
+<p>Cada gráfico corresponde a una estación y muestra los <strong>10 picos principales</strong> detectados en el espectro de frecuencia mediante la Transformada de Fourier. Esto permite examinar con mayor detalle las <strong>características individuales de la variabilidad cíclica</strong> de cada punto del Golfo de California.</p>
+<p><img src="images/clipboard-4268524739.png" class="img-fluid"></p>
+</section>
+<section id="descomposición-espectral-por-estación" class="level4">
+<h4 class="anchored" data-anchor-id="descomposición-espectral-por-estación">Descomposición espectral por estación</h4>
+<p>Como se observa, en la mayoría de estaciones el <strong>pico dominante</strong> se concentra en torno a la frecuencia <strong>0.083 (1/mes)</strong>, que representa el <strong>ciclo anual</strong>. Sin embargo, también aparecen picos secundarios en frecuencias menores (relacionadas con variaciones de largo plazo) o mayores (posiblemente semestrales o incluso estacionales modificadas por factores locales).</p>
+<p><img src="images/clipboard-275479576.png" class="img-fluid"></p>
+</section>
+</section>
+<section id="chl-a" class="level3">
+<h3 class="anchored" data-anchor-id="chl-a">Chl <em>a</em></h3>
+<p>La gráfica presentada muestra los <strong>espectros de frecuencia</strong> para la <strong>clorofila a</strong> (Chl a) registrados en las 17 estaciones a lo largo del tiempo.</p>
+<p>En la mayoría de las estaciones se observa un <strong>pico de magnitud considerable alrededor de la frecuencia 0.083 (1/mes)</strong>, que, al igual que con la TSM, corresponde a un <strong>ciclo anual</strong>. No obstante, comparado con los espectros de TSM, la magnitud de los picos para clorofila es significativamente menor, lo que sugiere una <strong>mayor variabilidad y ruido</strong> en la señal biológica, probablemente asociada a procesos locales, respuestas ecológicas rápidas y/o eventos episódicos.</p>
+<p>También pueden apreciarse <strong>pequeños picos secundarios</strong> en otras frecuencias, los cuales podrían estar relacionados con ciclos estacionales o respuestas a condiciones oceanográficas específicas.</p>
+<p><img src="images/clipboard-679282043.png" class="img-fluid"></p>
+<section id="picos-de-frecuencia-en-la-serie-de-clorofila-a" class="level4">
+<h4 class="anchored" data-anchor-id="picos-de-frecuencia-en-la-serie-de-clorofila-a">Picos de frecuencia en la serie de clorofila <em>a</em></h4>
+<p>Los resultados muestran una mayor dispersión de frecuencias dominantes respecto a lo observado en la TSM. A diferencia de la temperatura, donde la frecuencia anual fue claramente predominante en todas las estaciones, en Chl a se observan picos importantes tanto en frecuencias estacionales (alrededor de 0.083 1/mes) como en otras frecuencias más altas, lo que sugiere una dinámica más compleja y posiblemente más sensible a fenómenos de menor escala temporal.</p>
+<p>También resalta el hecho de que no todas las estaciones comparten los mismos patrones dominantes. Esto podría estar relacionado con condiciones oceanográficas locales, diferencias en la productividad biológica o la influencia diferenciada de eventos como El Niño o La Niña sobre la biomasa fitoplanctónica.</p>
+<p><img src="images/clipboard-4234847510.png" class="img-fluid"></p>
+</section>
+<section id="descomposición-espectral-por-estación-1" class="level4">
+<h4 class="anchored" data-anchor-id="descomposición-espectral-por-estación-1">Descomposición espectral por estación</h4>
+<ul>
+<li><p><strong>Estaciones 1 a 4</strong> presentan picos más concentrados en frecuencias bajas, en particular alrededor de la frecuencia anual (~0.083 1/mes).</p></li>
+<li><p><strong>Estaciones del centro-norte y norte (como 9 a 13)</strong> muestran una mayor dispersión en la distribución de frecuencias, con picos en zonas tanto anuales como subestacionales, lo cual podría reflejar una respuesta más compleja de la biomasa fitoplanctónica a distintos forzantes.</p></li>
+<li><p>En <strong>algunas estaciones del sur (por ejemplo, 16 y 17)</strong> se observan picos de magnitud considerable, con una menor contribución de frecuencias muy bajas, lo que podría implicar variabilidad más rápida y menos dependiente de ciclos anuales.</p></li>
+</ul>
+<p>Estas diferencias espaciales refuerzan la idea de que la dinámica de la clorofila a es más variable y localizada que la de la temperatura superficial del mar (TSM),</p>
+</section>
+</section>
+<section id="comparación-espectral-entre-tsm-y-clorofila-a" class="level3">
+<h3 class="anchored" data-anchor-id="comparación-espectral-entre-tsm-y-clorofila-a">Comparación espectral entre TSM y Clorofila a</h3>
+<p>Los espectros de frecuencia generados para las 17 estaciones muestran diferencias notables entre la variabilidad temporal de la temperatura superficial del mar (TSM) y la concentración de clorofila a (Chl a), tanto en la distribución de frecuencias como en la magnitud de los picos detectados.</p>
+<section id="temperatura-superficial-del-mar-tsm" class="level4">
+<h4 class="anchored" data-anchor-id="temperatura-superficial-del-mar-tsm">Temperatura superficial del mar (TSM)</h4>
+<p>El análisis espectral de la TSM revela un patrón altamente consistente entre estaciones. En todas ellas se identifica un pico dominante en torno a la frecuencia de 0.083 (1/mes), correspondiente a una periodicidad anual. Este comportamiento refleja una fuerte influencia del ciclo estacional. Además, se observan armónicos adicionales, aunque de menor magnitud, que refuerzan la presencia de ciclos subanuales y sugiere una señal estable y periódica.</p>
+</section>
+<section id="clorofila-a-chl-a" class="level4">
+<h4 class="anchored" data-anchor-id="clorofila-a-chl-a">Clorofila a (Chl a)</h4>
+<p>En contraste, los espectros de clorofila a presentan una mayor dispersión entre estaciones, tanto en la ubicación como en la intensidad de los picos. Si bien muchas estaciones también evidencian un pico alrededor de la frecuencia anual, otros picos relevantes aparecen en frecuencias más altas, lo que indica la presencia de procesos de variabilidad a escalas subanuales o incluso mensuales. Esta diversidad sugiere que la dinámica de la Chl a está influida por múltiples factores, como procesos de afloramiento, disponibilidad de nutrientes, eventos meteorológicos, y respuestas biológicas que no siguen un patrón estrictamente estacional.</p>
+</section>
+<section id="síntesis" class="level4">
+<h4 class="anchored" data-anchor-id="síntesis">Síntesis</h4>
+<p>Mientras que la TSM responde predominantemente al ciclo anual con una señal limpia y uniforme, la variabilidad de la clorofila a es más compleja y heterogénea, mostrando una estructura espectral más rica y menos predecible. Esta diferencia refuerza la idea de que, si bien la temperatura puede actuar como modulador general, la Chl a está sujeta a una combinación de forzantes físicos y biológicos más dinámicos.</p>
+</section>
+</section>
+</section>
+<section id="análisis-espectral-mediante-transformada-wavelet" class="level2">
+<h2 class="anchored" data-anchor-id="análisis-espectral-mediante-transformada-wavelet">Análisis Espectral mediante transformada wavelet</h2>
+<section id="tsm-1" class="level3">
+<h3 class="anchored" data-anchor-id="tsm-1">TSM</h3>
+<p>A diferencia de la transformada de Fourier, que proporciona información global en el dominio de la frecuencia, el análisis wavelet permite observar cómo varían las componentes de frecuencia a lo largo del tiempo. Esta propiedad resulta especialmente útil para detectar patrones transitorios o cambios en la periodicidad que puedan estar ligados a procesos oceánicos o climáticos no estacionarios.</p>
+<p><img src="images/clipboard-1952405182.png" class="img-fluid"></p>
+<p>La figura anterior muestra el espectro de potencia wavelet de la Temperatura Superficial del Mar (TSM) para cada una de las 17 estaciones, usando la transformada continua con wavelets complejas Morlet.</p>
+<p>En el gráfico se puede observar</p>
+<ul>
+<li><p><strong>Dominancia de la variabilidad de largo plazo:</strong> En la mayoría de las estaciones, las zonas de mayor magnitud se ubican en escalas de tiempo amplias (bajas frecuencias), lo que indica una fuerte presencia de oscilaciones de largo periodo (varios años a décadas). Estas señales podrían estar asociadas a forzantes climáticos de baja frecuencia, como la Oscilación Decadal del Pacífico (PDO), que modulan la TSM a escalas multidecadales.</p></li>
+<li><p><strong>Variabilidad interanual significativa:</strong> En muchos paneles se observan zonas amarillas y anaranjadas en la parte media del espectro (~2 a 8 años de periodo), indicando una señal interanual robusta. Esta es típicamente atribuida a eventos como El Niño–Oscilación del Sur (ENOS), que afectan significativamente la dinámica oceánica superficial en la región.</p></li>
+<li><p><strong>Señal anual menos dominante:</strong> Aunque se puede identificar una banda de energía asociada al ciclo estacional (frecuencia cercana a 1/12 meses⁻¹), su magnitud es relativamente baja comparada con las componentes interanuales y de largo plazo. Esto sugiere que, si bien existe estacionalidad, no es la principal fuente de variabilidad energética de la TSM en estas series.</p></li>
+<li><p><strong>Variabilidad espacial:</strong> La intensidad y estructura del espectro varían entre estaciones, reflejando diferencias en la respuesta oceánica local. Algunas estaciones presentan mayor energía interanual o estacional, mientras que otras muestran predominancia de señales de largo plazo. Esto sugiere que la influencia de los forzantes climáticos varía espacialmente a lo largo del golfo.</p></li>
+</ul>
+</section>
+<section id="chl-a-1" class="level3">
+<h3 class="anchored" data-anchor-id="chl-a-1">Chl <em>a</em></h3>
+<p>El análisis wavelet aplicado a las series de clorofila por estación revela una dinámica temporal notablemente más compleja y localizada que la observada para la TSM.</p>
+<p><img src="images/clipboard-2906875219.png" class="img-fluid"></p>
+<ul>
+<li><p><strong>Dominancia de Variabilidad Subanual y Anual:</strong> A diferencia de la TSM, en muchas estaciones la energía se concentra en frecuencias más altas (parte superior de los gráficos), lo que indica una fuerte influencia de procesos subanuales o estacionales. Esto sugiere que la clorofila responde con mayor sensibilidad a cambios estacionales como la luz solar y la mezcla vertical.</p></li>
+<li><p><strong>Eventos Intermitentes de Alta Energía:</strong> En varias estaciones se observan manchas localizadas de alta magnitud en ciertos años y frecuencias específicas. Estas “explosiones” espectrales pueden estar asociadas a eventos de floraciones fitoplanctónicas o condiciones oceanográficas anómalas (como fuertes eventos El Niño o La Niña).</p></li>
+<li><p><strong>Variabilidad Espacial Marcada:</strong> Las diferencias entre estaciones son más evidentes en Chl a que en TSM. Algunas estaciones presentan mayor actividad en frecuencias altas de forma persistente, mientras que otras exhiben variabilidad más baja o energía concentrada en frecuencias intermedias.</p></li>
+<li><p><strong>Poca Influencia de Escalas Decadales:</strong> A nivel general, no se observa una dominancia de variabilidad de muy largo plazo (como en el caso de la TSM), lo que indica que los cambios en clorofila tienden a estar más ligados a forzamientos de corto a mediano plazo.</p></li>
+</ul>
+</section>
+<section id="resumen-comparativo-variabilidad-espectral-de-tsm-y-chl-a" class="level3">
+<h3 class="anchored" data-anchor-id="resumen-comparativo-variabilidad-espectral-de-tsm-y-chl-a"><strong>Resumen Comparativo: Variabilidad Espectral de TSM y Chl a</strong></h3>
+<ul>
+<li><p><strong>TSM</strong>: Predominan las señales de largo plazo, asociadas a fenómenos climáticos como la Oscilación Decadal del Pacífico (PDO) y El Niño-Oscilación del Sur (ENOS). La variabilidad es más uniforme entre estaciones.</p></li>
+<li><p><strong>Chl a</strong>: Presenta mayor variabilidad en escalas estacionales y subanuales, con eventos intermitentes de alta energía posiblemente relacionados con floraciones fitoplanctónicas. Existe una marcada heterogeneidad espacial entre estaciones.</p></li>
+</ul>
 
 
+</section>
+</section>
 
-<a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a></main> <!-- /main -->
+</main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
@@ -206,12 +321,12 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     // flash "checked"
     button.classList.add('code-copy-button-checked');
     var currentTitle = button.getAttribute("title");
-    button.setAttribute("title", "Copied!");
+    button.setAttribute("title", "Copiado");
     let tooltip;
     if (window.bootstrap) {
       button.setAttribute("data-bs-toggle", "tooltip");
       button.setAttribute("data-bs-placement", "left");
-      button.setAttribute("data-bs-title", "Copied!");
+      button.setAttribute("data-bs-title", "Copiado");
       tooltip = new bootstrap.Tooltip(button, 
         { trigger: "manual", 
           customClass: "code-copy-button-tooltip",
@@ -581,6 +696,19 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 });
 </script>
 </div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+<p>Powered by <a href="https://quarto.org/"><img src="https://quarto.org/quarto.png" class="img-fluid" alt="Quarto" width="65"></a>.</p>
+</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/Jenn-LG/Bioestadistica/issues/new" class="toc-action"><i class="bi bi-github"></i>Informar de un problema</a></li><li><a href="https://github.com/Jenn-LG/Bioestadistica/blob/main/frecuencia.qmd" class="toc-action"><i class="bi empty"></i>Ver el código</a></li></ul></div></div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
 
 
 
