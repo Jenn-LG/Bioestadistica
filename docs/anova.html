@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="es" xml:lang="es"><head>
 
 <meta charset="utf-8">
 <meta name="generator" content="quarto-1.6.42">
@@ -39,7 +39,7 @@ ul.task-list li input[type="checkbox"] {
 <link href="site_libs/quarto-html/quarto-syntax-highlighting-2f5df379a58b258e96c21c0638c20c03.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-ddd961a2510921635943dfbbd19534c4.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-62a8aa0ec1796a0fb9ed2f5853550fec.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -54,22 +54,25 @@ ul.task-list li input[type="checkbox"] {
   ],
   "show-item-context": false,
   "language": {
-    "search-no-results-text": "No results",
-    "search-matching-documents-text": "matching documents",
-    "search-copy-link-title": "Copy link to search",
-    "search-hide-matches-text": "Hide additional matches",
-    "search-more-match-text": "more match in this document",
-    "search-more-matches-text": "more matches in this document",
-    "search-clear-button-title": "Clear",
+    "search-no-results-text": "Sin resultados",
+    "search-matching-documents-text": "documentos encontrados",
+    "search-copy-link-title": "Copiar el enlace en la búsqueda",
+    "search-hide-matches-text": "Ocultar resultados adicionales",
+    "search-more-match-text": "resultado adicional en este documento",
+    "search-more-matches-text": "resultados adicionales en este documento",
+    "search-clear-button-title": "Borrar",
     "search-text-placeholder": "",
-    "search-detached-cancel-button-title": "Cancel",
-    "search-submit-button-title": "Submit",
-    "search-label": "Search"
+    "search-detached-cancel-button-title": "Cancelar",
+    "search-submit-button-title": "Enviar",
+    "search-label": "Buscar"
   }
 }</script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
 
+
+
 <script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
@@ -123,8 +126,8 @@ window.Quarto = {
     <span class="navbar-title">Consultoría Bioestadística</span>
     </a>
   </div>
-            <div id="quarto-search" class="" title="Search"></div>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+            <div id="quarto-search" class="" title="Buscar"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Navegación de palanca" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
   <span class="navbar-toggler-icon"></span>
 </button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
@@ -170,7 +173,7 @@ window.Quarto = {
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
         <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">On this page</h2>
+    <h2 id="toc-title">En esta página</h2>
    
   <ul>
   <li><a href="#aplicación-del-anova-a-tsm" id="toc-aplicación-del-anova-a-tsm" class="nav-link active" data-scroll-target="#aplicación-del-anova-a-tsm">Aplicación del ANOVA a TSM</a></li>
@@ -178,10 +181,10 @@ window.Quarto = {
   <li><a href="#comparaciones-post-hoc-tukey-hsd" id="toc-comparaciones-post-hoc-tukey-hsd" class="nav-link" data-scroll-target="#comparaciones-post-hoc-tukey-hsd">Comparaciones post-hoc (Tukey HSD)</a></li>
   <li><a href="#visualización-de-los-resultados-del-anova" id="toc-visualización-de-los-resultados-del-anova" class="nav-link" data-scroll-target="#visualización-de-los-resultados-del-anova">Visualización de los resultados del ANOVA</a></li>
   <li><a href="#resultados-del-anova-trifactorial-para-clorofila-a-chl-a" id="toc-resultados-del-anova-trifactorial-para-clorofila-a-chl-a" class="nav-link" data-scroll-target="#resultados-del-anova-trifactorial-para-clorofila-a-chl-a">Resultados del ANOVA trifactorial para Clorofila a (Chl-a)</a></li>
-  <li><a href="#visualización-clave-de-los-resultados-del-anova-clorofila-a" id="toc-visualización-clave-de-los-resultados-del-anova-clorofila-a" class="nav-link" data-scroll-target="#visualización-clave-de-los-resultados-del-anova-clorofila-a"><strong>Visualización clave de los resultados del ANOVA – Clorofila a</strong></a></li>
-  <li><a href="#distribución-de-tsm-y-clorofila-a-según-estación-y-fase-enso" id="toc-distribución-de-tsm-y-clorofila-a-según-estación-y-fase-enso" class="nav-link" data-scroll-target="#distribución-de-tsm-y-clorofila-a-según-estación-y-fase-enso"><strong>Distribución de TSM y clorofila a según estación y fase ENSO</strong></a></li>
+  <li><a href="#visualización-clave-de-los-resultados-del-anova-clorofila-a" id="toc-visualización-clave-de-los-resultados-del-anova-clorofila-a" class="nav-link" data-scroll-target="#visualización-clave-de-los-resultados-del-anova-clorofila-a">Visualización clave de los resultados del ANOVA – Clorofila a</a></li>
+  <li><a href="#distribución-de-tsm-y-clorofila-a-según-estación-y-fase-enso" id="toc-distribución-de-tsm-y-clorofila-a-según-estación-y-fase-enso" class="nav-link" data-scroll-target="#distribución-de-tsm-y-clorofila-a-según-estación-y-fase-enso">Distribución de TSM y clorofila a según estación y fase ENSO</a></li>
   </ul>
-</nav>
+<div class="toc-actions"><ul><li><a href="https://github.com/Jenn-LG/Bioestadistica/issues/new" class="toc-action"><i class="bi bi-github"></i>Informar de un problema</a></li><li><a href="https://github.com/Jenn-LG/Bioestadistica/blob/main/anova.qmd" class="toc-action"><i class="bi empty"></i>Ver el código</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -208,7 +211,7 @@ window.Quarto = {
 <p>Antes de aplicar el análisis de varianza (ANOVA), es necesario identificar grupos de estaciones con características geográficas similares, de modo que el análisis estadístico posterior tenga sentido dentro de contextos homogéneos.</p>
 <p>Para ello, se aplicó una técnica de agrupamiento basada en coordenadas geográficas (latitud y longitud). Específicamente, se estandarizaron las coordenadas de cada estación y se utilizó el algoritmo de <strong>K-means</strong> para explorar diferentes posibles divisiones del espacio en clústeres.</p>
 <p>Como criterio para determinar el número óptimo de grupos, se utilizó el <strong>método del codo</strong>, que evalúa la inercia (suma de distancias al centro del clúster) para distintos valores de <span class="math inline">\(k\)</span>. El punto donde la reducción de inercia comienza a estabilizarse sugiere un número adecuado de clústeres a considerar</p>
-<div id="649ad150" class="cell" data-execution_count="5">
+<div id="0480eeae" class="cell" data-execution_count="5">
 <div class="cell-output cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
@@ -220,7 +223,7 @@ window.Quarto = {
 <p>A partir del gráfico del método del codo, se observa un punto de inflexión claro en <span class="math inline">\(k=4\)</span>, lo que indica que esta es una buena elección para agrupar las estaciones en función de su ubicación geográfica.</p>
 <p>Con base en este resultado, se aplicó el algoritmo de <strong>K-means</strong> con <span class="math inline">\(k=4\)</span>, y se asignó a cada estación un identificador de clúster. Posteriormente, estos clústeres fueron ordenados de sur a norte según la latitud promedio de las estaciones que los componen, y se les asignaron etiquetas descriptivas: <strong>Sur</strong>, <strong>Centro-Sur</strong>, <strong>Centro-Norte</strong> y <strong>Norte</strong>.</p>
 <p>Las cuales nos generan estas las siguientes regiones</p>
-<div id="6e9a7a6a" class="cell" data-execution_count="7">
+<div id="654ec1d1" class="cell" data-execution_count="7">
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -240,7 +243,7 @@ window.Quarto = {
 </ul>
 <p>Se creó una función <code>anova_tri()</code> la cuál implementa este análisis utilizando un modelo lineal con interacciones entre los tres factores (<code>ENSO * ESTACION * REGION</code>). Además del análisis de varianza, se evalúan los supuestos de normalidad (mediante la prueba de <strong>Shapiro-Wilk</strong>) y homogeneidad de varianzas (<strong>Levene</strong>).</p>
 <p>En caso de encontrar diferencias significativas en el factor ENSO, se realiza un análisis <strong>post-hoc de Tukey</strong> para identificar entre qué niveles se presentan las diferencias.</p>
-<div id="732be977" class="cell" data-execution_count="8">
+<div id="dbb55280" class="cell" data-execution_count="8">
 <div class="cell-output cell-output-stdout">
 <pre><code>
 ==========================================================================================
@@ -367,7 +370,7 @@ group1 group2 meandiff p-adj   lower  upper  reject
 <li><p>El gráfico inferior central muestra la interacción entre <strong>ENSO y estación</strong>, revelando cómo los efectos de ENSO no son constantes a lo largo del año. Por ejemplo, en verano las diferencias se reducen, mientras que en invierno y primavera se hacen más marcadas.</p></li>
 <li><p>Finalmente, el gráfico de <strong>estación × región</strong> (abajo a la derecha) destaca cómo el ciclo estacional de la TSM varía de una región a otra. La región sur presenta temperaturas consistentemente más altas, mientras que las regiones del norte muestran un rango más amplio de variación estacional.</p></li>
 </ul>
-<div id="36ad3525" class="cell" data-execution_count="9">
+<div id="cd0db511" class="cell" data-execution_count="9">
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -379,7 +382,7 @@ group1 group2 meandiff p-adj   lower  upper  reject
 </section>
 <section id="resultados-del-anova-trifactorial-para-clorofila-a-chl-a" class="level2">
 <h2 class="anchored" data-anchor-id="resultados-del-anova-trifactorial-para-clorofila-a-chl-a">Resultados del ANOVA trifactorial para Clorofila a (Chl-a)</h2>
-<div id="6489aa4e" class="cell" data-execution_count="10">
+<div id="f23363c2" class="cell" data-execution_count="10">
 <div class="cell-output cell-output-stdout">
 <pre><code>
 ==========================================================================================
@@ -491,7 +494,7 @@ group1 group2 meandiff p-adj   lower   upper  reject
 </section>
 </section>
 <section id="visualización-clave-de-los-resultados-del-anova-clorofila-a" class="level2">
-<h2 class="anchored" data-anchor-id="visualización-clave-de-los-resultados-del-anova-clorofila-a"><strong>Visualización clave de los resultados del ANOVA – Clorofila a</strong></h2>
+<h2 class="anchored" data-anchor-id="visualización-clave-de-los-resultados-del-anova-clorofila-a">Visualización clave de los resultados del ANOVA – Clorofila a</h2>
 <p>Las siguientes gráficas resumen los efectos principales e interacciones detectados en el análisis de varianza aplicado a la concentración de clorofila a (Chl-a):</p>
 <ul>
 <li><p>En la parte superior izquierda, se observa que la media de Chl-a varía de manera notable según la <strong>estación del año</strong>, con valores más altos en <strong>primavera</strong> e <strong>invierno</strong>, y una marcada disminución en <strong>verano</strong>. Esto concuerda con patrones estacionales típicos de productividad biológica.</p></li>
@@ -500,7 +503,7 @@ group1 group2 meandiff p-adj   lower   upper  reject
 <li><p>El gráfico de líneas de <strong>ENSO × Estación</strong> (centro derecha) muestra que el efecto del evento interanual varía según la estación. En primavera, por ejemplo, los años <strong>Niño</strong> tienden a tener valores de Chl-<em>a</em> más bajos comparados con <strong>La Niña</strong>, lo cual concuerda con los resultados del análisis post-hoc.</p></li>
 <li><p>Finalmente, el gráfico de <strong>contraste estacional por región</strong> (abajo) muestra la diferencia en Chl-<em>a</em> entre invierno y verano. Las regiones <strong>norte y centro-sur</strong> presentan los mayores contrastes, lo que indica una alta variabilidad estacional en estas zonas. La región <strong>centro-norte</strong>, por otro lado, muestra una diferencia estacional muy reducida, lo que podría estar relacionado con condiciones más constantes de mezcla o disponibilidad de nutrientes.</p></li>
 </ul>
-<div id="c63c8357" class="cell" data-execution_count="11">
+<div id="b0087fb0" class="cell" data-execution_count="11">
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -511,10 +514,10 @@ group1 group2 meandiff p-adj   lower   upper  reject
 </div>
 </section>
 <section id="distribución-de-tsm-y-clorofila-a-según-estación-y-fase-enso" class="level2">
-<h2 class="anchored" data-anchor-id="distribución-de-tsm-y-clorofila-a-según-estación-y-fase-enso"><strong>Distribución de TSM y clorofila a según estación y fase ENSO</strong></h2>
+<h2 class="anchored" data-anchor-id="distribución-de-tsm-y-clorofila-a-según-estación-y-fase-enso">Distribución de TSM y clorofila a según estación y fase ENSO</h2>
 <p>Las siguientes visualizaciones nos permitirán observar cómo se distribuyen los valores de temperatura superficial del mar (TSM) y clorofila a (Chl-a) en función de la estación del año y la fase del fenómeno ENSO.</p>
 <section id="tsm-por-estación-y-fase-enso" class="level4">
-<h4 class="anchored" data-anchor-id="tsm-por-estación-y-fase-enso"><strong>TSM por estación y fase ENSO</strong></h4>
+<h4 class="anchored" data-anchor-id="tsm-por-estación-y-fase-enso">TSM por estación y fase ENSO</h4>
 <p>La gráfica superior muestra que la TSM presenta un patrón estacional bien definido, con temperaturas bajas en invierno y primavera, y valores elevados en verano y otoño. Además, se observan diferencias sutiles asociadas al evento interanual:</p>
 <ul>
 <li><p>Durante el invierno y primavera, los años <strong>Niño</strong> tienden a mostrar temperaturas ligeramente más altas que los años <strong>Niña</strong>.</p></li>
@@ -522,7 +525,7 @@ group1 group2 meandiff p-adj   lower   upper  reject
 <li><p>Se observa una superposición importante entre grupos, aunque hay variaciones en los rangos de dispersión.</p></li>
 </ul>
 <p>Estos patrones confirman lo evidenciado por el ANOVA, donde ENSO tiene un efecto significativo sobre TSM, especialmente en interacción con la estación.</p>
-<div id="7de50555" class="cell" data-execution_count="13">
+<div id="0e9efb60" class="cell" data-execution_count="13">
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -533,14 +536,14 @@ group1 group2 meandiff p-adj   lower   upper  reject
 </div>
 </section>
 <section id="clorofila-a-por-estación-y-fase-enso" class="level4">
-<h4 class="anchored" data-anchor-id="clorofila-a-por-estación-y-fase-enso"><strong>Clorofila a por estación y fase ENSO</strong></h4>
+<h4 class="anchored" data-anchor-id="clorofila-a-por-estación-y-fase-enso">Clorofila a por estación y fase ENSO</h4>
 <p>En la segunda gráfica se observa un comportamiento más disperso en los valores de Chl-a, con presencia de valores atípicos especialmente en primavera. Aun así, se destacan algunos patrones:</p>
 <ul>
 <li><p>La <strong>primavera</strong> presenta las mayores concentraciones promedio de clorofila a, seguidas por invierno y otoño.</p></li>
 <li><p>Durante la primavera, los años <strong>Niña</strong> tienden a mostrar concentraciones ligeramente más altas que los años <strong>Niño</strong>, lo cual concuerda con los resultados post-hoc del ANOVA.</p></li>
 <li><p>El <strong>verano</strong> es la estación con menor concentración general de Chl-a, independientemente del evento interanual.</p></li>
 </ul>
-<div id="5960df3b" class="cell" data-execution_count="14">
+<div id="95cc8c5f" class="cell" data-execution_count="14">
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -554,7 +557,7 @@ group1 group2 meandiff p-adj   lower   upper  reject
 </section>
 </section>
 
-<a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a></main> <!-- /main -->
+</main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
@@ -598,12 +601,12 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     // flash "checked"
     button.classList.add('code-copy-button-checked');
     var currentTitle = button.getAttribute("title");
-    button.setAttribute("title", "Copied!");
+    button.setAttribute("title", "Copiado");
     let tooltip;
     if (window.bootstrap) {
       button.setAttribute("data-bs-toggle", "tooltip");
       button.setAttribute("data-bs-placement", "left");
-      button.setAttribute("data-bs-title", "Copied!");
+      button.setAttribute("data-bs-title", "Copiado");
       tooltip = new bootstrap.Tooltip(button, 
         { trigger: "manual", 
           customClass: "code-copy-button-tooltip",
@@ -973,6 +976,19 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 });
 </script>
 </div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+<p>Powered by <a href="https://quarto.org/"><img src="https://quarto.org/quarto.png" class="img-fluid" alt="Quarto" width="65"></a>.</p>
+</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/Jenn-LG/Bioestadistica/issues/new" class="toc-action"><i class="bi bi-github"></i>Informar de un problema</a></li><li><a href="https://github.com/Jenn-LG/Bioestadistica/blob/main/anova.qmd" class="toc-action"><i class="bi empty"></i>Ver el código</a></li></ul></div></div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
 
 
 

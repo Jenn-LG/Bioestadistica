@@ -9,11 +9,18 @@ website:
   title: "Consultoría Bioestadística"
   favicon: img/mcdlogo.png
   image: img/mcdlogo.png
+  repo-url: https://github.com/Jenn-LG/Bioestadistica
+  repo-actions: [issue, source]
   open-graph: true
   twitter-card: true
   page-navigation: true
-  back-to-top-navigation: true
+#  back-to-top-navigation: true
+  page-footer:
+    border: true
+    left: | 
+      Powered by [![](https://quarto.org/quarto.png){fig-alt="Quarto" width=65px}](https://quarto.org/).
   navbar:
+    search: true
     left:
       - href: index.qmd
         text: Introducción
@@ -22,7 +29,9 @@ website:
       - anova.qmd
       - regresion.qmd
       - frecuencia.qmd
+        text: Análisis de frecuencia
       - espectral.qmd
+        text: Análisis espectral
 
 format:
   html:
@@ -31,6 +40,7 @@ format:
       - brand
     css: styles.css
     toc: true
+    lang: es
 
 editor: visual
 

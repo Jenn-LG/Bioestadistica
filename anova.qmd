@@ -304,7 +304,7 @@ Los resultados muestran que tanto **la estación del año** como **la región** 
 
 El análisis post-hoc realizado para el factor ENSO reveló diferencias estadísticamente significativas únicamente entre los años **Niña** y **Niño**, con una diferencia negativa en la media, lo que sugiere una ligera disminución en la concentración de clorofila a durante eventos **Niña** respecto a **Niño**. No se encontraron diferencias significativas entre los años **Niña–Normal** ni **Niño–Normal**.
 
-## **Visualización clave de los resultados del ANOVA – Clorofila a**
+## Visualización clave de los resultados del ANOVA – Clorofila a
 
 Las siguientes gráficas resumen los efectos principales e interacciones detectados en el análisis de varianza aplicado a la concentración de clorofila a (Chl-a):
 
@@ -381,7 +381,7 @@ plt.tight_layout(rect=[0,0.03,1,0.95])
 plt.show()
 ```
 
-## **Distribución de TSM y clorofila a según estación y fase ENSO**
+## Distribución de TSM y clorofila a según estación y fase ENSO
 
 Las siguientes visualizaciones nos permitirán observar cómo se distribuyen los valores de temperatura superficial del mar (TSM) y clorofila a (Chl-a) en función de la estación del año y la fase del fenómeno ENSO.
 
@@ -395,7 +395,7 @@ def boxplot_factor(df, yvar, title):
     plt.show()
 ```
 
-#### **TSM por estación y fase ENSO**
+#### TSM por estación y fase ENSO
 
 La gráfica superior muestra que la TSM presenta un patrón estacional bien definido, con temperaturas bajas en invierno y primavera, y valores elevados en verano y otoño. Además, se observan diferencias sutiles asociadas al evento interanual:
 
@@ -412,7 +412,7 @@ Estos patrones confirman lo evidenciado por el ANOVA, donde ENSO tiene un efecto
 boxplot_factor(tsm_long , 'TSM' , 'TSM por estación y fase ENSO')
 ```
 
-#### **Clorofila a por estación y fase ENSO**
+#### Clorofila a por estación y fase ENSO
 
 En la segunda gráfica se observa un comportamiento más disperso en los valores de Chl-a, con presencia de valores atípicos especialmente en primavera. Aun así, se destacan algunos patrones:
 
