@@ -210,17 +210,17 @@ Los resultados muestran que los tres factores principales tienen un efecto altam
 
 ## Verificación de supuestos
 
--    **Normalidad de los residuos:** La prueba de Shapiro-Wilk no fue significativa ($p > 0.05$), lo cual sugiere que los residuos del modelo siguen una distribución normal.
+-   **Normalidad de los residuos:** La prueba de Shapiro-Wilk no fue significativa ($p > 0.05$), lo cual sugiere que los residuos del modelo siguen una distribución normal.
 
--    **Homocedasticidad:** La prueba de Levene sí fue significativa ($p < 0.05$), lo que indica que hay variaciones distintas entre los grupos. Aunque esta violación no invalida el análisis, se debe considerar con precaución en la interpretación.
+-   **Homocedasticidad:** La prueba de Levene sí fue significativa ($p < 0.05$), lo que indica que hay variaciones distintas entre los grupos. Aunque esta violación no invalida el análisis, se debe considerar con precaución en la interpretación.
 
 ## Comparaciones post-hoc (Tukey HSD)
 
 Se realizó un análisis post-hoc para el factor **ENSO**, dado que fue estadísticamente significativo. Los resultados indican que:
 
--    Existen diferencias significativas entre los años **Niña** y **Niño**, así como entre **Niña** y **Normal**.
+-   Existen diferencias significativas entre los años **Niña** y **Niño**, así como entre **Niña** y **Normal**.
 
--    No se encontraron diferencias significativas entre los años **Niño** y **Normal**.
+-   No se encontraron diferencias significativas entre los años **Niño** y **Normal**.
 
 Esto sugiere que las condiciones asociadas al fenómeno **La Niña** impactan de forma diferencial la TSM respecto a los otros dos eventos.
 
@@ -228,17 +228,17 @@ Esto sugiere que las condiciones asociadas al fenómeno **La Niña** impactan de
 
 Para complementar el análisis estadístico, se generaron visualizaciones que resumen los efectos principales e interacciones identificados mediante el ANOVA trifactorial aplicado a la TSM.
 
--    En la parte superior izquierda, se observa que los valores promedio de TSM varían según el tipo de evento interanual (**ENSO**). El valor más bajo se registra durante eventos **La Niña**, mientras que los valores más altos corresponden a condiciones **Normales**, lo que refuerza los resultados obtenidos en el análisis post-hoc de Tukey.
+-   En la parte superior izquierda, se observa que los valores promedio de TSM varían según el tipo de evento interanual (**ENSO**). El valor más bajo se registra durante eventos **La Niña**, mientras que los valores más altos corresponden a condiciones **Normales**, lo que refuerza los resultados obtenidos en el análisis post-hoc de Tukey.
 
--    El diagrama de caja por **ENSO** (arriba al centro) muestra la dispersión de los valores y la presencia de posibles valores atípicos, permitiendo visualizar la superposición parcial entre grupos.
+-   El diagrama de caja por **ENSO** (arriba al centro) muestra la dispersión de los valores y la presencia de posibles valores atípicos, permitiendo visualizar la superposición parcial entre grupos.
 
--    En la esquina superior derecha, la distribución de TSM por **estación del año** confirma el marcado ciclo estacional de la temperatura superficial: valores más bajos en invierno y más altos en verano.
+-   En la esquina superior derecha, la distribución de TSM por **estación del año** confirma el marcado ciclo estacional de la temperatura superficial: valores más bajos en invierno y más altos en verano.
 
--    En la parte inferior izquierda, se explora la variabilidad de TSM entre **regiones geográficas**. Aunque hay cierta variación dentro de cada región, se mantiene una tendencia de mayor temperatura en la zona sur.
+-   En la parte inferior izquierda, se explora la variabilidad de TSM entre **regiones geográficas**. Aunque hay cierta variación dentro de cada región, se mantiene una tendencia de mayor temperatura en la zona sur.
 
--    El gráfico inferior central muestra la interacción entre **ENSO y estación**, revelando cómo los efectos de ENSO no son constantes a lo largo del año. Por ejemplo, en verano las diferencias se reducen, mientras que en invierno y primavera se hacen más marcadas.
+-   El gráfico inferior central muestra la interacción entre **ENSO y estación**, revelando cómo los efectos de ENSO no son constantes a lo largo del año. Por ejemplo, en verano las diferencias se reducen, mientras que en invierno y primavera se hacen más marcadas.
 
--    Finalmente, el gráfico de **estación × región** (abajo a la derecha) destaca cómo el ciclo estacional de la TSM varía de una región a otra. La región sur presenta temperaturas consistentemente más altas, mientras que las regiones del norte muestran un rango más amplio de variación estacional.
+-   Finalmente, el gráfico de **estación × región** (abajo a la derecha) destaca cómo el ciclo estacional de la TSM varía de una región a otra. La región sur presenta temperaturas consistentemente más altas, mientras que las regiones del norte muestran un rango más amplio de variación estacional.
 
 ```{python}
 #| echo: false
@@ -298,7 +298,7 @@ Los resultados muestran que tanto **la estación del año** como **la región** 
 
 -   **Normalidad de los residuos:** La prueba de Shapiro-Wilk no fue significativa ( $p>0.05$ ), indicando que los residuos del modelo se distribuyen normalmente.
 
--    **Homocedasticidad:** La prueba de Levene fue significativa ( $p<0.001$ ), lo que indica que las varianzas no son homogéneas entre grupos, por lo que los resultados deben interpretarse con cautela.
+-   **Homocedasticidad:** La prueba de Levene fue significativa ( $p<0.001$ ), lo que indica que las varianzas no son homogéneas entre grupos, por lo que los resultados deben interpretarse con cautela.
 
 #### Comparaciones post-hoc (Tukey HSD)
 
@@ -308,15 +308,15 @@ El análisis post-hoc realizado para el factor ENSO reveló diferencias estadís
 
 Las siguientes gráficas resumen los efectos principales e interacciones detectados en el análisis de varianza aplicado a la concentración de clorofila a (Chl-a):
 
--    En la parte superior izquierda, se observa que la media de Chl-a varía de manera notable según la **estación del año**, con valores más altos en **primavera** e **invierno**, y una marcada disminución en **verano**. Esto concuerda con patrones estacionales típicos de productividad biológica.
+-   En la parte superior izquierda, se observa que la media de Chl-a varía de manera notable según la **estación del año**, con valores más altos en **primavera** e **invierno**, y una marcada disminución en **verano**. Esto concuerda con patrones estacionales típicos de productividad biológica.
 
--    La gráfica de **Chl-a por región** (arriba a la derecha) muestra que las regiones **norte y centro-norte** presentan los valores promedio más altos de clorofila a, mientras que las regiones **sur y centro-sur** muestran una productividad considerablemente menor. Esto sugiere un fuerte gradiente latitudinal en la productividad fitoplanctónica.
+-   La gráfica de **Chl-a por región** (arriba a la derecha) muestra que las regiones **norte y centro-norte** presentan los valores promedio más altos de clorofila a, mientras que las regiones **sur y centro-sur** muestran una productividad considerablemente menor. Esto sugiere un fuerte gradiente latitudinal en la productividad fitoplanctónica.
 
--    La gráfica inferior izquierda indica las diferencias entre condiciones **ENSO**, aunque más sutiles: los valores son ligeramente más altos durante **La Niña**, pero las diferencias entre grupos son pequeñas y en general consistentes con el análisis estadístico.
+-   La gráfica inferior izquierda indica las diferencias entre condiciones **ENSO**, aunque más sutiles: los valores son ligeramente más altos durante **La Niña**, pero las diferencias entre grupos son pequeñas y en general consistentes con el análisis estadístico.
 
--    El gráfico de líneas de **ENSO × Estación** (centro derecha) muestra que el efecto del evento interanual varía según la estación. En primavera, por ejemplo, los años **Niño** tienden a tener valores de Chl-*a* más bajos comparados con **La Niña**, lo cual concuerda con los resultados del análisis post-hoc.
+-   El gráfico de líneas de **ENSO × Estación** (centro derecha) muestra que el efecto del evento interanual varía según la estación. En primavera, por ejemplo, los años **Niño** tienden a tener valores de Chl-*a* más bajos comparados con **La Niña**, lo cual concuerda con los resultados del análisis post-hoc.
 
--    Finalmente, el gráfico de **contraste estacional por región** (abajo) muestra la diferencia en Chl-*a* entre invierno y verano. Las regiones **norte y centro-sur** presentan los mayores contrastes, lo que indica una alta variabilidad estacional en estas zonas. La región **centro-norte**, por otro lado, muestra una diferencia estacional muy reducida, lo que podría estar relacionado con condiciones más constantes de mezcla o disponibilidad de nutrientes.
+-   Finalmente, el gráfico de **contraste estacional por región** (abajo) muestra la diferencia en Chl-*a* entre invierno y verano. Las regiones **norte y centro-sur** presentan los mayores contrastes, lo que indica una alta variabilidad estacional en estas zonas. La región **centro-norte**, por otro lado, muestra una diferencia estacional muy reducida, lo que podría estar relacionado con condiciones más constantes de mezcla o disponibilidad de nutrientes.
 
 ```{python}
 #| echo: false

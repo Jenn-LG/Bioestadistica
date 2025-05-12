@@ -1,4 +1,465 @@
 ---
-title: "Regresión"
+title: "Regresión lineal"
 jupyter: python3
 ---
+
+Con el objetivo de analizar la relación entre la temperatura superficial del mar (TSM) y la concentración de clorofila a (Chl-a), se construyó un resumen estadístico por estación, que incluye la media y desviación estándar tanto de la temperatura como de la clorofila. Este resumen proporciona una primera aproximación al comportamiento espacial de ambas variables y servirá como referencia para comparar patrones y relaciones.
+
+```{python}
+#| echo: false
+import pandas as pd
+ruta_temp = 'data/Base de datos TSM consultoria estadística.xlsx'
+df_temp = pd.read_excel(ruta_temp)
+
+# Cargar archivo de clorofila
+ruta_cloro = 'data/Base de datos Chla consultoria estadística.xlsx'
+df_cloro = pd.read_excel(ruta_cloro)
+df_temp.columns = df_temp.columns.str.strip()
+df_cloro.columns = df_cloro.columns.str.strip()
+
+df_temp['EVENTO INTERANUAL'] = df_temp['EVENTO INTERANUAL'].replace({'Neutro': 'Normal'})
+# Recortar ambos al mismo rango: 1997-09-01 a 2018-10-01
+start_date = pd.Timestamp('1997-09-01')
+end_date = pd.Timestamp('2018-10-01')
+
+df_temp_cut = df_temp[(df_temp['FECHA'] >= start_date) & (df_temp['FECHA'] <= end_date)].reset_index(drop=True)
+df_cloro_cut = df_cloro[(df_cloro['FECHA'] >= start_date) & (df_cloro['FECHA'] <= end_date)].reset_index(drop=True)
+
+df_temp_ready = df_temp_cut.copy()
+df_cloro_ready = df_cloro_cut.copy()
+
+# Variables categóricas que queremos convertir a dummies
+categoricas = ['EVENTO INTERANUAL', 'MES', 'ESTACIÓN DEL AÑO']
+
+
+# Para temperatura
+# 1. Crear dummies aparte
+temp_dummies = pd.get_dummies(df_temp_ready[categoricas], prefix=categoricas, drop_first=False).astype(int)
+# 2. Quitar columnas originales y unir dummies
+df_temp_ready = pd.concat([df_temp_ready.drop(columns=categoricas), temp_dummies], axis=1)
+
+# Para clorofila
+# 1. Crear dummies aparte
+cloro_dummies = pd.get_dummies(df_cloro_ready[categoricas], prefix=categoricas, drop_first=False).astype(int)
+# 2. Quitar columnas originales y unir dummies
+df_cloro_ready = pd.concat([df_cloro_ready.drop(columns=categoricas), cloro_dummies], axis=1)
+
+# Estaciones de temperatura y clorofila
+temp_estaciones = [col for col in df_temp_ready.columns if 'Est' in col]
+cloro_estaciones = [col for col in df_cloro_ready.columns if 'Est' in col]
+
+df_temp_ready['temp_promedio'] = df_temp_ready[temp_estaciones].mean(axis=1)
+df_temp_ready['evento'] = df_temp_cut['EVENTO INTERANUAL'] 
+
+df_cloro_ready['cloro_promedio'] = df_cloro_ready[cloro_estaciones].mean(axis=1)
+df_cloro_ready['evento'] = df_cloro_cut['EVENTO INTERANUAL']  # traer original
+
+# Promedio total por estación (temperatura)
+temp_mean = df_temp_ready[temp_estaciones].mean()
+temp_std = df_temp_ready[temp_estaciones].std()
+
+# Promedio total por estación (clorofila)
+cloro_mean = df_cloro_ready[cloro_estaciones].mean()
+cloro_std = df_cloro_ready[cloro_estaciones].std()
+
+# Combinar en un solo DataFrame resumen
+resumen_estaciones = pd.DataFrame({
+    'temp_mean': temp_mean,
+    'temp_std': temp_std,
+    'cloro_mean': cloro_mean,
+    'cloro_std': cloro_std
+})
+
+print("Resumen de métricas por estación:")
+print(resumen_estaciones)
+```
+
+## Identificación de grupos de estaciones mediante clustering
+
+Antes de ajustar el modelo de regresión, se buscó identificar **grupos de estaciones con características similares** en cuanto a sus promedios de temperatura y clorofila. Para ello, se aplicó un análisis de **clustering con K-means**, utilizando como variables las métricas resumen por estación: media y desviación estándar tanto de la temperatura (TSM) como de la clorofila a (Chl-a).
+
+Los datos fueron previamente **escalados** para asegurar que todas las variables numéricas tuvieran igual peso en el agrupamiento, eliminando efectos de escala.
+
+Para determinar el número óptimo de clústeres, se aplicó el **método del codo**. La gráfica resultante muestra una disminución pronunciada de la inercia hasta $k=3$, donde comienza a estabilizarse, indicando que **tres grupos representan una buena partición** de las estaciones sin sobreajustar el modelo.
+
+```{python}
+#| echo: false
+from sklearn.cluster import KMeans
+from sklearn.preprocessing import StandardScaler
+import matplotlib.pyplot as plt
+
+# Seleccionar solo columnas numéricas
+X_numeric = resumen_estaciones.select_dtypes(include='number')
+
+# Escalar los datos
+scaler = StandardScaler()
+X_clustering = scaler.fit_transform(X_numeric)
+
+# Método del codo
+inertias = []
+K = range(1, 11)
+
+for k in K:
+    kmeans = KMeans(n_clusters=k, random_state=42)
+    kmeans.fit(X_clustering)
+    inertias.append(kmeans.inertia_)
+
+# Gráfico del codo
+plt.figure(figsize=(8, 5))
+plt.plot(K, inertias, marker='o')
+plt.xlabel('Número de clusters (k)')
+plt.ylabel('Inercia')
+plt.title('Método del codo para encontrar el número óptimo de clusters')
+plt.grid(True)
+plt.show()
+```
+
+Una vez determinado que tres grupos representan una buena estructura de los datos, se aplicó el algoritmo **K-means con** $k=3$ sobre las estaciones, utilizando como variables de entrada la **temperatura media** y la **clorofila media** de cada una.
+
+```{python}
+#| echo: false
+# PASO 2: Clustering con K-means
+
+from sklearn.cluster import KMeans
+import matplotlib.pyplot as plt
+
+# Definir número de clusters (ajustable)
+n_clusters = 3
+
+# Seleccionar solo las métricas para clustering
+X_clustering = resumen_estaciones.values
+
+# Ajustar modelo K-means
+kmeans = KMeans(n_clusters=n_clusters, random_state=42)
+resumen_estaciones['cluster'] = kmeans.fit_predict(X_clustering)
+
+print("Clusters asignados por estación:")
+print(resumen_estaciones[['cluster']])
+
+# Visualización rápida
+plt.figure(figsize=(8, 6))
+plt.scatter(resumen_estaciones['temp_mean'], resumen_estaciones['cloro_mean'],
+            c=resumen_estaciones['cluster'], cmap='viridis', s=100)
+plt.xlabel('Temperatura media')
+plt.ylabel('Clorofila media')
+plt.title('Clusters de estaciones')
+plt.colorbar(label='Cluster')
+plt.show()
+```
+
+Se pueden observar tres patrones bien diferenciados:
+
+-    Un grupo con **altas concentraciones de clorofila** y **temperaturas relativamente bajas**, lo que podría corresponder a zonas más productivas del norte o afectadas por surgencias.
+
+-   Un segundo grupo con **valores intermedios** en ambas variables.
+
+-    Un tercer grupo con **temperaturas más altas y clorofila más baja**, típicamente asociado a regiones más cálidas y menos productivas del sur del Golfo.
+
+## Distribución espacial de los clústeres de estaciones
+
+Para comprender mejor la organización geográfica de los grupos de estaciones obtenidos mediante clustering, se integraron las coordenadas geográficas de cada punto de muestreo con los resultados del modelo K-means.
+
+Se construyó un mapa interactivo en Folium que representa cada estación como un marcador circular, coloreado según su grupo asignado. Los tres colores identifican los clústeres determinados previamente a partir de los promedios de temperatura y clorofila.
+
+Esta representación revela un patrón espacial claro:
+
+-   Las estaciones clasificadas en el **clúster de alta clorofila y baja temperatura** tienden a ubicarse en el **norte** del Golfo de California.
+
+-   El clúster de **temperatura alta y clorofila baja** se concentra en la **zona sur**, reflejando condiciones más cálidas y oligotróficas.
+
+-   El grupo intermedio ocupa principalmente zonas **transicionales**, lo que sugiere una mezcla de condiciones físicas y biológicas.
+
+```{python}
+#| echo: false
+coordenadas = 'data/Coordenadas zona costera occidental GC.csv'
+df_coords = pd.read_csv(coordenadas, header=None)
+
+# Eliminar columna con NaNs (columna 1)
+df_coords_clean = df_coords.drop(columns=[1])
+
+# Renombrar columnas para claridad
+df_coords_clean.columns = ['lon', 'lat']
+
+# Permutar columnas: dejar como lat, lon
+df_coords_clean = df_coords_clean[['lat', 'lon']]
+df_coords_clean['Estación'] = [f'Est {i+1}°' for i in range(len(df_coords_clean))]
+df_coords_clean.columns = df_coords_clean.columns.str.strip()
+```
+
+![](images/clipboard-612779890.png){fig-align="center"}
+
+## Promedios por estación y evento interanual (ENSO)
+
+Aunque previamente analizamos los promedios generales de temperatura y clorofila por estación, este enfoque puede resultar demasiado generalista. Para obtener una visión más detallada, en esta sección calculamos los promedios por estación diferenciando según el tipo de evento interanual: **Niña**, **Niño** y **Normal**.
+
+La tabla siguiente presenta los valores medios de temperatura superficial del mar (TSM) y concentración de clorofila-a registrados en cada estación, estratificados por fase ENSO. Este desglose permite observar cómo se comportan ambas variables ambientales ante las distintas condiciones climáticas interanuales.
+
+Por ejemplo, se puede notar que:
+
+-   En las estaciones más al norte (Est. 1° a Est. 6°), la temperatura es consistentemente mayor y la clorofila menor en comparación con las estaciones del sur.
+
+-   En las estaciones del sur (Est. 12° a Est. 17°), los valores de clorofila aumentan notablemente durante eventos **Niña**, lo que puede reflejar una mayor productividad biológica asociada a condiciones más frías.
+
+```{python}
+#| echo: false
+# Primero, recuperamos el evento original como columna categórica
+df_temp_ready['evento'] = df_temp_cut['EVENTO INTERANUAL']
+df_cloro_ready['evento'] = df_cloro_cut['EVENTO INTERANUAL']
+
+# Crear tabla de promedio por estación y evento (para temperatura)
+temp_evento_mean = df_temp_ready.groupby('evento')[temp_estaciones].mean().T.reset_index().melt(
+    id_vars='index', var_name='Evento', value_name='Temp promedio'
+).rename(columns={'index': 'Estación'})
+
+# Crear tabla de promedio por estación y evento (para clorofila)
+cloro_evento_mean = df_cloro_ready.groupby('evento')[cloro_estaciones].mean().T.reset_index().melt(
+    id_vars='index', var_name='Evento', value_name='Cloro promedio'
+).rename(columns={'index': 'Estación'})
+
+# Unir ambas
+respuestas_evento = pd.merge(temp_evento_mean, cloro_evento_mean, on=['Estación', 'Evento'])
+
+# Ordenar por número de estación
+respuestas_evento['n_est'] = respuestas_evento['Estación'].str.extract(r'(\d+)').astype(int)
+respuestas_evento = respuestas_evento.sort_values('n_est')
+
+# Pivotear a formato ancho por estación
+pivot_temp = respuestas_evento.pivot(index='Estación', columns='Evento', values='Temp promedio')
+pivot_cloro = respuestas_evento.pivot(index='Estación', columns='Evento', values='Cloro promedio')
+
+# Renombrar columnas para claridad
+pivot_temp.columns = [f'Temp_{col}' for col in pivot_temp.columns]
+pivot_cloro.columns = [f'Cloro_{col}' for col in pivot_cloro.columns]
+
+# Unir todo
+tabla_kmeans = pd.concat([pivot_temp, pivot_cloro], axis=1)
+
+# Ver resultado ordenado
+tabla_kmeans = tabla_kmeans.reset_index()
+tabla_kmeans['n_est'] = tabla_kmeans['Estación'].str.extract(r'(\d+)').astype(int)
+tabla_kmeans = tabla_kmeans.sort_values('n_est').drop(columns='n_est').set_index('Estación')
+
+tabla_kmeans.head(18)
+```
+
+Para identificar patrones entre estaciones en función de sus promedios de temperatura y clorofila bajo diferentes fases de ENSO, aplicamos un análisis de clustering. Como paso previo, utilizamos el método del codo para seleccionar el número óptimo de grupos (clusters).
+
+En el gráfico generado se observa claramente el punto de inflexión, lo que sugiere que un número óptimo de clusters sería **k = 3.**
+
+```{python}
+#| echo: false
+import matplotlib.pyplot as plt
+from sklearn.cluster import KMeans
+from sklearn.preprocessing import StandardScaler
+
+# Escalar los datos
+scaler = StandardScaler()
+X_scaled = scaler.fit_transform(tabla_kmeans)
+
+# Método del codo
+inertias = []
+K = range(1, 11)
+
+for k in K:
+    kmeans = KMeans(n_clusters=k, random_state=42)
+    kmeans.fit(X_scaled)
+    inertias.append(kmeans.inertia_)
+
+# Graficar el codo
+plt.figure(figsize=(8, 5))
+plt.plot(K, inertias, marker='o')
+plt.xlabel('Número de clusters (k)')
+plt.ylabel('Inercia')
+plt.title('Método del codo para encontrar el número óptimo de clusters')
+plt.grid(True)
+plt.show()
+```
+
+### **Distribución de clusters por evento ENSO**
+
+La figura muestra los resultados de un análisis de agrupamiento (clustering) aplicado a las estaciones de monitoreo, considerando como variables las temperaturas y concentraciones promedio de clorofila a, separadas por tipo de evento interanual: *Niña*, *Niño* y *Normal*. Se utilizaron 3 clusters determinados previamente mediante el método del codo, y el modelo fue ajustado mediante KMeans.
+
+Cada subgráfico representa el comportamiento de las estaciones bajo un evento ENSO específico. Se observa cómo la relación entre temperatura y clorofila tiende a organizarse en patrones distintos según la fase del evento. Por ejemplo, bajo condiciones *Niña* y *Normal* se identifican agrupamientos más diferenciados en términos de temperatura y concentración de clorofila, mientras que durante *Niño* se advierte una mayor dispersión en algunos clusters, sugiriendo una respuesta más variable entre estaciones.
+
+```{python}
+#| echo: false
+import matplotlib.pyplot as plt
+from sklearn.cluster import KMeans
+from sklearn.preprocessing import StandardScaler
+
+# Escalar los datos
+X = StandardScaler().fit_transform(tabla_kmeans.drop(columns='cluster', errors='ignore'))
+
+# KMeans con 3 clusters
+kmeans = KMeans(n_clusters=3, random_state=42)
+tabla_kmeans['cluster'] = kmeans.fit_predict(X)
+
+# Crear figura con 3 subplots
+fig, axs = plt.subplots(1, 3, figsize=(18, 5), sharey=True)
+
+# Títulos de cada evento
+eventos = ['Niña', 'Niño', 'Normal']
+
+for i, evento in enumerate(eventos):
+    axs[i].scatter(tabla_kmeans[f'Temp_{evento}'], tabla_kmeans[f'Cloro_{evento}'],
+                   c=tabla_kmeans['cluster'], cmap='viridis', s=100, edgecolor='k')
+    axs[i].set_xlabel(f'Temperatura promedio ({evento})')
+    axs[i].set_title(f'Evento: {evento}')
+    axs[i].grid(True, linestyle='--', alpha=0.3)
+
+axs[0].set_ylabel('Clorofila promedio')
+fig.suptitle('Clusters ENSO por evento (KMeans, k=3)', fontsize=16)
+plt.tight_layout()
+plt.subplots_adjust(top=0.85)
+plt.show()
+```
+
+```{python}
+#| echo: false
+tabla_kmeans = tabla_kmeans.reset_index()
+
+tabla_kmeans_geo = pd.merge(tabla_kmeans, df_coords_clean, on='Estación', validate='one_to_one')
+
+```
+
+![](images/clipboard-1950012899.png)
+
+Notemos que el clúster en amarillo son las estaciones 12 y 13. Las estaciones que menor correlacion muestran con las demas.
+
+Las estaciones 12 y 13 son las mas cercanas al parque nacional marino archipiélago de san lorenzo, lo cual podria ser importante y por eso presentar clorofilas altas.
+
+## Regresión lineal por zonas
+
+Con base en la segmentación previa de las estaciones en tres zonas o clusters, se procede a realizar un análisis de regresión lineal simple para cada estación, agrupadas por cluster. Es decir, para cada estación dentro de un cluster, se ajustará un modelo de regresión lineal en el que se busca explicar la temperatura superficial del mar (TSM) a partir de variables categóricas como el año, el evento interanual (ENSO), el mes y la estación del año.
+
+El propósito de esta sección **no es construir un modelo predictivo óptimo**, sino más bien obtener una visión general de **qué variables parecen influir más en la variabilidad de la temperatura** en cada estación, dentro del contexto espacial definido por los clusters. En particular, se busca identificar patrones comunes dentro de cada zona y contrastar su comportamiento entre zonas con características térmicas y biológicas distintas.
+
+```{python}
+#| echo: false
+df_temp_long = df_temp_ready.melt(
+    id_vars=[col for col in df_temp_ready.columns if col not in tabla_kmeans_geo['Estación'].tolist()],
+    value_vars=tabla_kmeans_geo['Estación'].tolist(),
+    var_name='Estación',
+    value_name='TSM'
+)
+
+df_cloro_long = df_cloro_ready.melt(
+    id_vars=[col for col in df_cloro_ready.columns if col not in tabla_kmeans_geo['Estación'].tolist()],
+    value_vars=tabla_kmeans_geo['Estación'].tolist(),
+    var_name='Estación',
+    value_name='Chl_a'
+)
+
+# Crear diccionario Estación
+cluster_dict = tabla_kmeans_geo.set_index('Estación')['cluster'].to_dict()
+
+# Mapear al DataFrame largo
+df_temp_long['cluster'] = df_temp_long['Estación'].map(cluster_dict)
+df_cloro_long['cluster'] = df_cloro_long['Estación'].map(cluster_dict)
+import statsmodels.api as sm
+for i in sorted(df_temp_long['cluster'].unique()):
+    print(f"\n=== Cluster {i} ===")
+    cluster_data = df_temp_long[df_temp_long['cluster'] == i]
+
+    for est in cluster_data['Estación'].unique():
+        subset = cluster_data[cluster_data['Estación'] == est]
+
+        X = subset[[col for col in subset.columns if col.startswith('AÑO') or
+            col.startswith('EVENTO INTERANUAL_') or
+            col.startswith('MES_') or
+            col.startswith('ESTACIÓN DEL AÑO_')]]
+
+        X = sm.add_constant(X)
+        y = subset['TSM']
+
+        modelo = sm.OLS(y, X).fit()
+        print(f"\n--- Estación: {est} ---")
+        print(modelo.summary())
+```
+
+### Evaluación general del ajuste del modelo
+
+En la mayoría de las estaciones analizadas, los modelos de regresión presentan un coeficiente de determinación ajustado (R² ajustado) superior a 0.9. Esto podría interpretarse como una excelente capacidad explicativa del modelo; sin embargo, también es posible que se esté produciendo un **sobreajuste**, dado el elevado número de variables categóricas involucradas. Para verificarlo adecuadamente, sería necesario realizar una partición de los datos en conjuntos de entrenamiento y prueba, cosa que no se hara en esta ocasión puesto que un modelo real no entra en los objetivos del proyecto, pero si ver cuales variables pueden aportar más o menos información.
+
+### Análisis por clúster Modelos aplicados a TSM
+
+**Clusters 0 y 1**\
+En estas zonas, se observa que las variables con menor contribución estadística al modelo, de forma recurrente, son los indicadores correspondientes a los meses de **agosto y septiembre**, coincidentemente los meses con mayor temperatura superficial del mar.
+
+**Cluster 2**\
+Este grupo muestra un comportamiento diferente: tanto **Mes_Agosto** como **Mes_Septiembre** resultan ser variables significativas, junto con varios meses del periodo **primaveral**, lo cual indica una dinámica distinta en esta zona con mayor presencia de clorofila y temperaturas más bajas.
+
+Aunque el objetivo de este estudio no es desarrollar un modelo predictivo definitivo, resulta útil visualizar el comportamiento del modelo de regresión ajustado respecto a los valores reales de temperatura superficial del mar (TSM) para cada estación.
+
+En esta sección, se representa gráficamente la serie temporal de la temperatura observada junto con las predicciones generadas por el modelo lineal ajustado, utilizando como predictores variables categóricas relacionadas con el año, el evento interanual (ENSO), el mes y la estación del año. Esta comparación permite identificar visualmente qué tan bien el modelo captura las fluctuaciones en la TSM y si existen desviaciones sistemáticas en ciertos periodos.
+
+```{python}
+#| echo: false
+import statsmodels.api as sm
+import matplotlib.pyplot as plt
+
+# Obtener estaciones únicas
+estaciones = df_temp_long['Estación'].unique()
+
+for est in estaciones:
+    subset = df_temp_long[df_temp_long['Estación'] == est]
+
+    X = subset[[col for col in subset.columns if col.startswith('AÑO') or
+                col.startswith('EVENTO INTERANUAL_') or
+                col.startswith('MES_') or
+                col.startswith('ESTACIÓN DEL AÑO_')]]
+    X = sm.add_constant(X)
+    y = subset['TSM']
+
+    modelo = sm.OLS(y, X).fit()
+    y_pred = modelo.predict(X)
+
+    # Graficar
+    plt.figure(figsize=(12, 5))
+    plt.plot(subset['FECHA'], y, label='Real', color='blue')
+    plt.plot(subset['FECHA'], y_pred, label='Modelo', color='red', linestyle='--')
+    plt.title(f'Temperatura real vs modelo - {est}')
+    plt.xlabel('Fecha')
+    plt.ylabel('Temperatura')
+    plt.legend()
+    plt.grid(True, linestyle='--', alpha=0.3)
+    plt.tight_layout()
+    plt.show()
+```
+
+Haciendo lo propio para la clorofila
+
+```{python}
+for i in sorted(df_cloro_long['cluster'].unique()):
+    print(f"\n=== Cluster {i} ===")
+    cluster_data = df_cloro_long[df_cloro_long['cluster'] == i]
+
+    for est in cluster_data['Estación'].unique():
+        subset = cluster_data[cluster_data['Estación'] == est]
+
+        X = subset[[col for col in subset.columns if col.startswith('AÑO') or
+            col.startswith('EVENTO INTERANUAL_') or
+            col.startswith('MES_') or
+            col.startswith('ESTACIÓN DEL AÑO_')]]
+
+        X = sm.add_constant(X)
+        y = subset['Chl_a']
+
+        modelo = sm.OLS(y, X).fit()
+        print(f"\n--- Estación: {est} ---")
+        print(modelo.summary())
+
+```
+
+### Análisis por clúster – Modelos aplicados a clorofila a (Chl-a)
+
+**Clúster 0**\
+En las estaciones **10, 11 y 14**, la mayoría de las variables independientes presentan valores de p muy bajos, lo que sugiere que tienen un aporte estadísticamente significativo al modelo. En contraste, en las estaciones **15, 16 y 17**, ninguna de las variables consideradas muestra un efecto significativo, lo cual indica que en estas estaciones el modelo no logra explicar adecuadamente la variabilidad de la clorofila.
+
+**Cluster 1**\
+Las estaciones **1 a 8** presentan, en su mayoría, características que no son estadísticamente significativas. Una excepción es la **estación 9**, donde la mayoría de las variables aportan al modelo, con excepción de los meses correspondientes al invierno, que no muestran significancia.
+
+**Cluster 2**\
+En este grupo, compuesto por las **estaciones 12 y 13**, todas las variables consideradas en el modelo resultan significativas, indicando un ajuste más consistente entre los predictores y los valores observados de clorofila.
+
+No obstante, es importante señalar que, a diferencia del análisis realizado sobre la temperatura superficial del mar, los modelos aplicados a la clorofila a presentan valores de **R² ajustado considerablemente más bajos**, con un promedio aproximado de **0.5**. Esto sugiere que el modelo explica solo una parte moderada de la variabilidad, y que otros factores —no incluidos en esta formulación— podrían estar influyendo en los niveles de clorofila. Esta limitación también se refleja visualmente en los gráficos de ajuste, donde las predicciones no siguen tan de cerca a los valores reales como lo hacían en el caso de la temperatura.

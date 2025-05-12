@@ -28,9 +28,9 @@ website:
       - inicial.qmd
       - anova.qmd
       - regresion.qmd
-      - frecuencia.qmd
-        text: Análisis de frecuencia
-      - espectral.qmd
+      - href: frecuencia.qmd
+        text: "Análisis de frecuencia"
+      - href: espectral.qmd
         text: Análisis espectral
 
 format:
