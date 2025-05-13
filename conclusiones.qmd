@@ -15,11 +15,11 @@ Los **análisis espectrales** (FFT y wavelet) revelaron picos dominantes en frec
 **Cumplido parcialmente, con una propuesta clara y replicable.**\
 Mediante técnicas de **agrupamiento (K-means)** se propuso una **regionalización objetiva** basada en las características promedio de TSM y Chl a por estación. Se definieron **tres zonas** con diferencias claras:
 
--    Zonas de alta temperatura y baja clorofila,
+-   Zonas de alta temperatura y baja clorofila,
 
--    Zonas intermedias,
+-   Zonas intermedias,
 
--    Zonas de baja temperatura y alta clorofila.\
+-   Zonas de baja temperatura y alta clorofila.\
     Si bien el enfoque fue exitoso para identificar agrupamientos representativos, podría complementarse con variables dinámicas adicionales (p. ej., corrientes, batimetría) para mejorar la robustez ecológica y oceanográfica del modelo de regionalización.
 
 **Objetivo 3 – Influencia del ENSO (intra, interanual y estacional)**\
@@ -30,8 +30,8 @@ Los análisis espectrales (particularmente wavelet) confirmaron la **presencia d
 
 ### Consideraciones Finales y Recomendaciones
 
--    El enfoque utilizado demuestra el valor del análisis multiescala y multidimensional para comprender la dinámica marina costera.
+-   El enfoque utilizado demuestra el valor del análisis multiescala y multidimensional para comprender la dinámica marina costera.
 
--    Se recomienda ampliar el análisis incorporando variables físico-químicas adicionales (p.ej., salinidad, nutrientes) y forzantes atmosféricos.
+-   Se recomienda ampliar el análisis incorporando variables físico-químicas adicionales (p.ej., salinidad, nutrientes) y forzantes atmosféricos.
 
--    La regionalización propuesta puede servir como base para el diseño de estrategias de monitoreo ambiental, ordenamiento ecológico-marino o planificación pesquera en la región.
+-   La regionalización propuesta puede servir como base para el diseño de estrategias de monitoreo ambiental, ordenamiento ecológico-marino o planificación pesquera en la región.
