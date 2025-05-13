@@ -1,4 +1,0 @@
----
-title: "espectral"
-jupyter: python3
----

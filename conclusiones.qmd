@@ -1,0 +1,37 @@
+---
+title: "Conclusiones"
+jupyter: python3
+---
+
+**Objetivo General – Evaluación Global del Estudio**\
+Se logró cumplir de manera integral el objetivo general del trabajo. A través del uso de datos satelitales y técnicas estadísticas robustas, se analizó detalladamente la variabilidad espacio-temporal de la Temperatura Superficial del Mar (TSM) y de la Clorofila a (Chl a) en la zona costera occidental del Golfo de California. El uso combinado de análisis estadísticos (ANOVA, regresiones), análisis espectrales (FFT y wavelets), y técnicas de agrupamiento (K-means clustering), permitió caracterizar patrones oceánicos y ecológicos de interés, aportando una visión comprensiva de la dinámica regional.
+
+**Objetivo 1 – Variabilidad y frecuencias dominantes de TSM y Chl a**\
+**Cumplido completamente.**\
+Se identificó una marcada **variabilidad estacional y espacial** en la TSM desde 1981 hasta 2018, con patrones cíclicos anuales bien definidos. En el caso de la Chl a (1997–2018), se observó una mayor **intermitencia y variabilidad local**, reflejando su fuerte dependencia de procesos físicos-biológicos acoplados.\
+Los **análisis espectrales** (FFT y wavelet) revelaron picos dominantes en frecuencias anuales (1 ciclo/año), interanuales (2–7 años, asociados a ENSO), y de baja frecuencia (decadal), en el caso de la TSM. Para la Chl a, los patrones fueron más irregulares, pero se detectaron ciclos estacionales y algunos eventos interanuales aislados con significancia.
+
+**Objetivo 2 – Regionalización del área de estudio**\
+**Cumplido parcialmente, con una propuesta clara y replicable.**\
+Mediante técnicas de **agrupamiento (K-means)** se propuso una **regionalización objetiva** basada en las características promedio de TSM y Chl a por estación. Se definieron **tres zonas** con diferencias claras:
+
+-    Zonas de alta temperatura y baja clorofila,
+
+-    Zonas intermedias,
+
+-    Zonas de baja temperatura y alta clorofila.\
+    Si bien el enfoque fue exitoso para identificar agrupamientos representativos, podría complementarse con variables dinámicas adicionales (p. ej., corrientes, batimetría) para mejorar la robustez ecológica y oceanográfica del modelo de regionalización.
+
+**Objetivo 3 – Influencia del ENSO (intra, interanual y estacional)**\
+**Cumplido con evidencia estadística y visual.**\
+Los resultados de los modelos ANOVA, boxplots y análisis de regresión mostraron que **ENSO tiene un efecto estadísticamente significativo** sobre la TSM, especialmente durante los eventos Niño y Niña.\
+En el caso de la Chl a, la influencia del ENSO es **menos uniforme** y altamente dependiente de la estación y la región geográfica, lo que sugiere una interacción más compleja con otros factores (vientos, mezcla vertical, nutrientes).\
+Los análisis espectrales (particularmente wavelet) confirmaron la **presencia de señales interanuales coincidentes con eventos ENSO** en diversas estaciones.
+
+### Consideraciones Finales y Recomendaciones
+
+-    El enfoque utilizado demuestra el valor del análisis multiescala y multidimensional para comprender la dinámica marina costera.
+
+-    Se recomienda ampliar el análisis incorporando variables físico-químicas adicionales (p.ej., salinidad, nutrientes) y forzantes atmosféricos.
+
+-    La regionalización propuesta puede servir como base para el diseño de estrategias de monitoreo ambiental, ordenamiento ecológico-marino o planificación pesquera en la región.

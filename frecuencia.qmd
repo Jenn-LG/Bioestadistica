@@ -63,11 +63,11 @@ También resalta el hecho de que no todas las estaciones comparten los mismos pa
 
 #### Descomposición espectral por estación
 
--    **Estaciones 1 a 4** presentan picos más concentrados en frecuencias bajas, en particular alrededor de la frecuencia anual (\~0.083 1/mes).
+-   **Estaciones 1 a 4** presentan picos más concentrados en frecuencias bajas, en particular alrededor de la frecuencia anual (\~0.083 1/mes).
 
--    **Estaciones del centro-norte y norte (como 9 a 13)** muestran una mayor dispersión en la distribución de frecuencias, con picos en zonas tanto anuales como subestacionales, lo cual podría reflejar una respuesta más compleja de la biomasa fitoplanctónica a distintos forzantes.
+-   **Estaciones del centro-norte y norte (como 9 a 13)** muestran una mayor dispersión en la distribución de frecuencias, con picos en zonas tanto anuales como subestacionales, lo cual podría reflejar una respuesta más compleja de la biomasa fitoplanctónica a distintos forzantes.
 
--    En **algunas estaciones del sur (por ejemplo, 16 y 17)** se observan picos de magnitud considerable, con una menor contribución de frecuencias muy bajas, lo que podría implicar variabilidad más rápida y menos dependiente de ciclos anuales.
+-   En **algunas estaciones del sur (por ejemplo, 16 y 17)** se observan picos de magnitud considerable, con una menor contribución de frecuencias muy bajas, lo que podría implicar variabilidad más rápida y menos dependiente de ciclos anuales.
 
 Estas diferencias espaciales refuerzan la idea de que la dinámica de la clorofila a es más variable y localizada que la de la temperatura superficial del mar (TSM),
 
@@ -87,7 +87,7 @@ En contraste, los espectros de clorofila a presentan una mayor dispersión entre
 
 Mientras que la TSM responde predominantemente al ciclo anual con una señal limpia y uniforme, la variabilidad de la clorofila a es más compleja y heterogénea, mostrando una estructura espectral más rica y menos predecible. Esta diferencia refuerza la idea de que, si bien la temperatura puede actuar como modulador general, la Chl a está sujeta a una combinación de forzantes físicos y biológicos más dinámicos.
 
-## Análisis Espectral mediante transformada wavelet 
+## Análisis Espectral mediante transformada wavelet
 
 ### TSM
 
@@ -99,13 +99,13 @@ La figura anterior muestra el espectro de potencia wavelet de la Temperatura Sup
 
 En el gráfico se puede observar
 
--    **Dominancia de la variabilidad de largo plazo:** En la mayoría de las estaciones, las zonas de mayor magnitud se ubican en escalas de tiempo amplias (bajas frecuencias), lo que indica una fuerte presencia de oscilaciones de largo periodo (varios años a décadas). Estas señales podrían estar asociadas a forzantes climáticos de baja frecuencia, como la Oscilación Decadal del Pacífico (PDO), que modulan la TSM a escalas multidecadales.
+-   **Dominancia de la variabilidad de largo plazo:** En la mayoría de las estaciones, las zonas de mayor magnitud se ubican en escalas de tiempo amplias (bajas frecuencias), lo que indica una fuerte presencia de oscilaciones de largo periodo (varios años a décadas). Estas señales podrían estar asociadas a forzantes climáticos de baja frecuencia, como la Oscilación Decadal del Pacífico (PDO), que modulan la TSM a escalas multidecadales.
 
--    **Variabilidad interanual significativa:** En muchos paneles se observan zonas amarillas y anaranjadas en la parte media del espectro (\~2 a 8 años de periodo), indicando una señal interanual robusta. Esta es típicamente atribuida a eventos como El Niño–Oscilación del Sur (ENOS), que afectan significativamente la dinámica oceánica superficial en la región.
+-   **Variabilidad interanual significativa:** En muchos paneles se observan zonas amarillas y anaranjadas en la parte media del espectro (\~2 a 8 años de periodo), indicando una señal interanual robusta. Esta es típicamente atribuida a eventos como El Niño–Oscilación del Sur (ENOS), que afectan significativamente la dinámica oceánica superficial en la región.
 
--    **Señal anual menos dominante:** Aunque se puede identificar una banda de energía asociada al ciclo estacional (frecuencia cercana a 1/12 meses⁻¹), su magnitud es relativamente baja comparada con las componentes interanuales y de largo plazo. Esto sugiere que, si bien existe estacionalidad, no es la principal fuente de variabilidad energética de la TSM en estas series.
+-   **Señal anual menos dominante:** Aunque se puede identificar una banda de energía asociada al ciclo estacional (frecuencia cercana a 1/12 meses⁻¹), su magnitud es relativamente baja comparada con las componentes interanuales y de largo plazo. Esto sugiere que, si bien existe estacionalidad, no es la principal fuente de variabilidad energética de la TSM en estas series.
 
--    **Variabilidad espacial:** La intensidad y estructura del espectro varían entre estaciones, reflejando diferencias en la respuesta oceánica local. Algunas estaciones presentan mayor energía interanual o estacional, mientras que otras muestran predominancia de señales de largo plazo. Esto sugiere que la influencia de los forzantes climáticos varía espacialmente a lo largo del golfo.
+-   **Variabilidad espacial:** La intensidad y estructura del espectro varían entre estaciones, reflejando diferencias en la respuesta oceánica local. Algunas estaciones presentan mayor energía interanual o estacional, mientras que otras muestran predominancia de señales de largo plazo. Esto sugiere que la influencia de los forzantes climáticos varía espacialmente a lo largo del golfo.
 
 ### Chl *a*
 
@@ -113,16 +113,16 @@ El análisis wavelet aplicado a las series de clorofila por estación revela una
 
 ![](images/clipboard-2906875219.png)
 
--    **Dominancia de Variabilidad Subanual y Anual:** A diferencia de la TSM, en muchas estaciones la energía se concentra en frecuencias más altas (parte superior de los gráficos), lo que indica una fuerte influencia de procesos subanuales o estacionales. Esto sugiere que la clorofila responde con mayor sensibilidad a cambios estacionales como la luz solar y la mezcla vertical.
+-   **Dominancia de Variabilidad Subanual y Anual:** A diferencia de la TSM, en muchas estaciones la energía se concentra en frecuencias más altas (parte superior de los gráficos), lo que indica una fuerte influencia de procesos subanuales o estacionales. Esto sugiere que la clorofila responde con mayor sensibilidad a cambios estacionales como la luz solar y la mezcla vertical.
 
--    **Eventos Intermitentes de Alta Energía:** En varias estaciones se observan manchas localizadas de alta magnitud en ciertos años y frecuencias específicas. Estas "explosiones" espectrales pueden estar asociadas a eventos de floraciones fitoplanctónicas o condiciones oceanográficas anómalas (como fuertes eventos El Niño o La Niña).
+-   **Eventos Intermitentes de Alta Energía:** En varias estaciones se observan manchas localizadas de alta magnitud en ciertos años y frecuencias específicas. Estas "explosiones" espectrales pueden estar asociadas a eventos de floraciones fitoplanctónicas o condiciones oceanográficas anómalas (como fuertes eventos El Niño o La Niña).
 
--    **Variabilidad Espacial Marcada:** Las diferencias entre estaciones son más evidentes en Chl a que en TSM. Algunas estaciones presentan mayor actividad en frecuencias altas de forma persistente, mientras que otras exhiben variabilidad más baja o energía concentrada en frecuencias intermedias.
+-   **Variabilidad Espacial Marcada:** Las diferencias entre estaciones son más evidentes en Chl a que en TSM. Algunas estaciones presentan mayor actividad en frecuencias altas de forma persistente, mientras que otras exhiben variabilidad más baja o energía concentrada en frecuencias intermedias.
 
--    **Poca Influencia de Escalas Decadales:** A nivel general, no se observa una dominancia de variabilidad de muy largo plazo (como en el caso de la TSM), lo que indica que los cambios en clorofila tienden a estar más ligados a forzamientos de corto a mediano plazo.
+-   **Poca Influencia de Escalas Decadales:** A nivel general, no se observa una dominancia de variabilidad de muy largo plazo (como en el caso de la TSM), lo que indica que los cambios en clorofila tienden a estar más ligados a forzamientos de corto a mediano plazo.
 
-### **Resumen Comparativo: Variabilidad Espectral de TSM y Chl a**
+### Resumen Comparativo: Variabilidad Espectral de TSM y Chl a
 
 -   **TSM**: Predominan las señales de largo plazo, asociadas a fenómenos climáticos como la Oscilación Decadal del Pacífico (PDO) y El Niño-Oscilación del Sur (ENOS). La variabilidad es más uniforme entre estaciones.
 
--    **Chl a**: Presenta mayor variabilidad en escalas estacionales y subanuales, con eventos intermitentes de alta energía posiblemente relacionados con floraciones fitoplanctónicas. Existe una marcada heterogeneidad espacial entre estaciones.
+-   **Chl a**: Presenta mayor variabilidad en escalas estacionales y subanuales, con eventos intermitentes de alta energía posiblemente relacionados con floraciones fitoplanctónicas. Existe una marcada heterogeneidad espacial entre estaciones.
