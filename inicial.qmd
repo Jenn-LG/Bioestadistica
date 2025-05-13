@@ -135,7 +135,88 @@ Además, se verificaron los tipos de datos asociados a cada variable del conjunt
 print("Tipos de dato originales:\n", df.dtypes)
 ```
 
+Como parte del análisis exploratorio, se calculó un resumen estadístico básico para las variables numéricas. Este resumen incluye medidas de tendencia central, dispersión y rangos, que permiten tener una primera idea de la distribución general de los datos.
+
+```{python}
+#| echo: false
+df.describe()
+```
+
+Si las observamos en cuanto a estaciones, se tiene
+
+```{python}
+#| echo: false
+# Estadísticas descriptivas por estación – Temperatura
+print("Temperatura - Estadísticas descriptivas por estación:")
+tsm_stats = tsm_long.groupby("Estacion")["TSM"].describe()[["mean", "std", "min", "max"]]
+print(tsm_stats)
+
+# Estadísticas descriptivas por estación – Clorofila
+print("\nClorofila - Estadísticas descriptivas por estación:")
+chla_stats = chla_long.groupby("Estacion")["Chla"].describe()[["mean", "std", "min", "max"]]
+print(chla_stats)
+
+```
+
 ## Visualización exploratoria
+
+### Distribución de la Temperatura Superficial del Mar por estación 
+
+El gráfico boxplot permite observar la **variabilidad espacial de la TSM** en las estaciones distribuidas a lo largo de la costa occidental del Golfo de California, revelando los siguientes patrones:
+
+-    **Estaciones del norte (Est. 1 a 6)** presentan temperaturas **más altas en promedio**, con menor dispersión, y valores máximos cercanos a los 33 °C. Esto refleja su cercanía a latitudes más cálidas y su menor exposición a procesos de mezcla o afloramiento frío.
+
+-   **Estaciones del sur (Est. 13 a 17)** muestran un patrón opuesto: temperaturas **más bajas en promedio** y mayor dispersión. En particular, algunas estaciones presentan **outliers fríos**, que podrían asociarse a eventos de surgencia o influencia de masas de agua más profundas.
+
+-   Las **estaciones intermedias (Est. 7 a 12)** presentan un gradiente de transición, lo que refuerza la hipótesis de una zonificación térmica costera, como la que posteriormente se abordará en el análisis de clusters.
+
+-    El rango intercuartílico se mantiene amplio en la mayoría de estaciones, lo que sugiere **una marcada variabilidad estacional e interanual**. Esto es consistente con los resultados obtenidos en el análisis espectral y wavelet.
+
+-   Se observan algunos valores atípicos (outliers fríos), especialmente en estaciones del centro-sur, que podrían ser indicadores de eventos inusuales, errores de medición o fenómenos climáticos intensos como La Niña.
+
+![](images/clipboard-3925634419.png)
+
+### Distribución de Clorofila a por estación
+
+-   **Estaciones 12 y 13** destacan por tener las concentraciones **más elevadas y variables** de clorofila, lo que podría deberse a procesos oceanográficos locales como **afloramientos costeros**, **mezcla vertical** o **acumulación de nutrientes**. Además, presentan una **mayor cantidad de valores atípicos (outliers)**, lo cual es consistente con episodios de floraciones intensas.
+
+-   **Estaciones del norte (Est. 1 a 6)** tienden a tener concentraciones **más bajas** y con menor dispersión. Esto podría estar relacionado con condiciones oligotróficas y menor disponibilidad de nutrientes durante buena parte del año.
+
+-   Las **estaciones intermedias (Est. 7 a 11)** muestran una **transición en la mediana** y en el rango intercuartílico, sugiriendo una **gradiente espacial** en la productividad primaria.
+
+-   La presencia de múltiples **outliers en casi todas las estaciones** sugiere una dinámica altamente variable a lo largo del tiempo, reflejando probablemente eventos episódicos como **ENSO**, **cambios estacionales marcados**, o respuestas biológicas no lineales.
+
+![](images/clipboard-3005409465.png)
+
+En los boxplots de clorofila por estación se observa la presencia de valores atípicos (outliers) en múltiples estaciones. No obstante, estos niveles elevados no deben considerarse anómalos en términos ecológicos, ya que reflejan eventos naturales de alta productividad biológica que pueden ocurrir en ciertas épocas o bajo condiciones específicas (e.g., afloramientos o eventos ENSO).
+
+![](images/clipboard-3364230800.png)
+
+![](images/clipboard-466521141.png)Por otro lado, al examinar las matrices de correlación entre estaciones para las dos variables clave Temperatura Superficial del Mar (TSM) y Clorofila a (Chl-a) se obtienen resultados contrastantes. En el caso de la TSM, todas las estaciones presentan correlaciones altas entre sí (mayores a 0.9), lo que sugiere una variación espacial relativamente homogénea a lo largo de la zona costera occidental del Golfo de California. Esta homogeneidad es coherente con el hecho de que la TSM es una variable de carácter físico fuertemente influenciada por patrones regionales y estacionales amplios.
+
+En contraste, la clorofila muestra una mayor heterogeneidad espacial. Las correlaciones entre estaciones son más variables, oscilando desde valores altos hasta correlaciones negativas. Destacan las correlaciones negativas entre estaciones como la 1 y la 12, la 1 y la 13, la 2 y la 12, y la 2 y la 13. Este comportamiento refleja que la dinámica de la biomasa fitoplanctónica es mucho más local y sujeta a procesos específicos como la circulación costera, la disponibilidad de nutrientes y las condiciones de mezcla de la columna de agua. En este sentido, la señal de clorofila no es simplemente un reflejo de la temperatura, sino que responde a una combinación de factores físicos y biológicos que pueden variar intensamente de una estación a otra.
+
+**Análisis de la variación de TSM y Clorofila según el evento interanual ENSO**
+
+Los boxplots presentados permiten visualizar la distribución de los valores promedio de Temperatura Superficial del Mar (TSM) y Clorofila a (Chl-a) durante los diferentes eventos interanuales del fenómeno ENSO: Niño, Normal y Niña.
+
+![](images/clipboard-529736900.png)
+
+![](images/clipboard-762011773.png)
+
+Para complementar el análisis exploratorio, se examinó la variación estacional tanto de la Temperatura Superficial del Mar (TSM) como de la Clorofila a (Chl-a).
+
+**Temperatura promedio por estación del año:**
+
+![](images/clipboard-2424603991.png)
+
+El gráfico revela un patrón claro: las estaciones de **verano** y **otoño** presentan las **temperaturas más altas**, mientras que en **invierno** y **primavera** las temperaturas descienden significativamente. Este comportamiento estacional es coherente con la dinámica climática del noroeste de México, donde el calentamiento solar es más intenso entre junio y octubre.
+
+**Clorofila promedio por estación del año:**
+
+![](images/clipboard-3245617055.png)
+
+En contraste, los niveles promedio de **clorofila** son **más altos durante el invierno y la primavera**, y **más bajos en verano y otoño**. Este patrón puede estar relacionado con el aumento de la productividad biológica durante las estaciones frías, cuando los vientos y la mezcla vertical favorecen el afloramiento de nutrientes en la región.
 
 ### Promedio mensual de la Temperatura Superficial del Mar (TSM) por estación
 
