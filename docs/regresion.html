@@ -179,7 +179,7 @@ window.Quarto = {
   <ul class="collapse">
   <li><a href="#distribución-de-clusters-por-evento-enso" id="toc-distribución-de-clusters-por-evento-enso" class="nav-link" data-scroll-target="#distribución-de-clusters-por-evento-enso"><strong>Distribución de clusters por evento ENSO</strong></a></li>
   </ul></li>
-  <li><a href="#regresión-lineal-por-zonas" id="toc-regresión-lineal-por-zonas" class="nav-link" data-scroll-target="#regresión-lineal-por-zonas">Regresión lineal por zonas</a>
+  <li><a href="#regresión-lineal-por-región" id="toc-regresión-lineal-por-región" class="nav-link" data-scroll-target="#regresión-lineal-por-región">Regresión lineal por región</a>
   <ul class="collapse">
   <li><a href="#evaluación-general-del-ajuste-del-modelo" id="toc-evaluación-general-del-ajuste-del-modelo" class="nav-link" data-scroll-target="#evaluación-general-del-ajuste-del-modelo">Evaluación general del ajuste del modelo</a></li>
   <li><a href="#análisis-por-clúster-modelos-aplicados-a-tsm" id="toc-análisis-por-clúster-modelos-aplicados-a-tsm" class="nav-link" data-scroll-target="#análisis-por-clúster-modelos-aplicados-a-tsm">Análisis por clúster Modelos aplicados a TSM</a></li>
@@ -212,7 +212,7 @@ window.Quarto = {
 
 
 <p>Con el objetivo de analizar la relación entre la temperatura superficial del mar (TSM) y la concentración de clorofila a (Chl-a), se construyó un resumen estadístico por estación, que incluye la media y desviación estándar tanto de la temperatura como de la clorofila. Este resumen proporciona una primera aproximación al comportamiento espacial de ambas variables y servirá como referencia para comparar patrones y relaciones.</p>
-<div id="4d8cbb7d" class="cell" data-execution_count="1">
+<div id="19d3ab6c" class="cell" data-execution_count="1">
 <div class="cell-output cell-output-stdout">
 <pre><code>Resumen de métricas por estación:
          temp_mean  temp_std  cloro_mean  cloro_std
@@ -240,7 +240,7 @@ Est 17°  24.228451  5.259505    1.954616   1.070397</code></pre>
 <p>Antes de ajustar el modelo de regresión, se buscó identificar <strong>grupos de estaciones con características similares</strong> en cuanto a sus promedios de temperatura y clorofila. Para ello, se aplicó un análisis de <strong>clustering con K-means</strong>, utilizando como variables las métricas resumen por estación: media y desviación estándar tanto de la temperatura (TSM) como de la clorofila a (Chl-a).</p>
 <p>Los datos fueron previamente <strong>escalados</strong> para asegurar que todas las variables numéricas tuvieran igual peso en el agrupamiento, eliminando efectos de escala.</p>
 <p>Para determinar el número óptimo de clústeres, se aplicó el <strong>método del codo</strong>. La gráfica resultante muestra una disminución pronunciada de la inercia hasta <span class="math inline">\(k=3\)</span>, donde comienza a estabilizarse, indicando que <strong>tres grupos representan una buena partición</strong> de las estaciones sin sobreajustar el modelo.</p>
-<div id="06cc4d0d" class="cell" data-execution_count="2">
+<div id="b834c850" class="cell" data-execution_count="2">
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -250,7 +250,7 @@ Est 17°  24.228451  5.259505    1.954616   1.070397</code></pre>
 </div>
 </div>
 <p>Una vez determinado que tres grupos representan una buena estructura de los datos, se aplicó el algoritmo <strong>K-means con</strong> <span class="math inline">\(k=3\)</span> sobre las estaciones, utilizando como variables de entrada la <strong>temperatura media</strong> y la <strong>clorofila media</strong> de cada una.</p>
-<div id="347154f5" class="cell" data-execution_count="3">
+<div id="521ed1ef" class="cell" data-execution_count="3">
 <div class="cell-output cell-output-stdout">
 <pre><code>Clusters asignados por estación:
          cluster
@@ -312,7 +312,7 @@ Est 17°        1</code></pre>
 <li><p>En las estaciones más al norte (Est. 1° a Est. 6°), la temperatura es consistentemente mayor y la clorofila menor en comparación con las estaciones del sur.</p></li>
 <li><p>En las estaciones del sur (Est. 12° a Est. 17°), los valores de clorofila aumentan notablemente durante eventos <strong>Niña</strong>, lo que puede reflejar una mayor productividad biológica asociada a condiciones más frías.</p></li>
 </ul>
-<div id="2a3245ee" class="cell" data-execution_count="5">
+<div id="0baf43f1" class="cell" data-execution_count="5">
 <div class="cell-output cell-output-display" data-execution_count="5">
 <div>
 
@@ -500,7 +500,7 @@ Est 17°        1</code></pre>
 </div>
 <p>Para identificar patrones entre estaciones en función de sus promedios de temperatura y clorofila bajo diferentes fases de ENSO, aplicamos un análisis de clustering. Como paso previo, utilizamos el método del codo para seleccionar el número óptimo de grupos (clusters).</p>
 <p>En el gráfico generado se observa claramente el punto de inflexión, lo que sugiere que un número óptimo de clusters sería <strong>k = 3.</strong></p>
-<div id="850dd86f" class="cell" data-execution_count="6">
+<div id="5c0806c6" class="cell" data-execution_count="6">
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -533,11 +533,23 @@ Est 17°        1</code></pre>
 <p>Las estaciones 12 y 13 son las mas cercanas al parque nacional marino archipiélago de san lorenzo, lo cual podria ser importante y por eso presentar clorofilas altas.</p>
 </section>
 </section>
-<section id="regresión-lineal-por-zonas" class="level2">
-<h2 class="anchored" data-anchor-id="regresión-lineal-por-zonas">Regresión lineal por zonas</h2>
+<section id="regresión-lineal-por-región" class="level2">
+<h2 class="anchored" data-anchor-id="regresión-lineal-por-región">Regresión lineal por región</h2>
 <p>Con base en la segmentación previa de las estaciones en tres zonas o clusters, se procede a realizar un análisis de regresión lineal simple para cada estación, agrupadas por cluster. Es decir, para cada estación dentro de un cluster, se ajustará un modelo de regresión lineal en el que se busca explicar la temperatura superficial del mar (TSM) a partir de variables categóricas como el año, el evento interanual (ENSO), el mes y la estación del año.</p>
 <p>El propósito de esta sección <strong>no es construir un modelo predictivo óptimo</strong>, sino más bien obtener una visión general de <strong>qué variables parecen influir más en la variabilidad de la temperatura</strong> en cada estación, dentro del contexto espacial definido por los clusters. En particular, se busca identificar patrones comunes dentro de cada zona y contrastar su comportamiento entre zonas con características térmicas y biológicas distintas.</p>
-<div id="2ad2c672" class="cell" data-execution_count="9">
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Regresiones TSM
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div id="2db826ea" class="cell" data-execution_count="9">
 <div class="cell-output cell-output-stdout">
 <pre><code>
 === Cluster 0 ===
@@ -548,8 +560,8 @@ Est 17°        1</code></pre>
 Dep. Variable:                    TSM   R-squared:                       0.942
 Model:                            OLS   Adj. R-squared:                  0.939
 Method:                 Least Squares   F-statistic:                     277.8
-Date:                Mon, 12 May 2025   Prob (F-statistic):          4.66e-139
-Time:                        23:13:55   Log-Likelihood:                -330.63
+Date:                Tue, 13 May 2025   Prob (F-statistic):          4.66e-139
+Time:                        16:31:37   Log-Likelihood:                -330.63
 No. Observations:                 254   AIC:                             691.3
 Df Residuals:                     239   BIC:                             744.3
 Df Model:                          14                                         
@@ -596,8 +608,8 @@ strong multicollinearity problems or that the design matrix is singular.
 Dep. Variable:                    TSM   R-squared:                       0.957
 Model:                            OLS   Adj. R-squared:                  0.955
 Method:                 Least Squares   F-statistic:                     380.6
-Date:                Mon, 12 May 2025   Prob (F-statistic):          1.52e-154
-Time:                        23:13:56   Log-Likelihood:                -310.58
+Date:                Tue, 13 May 2025   Prob (F-statistic):          1.52e-154
+Time:                        16:31:37   Log-Likelihood:                -310.58
 No. Observations:                 254   AIC:                             651.2
 Df Residuals:                     239   BIC:                             704.2
 Df Model:                          14                                         
@@ -644,8 +656,8 @@ strong multicollinearity problems or that the design matrix is singular.
 Dep. Variable:                    TSM   R-squared:                       0.959
 Model:                            OLS   Adj. R-squared:                  0.957
 Method:                 Least Squares   F-statistic:                     402.2
-Date:                Mon, 12 May 2025   Prob (F-statistic):          2.80e-157
-Time:                        23:13:56   Log-Likelihood:                -314.25
+Date:                Tue, 13 May 2025   Prob (F-statistic):          2.80e-157
+Time:                        16:31:37   Log-Likelihood:                -314.25
 No. Observations:                 254   AIC:                             658.5
 Df Residuals:                     239   BIC:                             711.6
 Df Model:                          14                                         
@@ -692,8 +704,8 @@ strong multicollinearity problems or that the design matrix is singular.
 Dep. Variable:                    TSM   R-squared:                       0.964
 Model:                            OLS   Adj. R-squared:                  0.962
 Method:                 Least Squares   F-statistic:                     452.5
-Date:                Mon, 12 May 2025   Prob (F-statistic):          3.72e-163
-Time:                        23:13:56   Log-Likelihood:                -315.66
+Date:                Tue, 13 May 2025   Prob (F-statistic):          3.72e-163
+Time:                        16:31:37   Log-Likelihood:                -315.66
 No. Observations:                 254   AIC:                             661.3
 Df Residuals:                     239   BIC:                             714.4
 Df Model:                          14                                         
@@ -740,8 +752,8 @@ strong multicollinearity problems or that the design matrix is singular.
 Dep. Variable:                    TSM   R-squared:                       0.967
 Model:                            OLS   Adj. R-squared:                  0.965
 Method:                 Least Squares   F-statistic:                     498.5
-Date:                Mon, 12 May 2025   Prob (F-statistic):          5.37e-168
-Time:                        23:13:56   Log-Likelihood:                -319.09
+Date:                Tue, 13 May 2025   Prob (F-statistic):          5.37e-168
+Time:                        16:31:37   Log-Likelihood:                -319.09
 No. Observations:                 254   AIC:                             668.2
 Df Residuals:                     239   BIC:                             721.2
 Df Model:                          14                                         
@@ -788,8 +800,8 @@ strong multicollinearity problems or that the design matrix is singular.
 Dep. Variable:                    TSM   R-squared:                       0.962
 Model:                            OLS   Adj. R-squared:                  0.960
 Method:                 Least Squares   F-statistic:                     436.3
-Date:                Mon, 12 May 2025   Prob (F-statistic):          2.44e-161
-Time:                        23:13:56   Log-Likelihood:                -337.56
+Date:                Tue, 13 May 2025   Prob (F-statistic):          2.44e-161
+Time:                        16:31:37   Log-Likelihood:                -337.56
 No. Observations:                 254   AIC:                             705.1
 Df Residuals:                     239   BIC:                             758.2
 Df Model:                          14                                         
@@ -838,8 +850,8 @@ strong multicollinearity problems or that the design matrix is singular.
 Dep. Variable:                    TSM   R-squared:                       0.957
 Model:                            OLS   Adj. R-squared:                  0.954
 Method:                 Least Squares   F-statistic:                     378.8
-Date:                Mon, 12 May 2025   Prob (F-statistic):          2.64e-154
-Time:                        23:13:56   Log-Likelihood:                -363.38
+Date:                Tue, 13 May 2025   Prob (F-statistic):          2.64e-154
+Time:                        16:31:37   Log-Likelihood:                -363.38
 No. Observations:                 254   AIC:                             756.8
 Df Residuals:                     239   BIC:                             809.8
 Df Model:                          14                                         
@@ -886,8 +898,8 @@ strong multicollinearity problems or that the design matrix is singular.
 Dep. Variable:                    TSM   R-squared:                       0.950
 Model:                            OLS   Adj. R-squared:                  0.947
 Method:                 Least Squares   F-statistic:                     322.8
-Date:                Mon, 12 May 2025   Prob (F-statistic):          2.04e-146
-Time:                        23:13:56   Log-Likelihood:                -393.35
+Date:                Tue, 13 May 2025   Prob (F-statistic):          2.04e-146
+Time:                        16:31:37   Log-Likelihood:                -393.35
 No. Observations:                 254   AIC:                             816.7
 Df Residuals:                     239   BIC:                             869.8
 Df Model:                          14                                         
@@ -934,8 +946,8 @@ strong multicollinearity problems or that the design matrix is singular.
 Dep. Variable:                    TSM   R-squared:                       0.960
 Model:                            OLS   Adj. R-squared:                  0.958
 Method:                 Least Squares   F-statistic:                     410.5
-Date:                Mon, 12 May 2025   Prob (F-statistic):          2.65e-158
-Time:                        23:13:56   Log-Likelihood:                -357.09
+Date:                Tue, 13 May 2025   Prob (F-statistic):          2.65e-158
+Time:                        16:31:37   Log-Likelihood:                -357.09
 No. Observations:                 254   AIC:                             744.2
 Df Residuals:                     239   BIC:                             797.2
 Df Model:                          14                                         
@@ -982,8 +994,8 @@ strong multicollinearity problems or that the design matrix is singular.
 Dep. Variable:                    TSM   R-squared:                       0.973
 Model:                            OLS   Adj. R-squared:                  0.972
 Method:                 Least Squares   F-statistic:                     624.6
-Date:                Mon, 12 May 2025   Prob (F-statistic):          2.48e-179
-Time:                        23:13:56   Log-Likelihood:                -304.18
+Date:                Tue, 13 May 2025   Prob (F-statistic):          2.48e-179
+Time:                        16:31:37   Log-Likelihood:                -304.18
 No. Observations:                 254   AIC:                             638.4
 Df Residuals:                     239   BIC:                             691.4
 Df Model:                          14                                         
@@ -1030,8 +1042,8 @@ strong multicollinearity problems or that the design matrix is singular.
 Dep. Variable:                    TSM   R-squared:                       0.898
 Model:                            OLS   Adj. R-squared:                  0.892
 Method:                 Least Squares   F-statistic:                     150.5
-Date:                Mon, 12 May 2025   Prob (F-statistic):          7.23e-110
-Time:                        23:13:56   Log-Likelihood:                -509.95
+Date:                Tue, 13 May 2025   Prob (F-statistic):          7.23e-110
+Time:                        16:31:38   Log-Likelihood:                -509.95
 No. Observations:                 254   AIC:                             1050.
 Df Residuals:                     239   BIC:                             1103.
 Df Model:                          14                                         
@@ -1078,8 +1090,8 @@ strong multicollinearity problems or that the design matrix is singular.
 Dep. Variable:                    TSM   R-squared:                       0.969
 Model:                            OLS   Adj. R-squared:                  0.968
 Method:                 Least Squares   F-statistic:                     539.5
-Date:                Mon, 12 May 2025   Prob (F-statistic):          5.91e-172
-Time:                        23:13:56   Log-Likelihood:                -326.05
+Date:                Tue, 13 May 2025   Prob (F-statistic):          5.91e-172
+Time:                        16:31:38   Log-Likelihood:                -326.05
 No. Observations:                 254   AIC:                             682.1
 Df Residuals:                     239   BIC:                             735.2
 Df Model:                          14                                         
@@ -1126,8 +1138,8 @@ strong multicollinearity problems or that the design matrix is singular.
 Dep. Variable:                    TSM   R-squared:                       0.966
 Model:                            OLS   Adj. R-squared:                  0.964
 Method:                 Least Squares   F-statistic:                     485.2
-Date:                Mon, 12 May 2025   Prob (F-statistic):          1.22e-166
-Time:                        23:13:56   Log-Likelihood:                -348.15
+Date:                Tue, 13 May 2025   Prob (F-statistic):          1.22e-166
+Time:                        16:31:38   Log-Likelihood:                -348.15
 No. Observations:                 254   AIC:                             726.3
 Df Residuals:                     239   BIC:                             779.4
 Df Model:                          14                                         
@@ -1174,8 +1186,8 @@ strong multicollinearity problems or that the design matrix is singular.
 Dep. Variable:                    TSM   R-squared:                       0.958
 Model:                            OLS   Adj. R-squared:                  0.955
 Method:                 Least Squares   F-statistic:                     386.9
-Date:                Mon, 12 May 2025   Prob (F-statistic):          2.36e-155
-Time:                        23:13:56   Log-Likelihood:                -379.75
+Date:                Tue, 13 May 2025   Prob (F-statistic):          2.36e-155
+Time:                        16:31:38   Log-Likelihood:                -379.75
 No. Observations:                 254   AIC:                             789.5
 Df Residuals:                     239   BIC:                             842.6
 Df Model:                          14                                         
@@ -1224,8 +1236,8 @@ strong multicollinearity problems or that the design matrix is singular.
 Dep. Variable:                    TSM   R-squared:                       0.945
 Model:                            OLS   Adj. R-squared:                  0.941
 Method:                 Least Squares   F-statistic:                     291.8
-Date:                Mon, 12 May 2025   Prob (F-statistic):          1.82e-141
-Time:                        23:13:56   Log-Likelihood:                -315.03
+Date:                Tue, 13 May 2025   Prob (F-statistic):          1.82e-141
+Time:                        16:31:38   Log-Likelihood:                -315.03
 No. Observations:                 254   AIC:                             660.1
 Df Residuals:                     239   BIC:                             713.1
 Df Model:                          14                                         
@@ -1272,8 +1284,8 @@ strong multicollinearity problems or that the design matrix is singular.
 Dep. Variable:                    TSM   R-squared:                       0.947
 Model:                            OLS   Adj. R-squared:                  0.944
 Method:                 Least Squares   F-statistic:                     306.3
-Date:                Mon, 12 May 2025   Prob (F-statistic):          7.88e-144
-Time:                        23:13:56   Log-Likelihood:                -313.88
+Date:                Tue, 13 May 2025   Prob (F-statistic):          7.88e-144
+Time:                        16:31:38   Log-Likelihood:                -313.88
 No. Observations:                 254   AIC:                             657.8
 Df Residuals:                     239   BIC:                             710.8
 Df Model:                          14                                         
@@ -1320,8 +1332,8 @@ strong multicollinearity problems or that the design matrix is singular.
 Dep. Variable:                    TSM   R-squared:                       0.949
 Model:                            OLS   Adj. R-squared:                  0.945
 Method:                 Least Squares   F-statistic:                     314.5
-Date:                Mon, 12 May 2025   Prob (F-statistic):          3.95e-145
-Time:                        23:13:56   Log-Likelihood:                -314.60
+Date:                Tue, 13 May 2025   Prob (F-statistic):          3.95e-145
+Time:                        16:31:38   Log-Likelihood:                -314.60
 No. Observations:                 254   AIC:                             659.2
 Df Residuals:                     239   BIC:                             712.3
 Df Model:                          14                                         
@@ -1363,6 +1375,9 @@ Notes:
 strong multicollinearity problems or that the design matrix is singular.</code></pre>
 </div>
 </div>
+</div>
+</div>
+</div>
 <section id="evaluación-general-del-ajuste-del-modelo" class="level3">
 <h3 class="anchored" data-anchor-id="evaluación-general-del-ajuste-del-modelo">Evaluación general del ajuste del modelo</h3>
 <p>En la mayoría de las estaciones analizadas, los modelos de regresión presentan un coeficiente de determinación ajustado (R² ajustado) superior a 0.9. Esto podría interpretarse como una excelente capacidad explicativa del modelo; sin embargo, también es posible que se esté produciendo un <strong>sobreajuste</strong>, dado el elevado número de variables categóricas involucradas. Para verificarlo adecuadamente, sería necesario realizar una partición de los datos en conjuntos de entrenamiento y prueba, cosa que no se hara en esta ocasión puesto que un modelo real no entra en los objetivos del proyecto, pero si ver cuales variables pueden aportar más o menos información.</p>
@@ -1375,7 +1390,19 @@ En estas zonas, se observa que las variables con menor contribución estadístic
 Este grupo muestra un comportamiento diferente: tanto <strong>Mes_Agosto</strong> como <strong>Mes_Septiembre</strong> resultan ser variables significativas, junto con varios meses del periodo <strong>primaveral</strong>, lo cual indica una dinámica distinta en esta zona con mayor presencia de clorofila y temperaturas más bajas.</p>
 <p>Aunque el objetivo de este estudio no es desarrollar un modelo predictivo definitivo, resulta útil visualizar el comportamiento del modelo de regresión ajustado respecto a los valores reales de temperatura superficial del mar (TSM) para cada estación.</p>
 <p>En esta sección, se representa gráficamente la serie temporal de la temperatura observada junto con las predicciones generadas por el modelo lineal ajustado, utilizando como predictores variables categóricas relacionadas con el año, el evento interanual (ENSO), el mes y la estación del año. Esta comparación permite identificar visualmente qué tan bien el modelo captura las fluctuaciones en la TSM y si existen desviaciones sistemáticas en ciertos periodos.</p>
-<div id="336f83b4" class="cell" data-execution_count="10">
+<div class="callout callout-style-default callout-tip no-icon callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Gráficas TSM
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div id="f47c1199" class="cell" data-execution_count="10">
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -1496,8 +1523,23 @@ Este grupo muestra un comportamiento diferente: tanto <strong>Mes_Agosto</strong
 </div>
 </div>
 </div>
+</div>
+</div>
+</div>
 <p>Haciendo lo propio para la clorofila</p>
-<div id="7a829d53" class="cell" data-execution_count="11">
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Regresiones Chla
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-3" class="callout-3-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div id="3d62a9a6" class="cell" data-execution_count="11">
 <div class="cell-output cell-output-stdout">
 <pre><code>
 === Cluster 0 ===
@@ -1508,8 +1550,8 @@ Este grupo muestra un comportamiento diferente: tanto <strong>Mes_Agosto</strong
 Dep. Variable:                  Chl_a   R-squared:                       0.542
 Model:                            OLS   Adj. R-squared:                  0.515
 Method:                 Least Squares   F-statistic:                     20.19
-Date:                Mon, 12 May 2025   Prob (F-statistic):           3.91e-33
-Time:                        23:13:59   Log-Likelihood:                -108.47
+Date:                Tue, 13 May 2025   Prob (F-statistic):           3.91e-33
+Time:                        16:31:42   Log-Likelihood:                -108.47
 No. Observations:                 254   AIC:                             246.9
 Df Residuals:                     239   BIC:                             300.0
 Df Model:                          14                                         
@@ -1556,8 +1598,8 @@ strong multicollinearity problems or that the design matrix is singular.
 Dep. Variable:                  Chl_a   R-squared:                       0.453
 Model:                            OLS   Adj. R-squared:                  0.421
 Method:                 Least Squares   F-statistic:                     14.14
-Date:                Mon, 12 May 2025   Prob (F-statistic):           2.18e-24
-Time:                        23:13:59   Log-Likelihood:                -189.49
+Date:                Tue, 13 May 2025   Prob (F-statistic):           2.18e-24
+Time:                        16:31:42   Log-Likelihood:                -189.49
 No. Observations:                 254   AIC:                             409.0
 Df Residuals:                     239   BIC:                             462.0
 Df Model:                          14                                         
@@ -1604,8 +1646,8 @@ strong multicollinearity problems or that the design matrix is singular.
 Dep. Variable:                  Chl_a   R-squared:                       0.544
 Model:                            OLS   Adj. R-squared:                  0.517
 Method:                 Least Squares   F-statistic:                     20.36
-Date:                Mon, 12 May 2025   Prob (F-statistic):           2.33e-33
-Time:                        23:13:59   Log-Likelihood:                -155.42
+Date:                Tue, 13 May 2025   Prob (F-statistic):           2.33e-33
+Time:                        16:31:42   Log-Likelihood:                -155.42
 No. Observations:                 254   AIC:                             340.8
 Df Residuals:                     239   BIC:                             393.9
 Df Model:                          14                                         
@@ -1652,8 +1694,8 @@ strong multicollinearity problems or that the design matrix is singular.
 Dep. Variable:                  Chl_a   R-squared:                       0.547
 Model:                            OLS   Adj. R-squared:                  0.520
 Method:                 Least Squares   F-statistic:                     20.60
-Date:                Mon, 12 May 2025   Prob (F-statistic):           1.11e-33
-Time:                        23:13:59   Log-Likelihood:                -109.62
+Date:                Tue, 13 May 2025   Prob (F-statistic):           1.11e-33
+Time:                        16:31:42   Log-Likelihood:                -109.62
 No. Observations:                 254   AIC:                             249.2
 Df Residuals:                     239   BIC:                             302.3
 Df Model:                          14                                         
@@ -1700,8 +1742,8 @@ strong multicollinearity problems or that the design matrix is singular.
 Dep. Variable:                  Chl_a   R-squared:                       0.586
 Model:                            OLS   Adj. R-squared:                  0.562
 Method:                 Least Squares   F-statistic:                     24.17
-Date:                Mon, 12 May 2025   Prob (F-statistic):           3.35e-38
-Time:                        23:13:59   Log-Likelihood:                -92.770
+Date:                Tue, 13 May 2025   Prob (F-statistic):           3.35e-38
+Time:                        16:31:42   Log-Likelihood:                -92.770
 No. Observations:                 254   AIC:                             215.5
 Df Residuals:                     239   BIC:                             268.6
 Df Model:                          14                                         
@@ -1748,8 +1790,8 @@ strong multicollinearity problems or that the design matrix is singular.
 Dep. Variable:                  Chl_a   R-squared:                       0.553
 Model:                            OLS   Adj. R-squared:                  0.527
 Method:                 Least Squares   F-statistic:                     21.14
-Date:                Mon, 12 May 2025   Prob (F-statistic):           2.20e-34
-Time:                        23:13:59   Log-Likelihood:                -167.00
+Date:                Tue, 13 May 2025   Prob (F-statistic):           2.20e-34
+Time:                        16:31:42   Log-Likelihood:                -167.00
 No. Observations:                 254   AIC:                             364.0
 Df Residuals:                     239   BIC:                             417.1
 Df Model:                          14                                         
@@ -1798,8 +1840,8 @@ strong multicollinearity problems or that the design matrix is singular.
 Dep. Variable:                  Chl_a   R-squared:                       0.420
 Model:                            OLS   Adj. R-squared:                  0.386
 Method:                 Least Squares   F-statistic:                     12.37
-Date:                Mon, 12 May 2025   Prob (F-statistic):           1.50e-21
-Time:                        23:13:59   Log-Likelihood:                -227.30
+Date:                Tue, 13 May 2025   Prob (F-statistic):           1.50e-21
+Time:                        16:31:42   Log-Likelihood:                -227.30
 No. Observations:                 254   AIC:                             484.6
 Df Residuals:                     239   BIC:                             537.7
 Df Model:                          14                                         
@@ -1846,8 +1888,8 @@ strong multicollinearity problems or that the design matrix is singular.
 Dep. Variable:                  Chl_a   R-squared:                       0.522
 Model:                            OLS   Adj. R-squared:                  0.494
 Method:                 Least Squares   F-statistic:                     18.64
-Date:                Mon, 12 May 2025   Prob (F-statistic):           5.11e-31
-Time:                        23:13:59   Log-Likelihood:                -218.93
+Date:                Tue, 13 May 2025   Prob (F-statistic):           5.11e-31
+Time:                        16:31:42   Log-Likelihood:                -218.93
 No. Observations:                 254   AIC:                             467.9
 Df Residuals:                     239   BIC:                             520.9
 Df Model:                          14                                         
@@ -1894,8 +1936,8 @@ strong multicollinearity problems or that the design matrix is singular.
 Dep. Variable:                  Chl_a   R-squared:                       0.396
 Model:                            OLS   Adj. R-squared:                  0.360
 Method:                 Least Squares   F-statistic:                     11.18
-Date:                Mon, 12 May 2025   Prob (F-statistic):           1.44e-19
-Time:                        23:13:59   Log-Likelihood:                -408.10
+Date:                Tue, 13 May 2025   Prob (F-statistic):           1.44e-19
+Time:                        16:31:42   Log-Likelihood:                -408.10
 No. Observations:                 254   AIC:                             846.2
 Df Residuals:                     239   BIC:                             899.3
 Df Model:                          14                                         
@@ -1942,8 +1984,8 @@ strong multicollinearity problems or that the design matrix is singular.
 Dep. Variable:                  Chl_a   R-squared:                       0.480
 Model:                            OLS   Adj. R-squared:                  0.449
 Method:                 Least Squares   F-statistic:                     15.73
-Date:                Mon, 12 May 2025   Prob (F-statistic):           7.83e-27
-Time:                        23:13:59   Log-Likelihood:                -311.63
+Date:                Tue, 13 May 2025   Prob (F-statistic):           7.83e-27
+Time:                        16:31:42   Log-Likelihood:                -311.63
 No. Observations:                 254   AIC:                             653.3
 Df Residuals:                     239   BIC:                             706.3
 Df Model:                          14                                         
@@ -1990,8 +2032,8 @@ strong multicollinearity problems or that the design matrix is singular.
 Dep. Variable:                  Chl_a   R-squared:                       0.456
 Model:                            OLS   Adj. R-squared:                  0.424
 Method:                 Least Squares   F-statistic:                     14.28
-Date:                Mon, 12 May 2025   Prob (F-statistic):           1.29e-24
-Time:                        23:13:59   Log-Likelihood:                -237.56
+Date:                Tue, 13 May 2025   Prob (F-statistic):           1.29e-24
+Time:                        16:31:42   Log-Likelihood:                -237.56
 No. Observations:                 254   AIC:                             505.1
 Df Residuals:                     239   BIC:                             558.2
 Df Model:                          14                                         
@@ -2038,8 +2080,8 @@ strong multicollinearity problems or that the design matrix is singular.
 Dep. Variable:                  Chl_a   R-squared:                       0.504
 Model:                            OLS   Adj. R-squared:                  0.475
 Method:                 Least Squares   F-statistic:                     17.33
-Date:                Mon, 12 May 2025   Prob (F-statistic):           3.53e-29
-Time:                        23:14:00   Log-Likelihood:                -282.82
+Date:                Tue, 13 May 2025   Prob (F-statistic):           3.53e-29
+Time:                        16:31:42   Log-Likelihood:                -282.82
 No. Observations:                 254   AIC:                             595.6
 Df Residuals:                     239   BIC:                             648.7
 Df Model:                          14                                         
@@ -2086,8 +2128,8 @@ strong multicollinearity problems or that the design matrix is singular.
 Dep. Variable:                  Chl_a   R-squared:                       0.532
 Model:                            OLS   Adj. R-squared:                  0.504
 Method:                 Least Squares   F-statistic:                     19.39
-Date:                Mon, 12 May 2025   Prob (F-statistic):           4.75e-32
-Time:                        23:14:00   Log-Likelihood:                -319.11
+Date:                Tue, 13 May 2025   Prob (F-statistic):           4.75e-32
+Time:                        16:31:42   Log-Likelihood:                -319.11
 No. Observations:                 254   AIC:                             668.2
 Df Residuals:                     239   BIC:                             721.3
 Df Model:                          14                                         
@@ -2134,8 +2176,8 @@ strong multicollinearity problems or that the design matrix is singular.
 Dep. Variable:                  Chl_a   R-squared:                       0.571
 Model:                            OLS   Adj. R-squared:                  0.546
 Method:                 Least Squares   F-statistic:                     22.70
-Date:                Mon, 12 May 2025   Prob (F-statistic):           2.20e-36
-Time:                        23:14:00   Log-Likelihood:                -269.77
+Date:                Tue, 13 May 2025   Prob (F-statistic):           2.20e-36
+Time:                        16:31:42   Log-Likelihood:                -269.77
 No. Observations:                 254   AIC:                             569.5
 Df Residuals:                     239   BIC:                             622.6
 Df Model:                          14                                         
@@ -2184,8 +2226,8 @@ strong multicollinearity problems or that the design matrix is singular.
 Dep. Variable:                  Chl_a   R-squared:                       0.695
 Model:                            OLS   Adj. R-squared:                  0.677
 Method:                 Least Squares   F-statistic:                     38.85
-Date:                Mon, 12 May 2025   Prob (F-statistic):           1.45e-53
-Time:                        23:14:00   Log-Likelihood:                 98.945
+Date:                Tue, 13 May 2025   Prob (F-statistic):           1.45e-53
+Time:                        16:31:42   Log-Likelihood:                 98.945
 No. Observations:                 254   AIC:                            -167.9
 Df Residuals:                     239   BIC:                            -114.8
 Df Model:                          14                                         
@@ -2232,8 +2274,8 @@ strong multicollinearity problems or that the design matrix is singular.
 Dep. Variable:                  Chl_a   R-squared:                       0.646
 Model:                            OLS   Adj. R-squared:                  0.625
 Method:                 Least Squares   F-statistic:                     31.11
-Date:                Mon, 12 May 2025   Prob (F-statistic):           5.08e-46
-Time:                        23:14:00   Log-Likelihood:                 26.547
+Date:                Tue, 13 May 2025   Prob (F-statistic):           5.08e-46
+Time:                        16:31:42   Log-Likelihood:                 26.547
 No. Observations:                 254   AIC:                            -23.09
 Df Residuals:                     239   BIC:                             29.97
 Df Model:                          14                                         
@@ -2280,8 +2322,8 @@ strong multicollinearity problems or that the design matrix is singular.
 Dep. Variable:                  Chl_a   R-squared:                       0.564
 Model:                            OLS   Adj. R-squared:                  0.539
 Method:                 Least Squares   F-statistic:                     22.11
-Date:                Mon, 12 May 2025   Prob (F-statistic):           1.24e-35
-Time:                        23:14:00   Log-Likelihood:                -19.569
+Date:                Tue, 13 May 2025   Prob (F-statistic):           1.24e-35
+Time:                        16:31:42   Log-Likelihood:                -19.569
 No. Observations:                 254   AIC:                             69.14
 Df Residuals:                     239   BIC:                             122.2
 Df Model:                          14                                         
@@ -2323,6 +2365,9 @@ Notes:
 strong multicollinearity problems or that the design matrix is singular.</code></pre>
 </div>
 </div>
+</div>
+</div>
+</div>
 </section>
 <section id="análisis-por-clúster-modelos-aplicados-a-clorofila-a-chl-a" class="level3">
 <h3 class="anchored" data-anchor-id="análisis-por-clúster-modelos-aplicados-a-clorofila-a-chl-a">Análisis por clúster – Modelos aplicados a clorofila a (Chl-a)</h3>
@@ -2333,7 +2378,19 @@ Las estaciones <strong>1 a 8</strong> presentan, en su mayoría, característica
 <p><strong>Cluster 2</strong><br>
 En este grupo, compuesto por las <strong>estaciones 12 y 13</strong>, todas las variables consideradas en el modelo resultan significativas, indicando un ajuste más consistente entre los predictores y los valores observados de clorofila.</p>
 <p>No obstante, es importante señalar que, a diferencia del análisis realizado sobre la temperatura superficial del mar, los modelos aplicados a la clorofila a presentan valores de <strong>R² ajustado considerablemente más bajos</strong>, con un promedio aproximado de <strong>0.5</strong>. Esto sugiere que el modelo explica solo una parte moderada de la variabilidad, y que otros factores —no incluidos en esta formulación— podrían estar influyendo en los niveles de clorofila. Esta limitación también se refleja visualmente en los gráficos de ajuste, donde las predicciones no siguen tan de cerca a los valores reales como lo hacían en el caso de la temperatura.</p>
-<div id="cb2e658e" class="cell" data-execution_count="12">
+<div class="callout callout-style-default callout-tip no-icon callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Gráficas Chla
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-4" class="callout-4-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div id="15b52632" class="cell" data-execution_count="12">
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -2451,6 +2508,9 @@ En este grupo, compuesto por las <strong>estaciones 12 y 13</strong>, todas las 
 <figure class="figure">
 <p><img src="regresion_files/figure-html/cell-13-output-17.png" class="img-fluid figure-img"></p>
 </figure>
+</div>
+</div>
+</div>
 </div>
 </div>
 </div>

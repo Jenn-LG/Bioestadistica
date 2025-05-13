@@ -315,11 +315,14 @@ Notemos que el clúster en amarillo son las estaciones 12 y 13. Las estaciones q
 
 Las estaciones 12 y 13 son las mas cercanas al parque nacional marino archipiélago de san lorenzo, lo cual podria ser importante y por eso presentar clorofilas altas.
 
-## Regresión lineal por zonas
+## Regresión lineal por región
 
 Con base en la segmentación previa de las estaciones en tres zonas o clusters, se procede a realizar un análisis de regresión lineal simple para cada estación, agrupadas por cluster. Es decir, para cada estación dentro de un cluster, se ajustará un modelo de regresión lineal en el que se busca explicar la temperatura superficial del mar (TSM) a partir de variables categóricas como el año, el evento interanual (ENSO), el mes y la estación del año.
 
 El propósito de esta sección **no es construir un modelo predictivo óptimo**, sino más bien obtener una visión general de **qué variables parecen influir más en la variabilidad de la temperatura** en cada estación, dentro del contexto espacial definido por los clusters. En particular, se busca identificar patrones comunes dentro de cada zona y contrastar su comportamiento entre zonas con características térmicas y biológicas distintas.
+
+::: {.callout-note collapse="true" icon="false"}
+## Regresiones TSM
 
 ```{python}
 #| echo: false
@@ -363,6 +366,7 @@ for i in sorted(df_temp_long['cluster'].unique()):
         print(f"\n--- Estación: {est} ---")
         print(modelo.summary())
 ```
+:::
 
 ### Evaluación general del ajuste del modelo
 
@@ -379,6 +383,9 @@ Este grupo muestra un comportamiento diferente: tanto **Mes_Agosto** como **Mes_
 Aunque el objetivo de este estudio no es desarrollar un modelo predictivo definitivo, resulta útil visualizar el comportamiento del modelo de regresión ajustado respecto a los valores reales de temperatura superficial del mar (TSM) para cada estación.
 
 En esta sección, se representa gráficamente la serie temporal de la temperatura observada junto con las predicciones generadas por el modelo lineal ajustado, utilizando como predictores variables categóricas relacionadas con el año, el evento interanual (ENSO), el mes y la estación del año. Esta comparación permite identificar visualmente qué tan bien el modelo captura las fluctuaciones en la TSM y si existen desviaciones sistemáticas en ciertos periodos.
+
+::: {.callout-tip collapse="true" icon="false"}
+## Gráficas TSM
 
 ```{python}
 #| echo: false
@@ -413,8 +420,12 @@ for est in estaciones:
     plt.tight_layout()
     plt.show()
 ```
+:::
 
 Haciendo lo propio para la clorofila
+
+::: {.callout-note collapse="true" icon="false"}
+## Regresiones Chla
 
 ```{python}
 #| echo: false
@@ -436,8 +447,8 @@ for i in sorted(df_cloro_long['cluster'].unique()):
         modelo = sm.OLS(y, X).fit()
         print(f"\n--- Estación: {est} ---")
         print(modelo.summary())
-
 ```
+:::
 
 ### Análisis por clúster – Modelos aplicados a clorofila a (Chl-a)
 
@@ -451,6 +462,9 @@ Las estaciones **1 a 8** presentan, en su mayoría, características que no son 
 En este grupo, compuesto por las **estaciones 12 y 13**, todas las variables consideradas en el modelo resultan significativas, indicando un ajuste más consistente entre los predictores y los valores observados de clorofila.
 
 No obstante, es importante señalar que, a diferencia del análisis realizado sobre la temperatura superficial del mar, los modelos aplicados a la clorofila a presentan valores de **R² ajustado considerablemente más bajos**, con un promedio aproximado de **0.5**. Esto sugiere que el modelo explica solo una parte moderada de la variabilidad, y que otros factores —no incluidos en esta formulación— podrían estar influyendo en los niveles de clorofila. Esta limitación también se refleja visualmente en los gráficos de ajuste, donde las predicciones no siguen tan de cerca a los valores reales como lo hacían en el caso de la temperatura.
+
+::: {.callout-tip collapse="true" icon="false"}
+## Gráficas Chla
 
 ```{python}
 #| echo: false
@@ -485,6 +499,7 @@ for est in estaciones:
     plt.tight_layout()
     plt.show()
 ```
+:::
 
 ## Conclusión
 

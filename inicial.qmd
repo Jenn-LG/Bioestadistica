@@ -160,17 +160,17 @@ print(chla_stats)
 
 ## Visualización exploratoria
 
-### Distribución de la Temperatura Superficial del Mar por estación 
+### Distribución de la Temperatura Superficial del Mar por estación
 
 El gráfico boxplot permite observar la **variabilidad espacial de la TSM** en las estaciones distribuidas a lo largo de la costa occidental del Golfo de California, revelando los siguientes patrones:
 
--    **Estaciones del norte (Est. 1 a 6)** presentan temperaturas **más altas en promedio**, con menor dispersión, y valores máximos cercanos a los 33 °C. Esto refleja su cercanía a latitudes más cálidas y su menor exposición a procesos de mezcla o afloramiento frío.
+-   **Estaciones del norte (Est. 1 a 6)** presentan temperaturas **más altas en promedio**, con menor dispersión, y valores máximos cercanos a los 33 °C. Esto refleja su cercanía a latitudes más cálidas y su menor exposición a procesos de mezcla o afloramiento frío.
 
 -   **Estaciones del sur (Est. 13 a 17)** muestran un patrón opuesto: temperaturas **más bajas en promedio** y mayor dispersión. En particular, algunas estaciones presentan **outliers fríos**, que podrían asociarse a eventos de surgencia o influencia de masas de agua más profundas.
 
 -   Las **estaciones intermedias (Est. 7 a 12)** presentan un gradiente de transición, lo que refuerza la hipótesis de una zonificación térmica costera, como la que posteriormente se abordará en el análisis de clusters.
 
--    El rango intercuartílico se mantiene amplio en la mayoría de estaciones, lo que sugiere **una marcada variabilidad estacional e interanual**. Esto es consistente con los resultados obtenidos en el análisis espectral y wavelet.
+-   El rango intercuartílico se mantiene amplio en la mayoría de estaciones, lo que sugiere **una marcada variabilidad estacional e interanual**. Esto es consistente con los resultados obtenidos en el análisis espectral y wavelet.
 
 -   Se observan algunos valores atípicos (outliers fríos), especialmente en estaciones del centro-sur, que podrían ser indicadores de eventos inusuales, errores de medición o fenómenos climáticos intensos como La Niña.
 
