@@ -305,3 +305,102 @@ La figura presenta la distribución geoespacial del promedio de concentración d
 La distribución de Chl-a muestra un patrón inverso a la de la TSM: las mayores concentraciones se registran en la región norte y centro del golfo, disminuyendo hacia el sur. Esta distribución sugiere una relación inversa entre la temperatura del mar y la productividad fitoplanctónica, posiblemente asociada con procesos de surgencia y mezcla vertical más intensos en el norte, los cuales favorecen el afloramiento de nutrientes esenciales para el crecimiento del fitoplancton.
 
 ![](images/clipboard-2974735225.png)
+
+```{python}
+#| echo: false
+import pandas as pd
+ruta_temp = 'data/Base de datos TSM consultoria estadística.xlsx'
+df_temp = pd.read_excel(ruta_temp)
+
+# Cargar archivo de clorofila
+ruta_cloro = 'data/Base de datos Chla consultoria estadística.xlsx'
+df_cloro = pd.read_excel(ruta_cloro)
+df_temp.columns = df_temp.columns.str.strip()
+df_cloro.columns = df_cloro.columns.str.strip()
+
+df_temp['EVENTO INTERANUAL'] = df_temp['EVENTO INTERANUAL'].replace({'Neutro': 'Normal'})
+# Recortar ambos al mismo rango: 1997-09-01 a 2018-10-01
+start_date = pd.Timestamp('1997-09-01')
+end_date = pd.Timestamp('2018-10-01')
+
+df_temp_cut = df_temp[(df_temp['FECHA'] >= start_date) & (df_temp['FECHA'] <= end_date)].reset_index(drop=True)
+df_cloro_cut = df_cloro[(df_cloro['FECHA'] >= start_date) & (df_cloro['FECHA'] <= end_date)].reset_index(drop=True)
+
+df_temp_ready = df_temp_cut.copy()
+df_cloro_ready = df_cloro_cut.copy()
+```
+
+```{python}
+#| echo: false
+import plotly.graph_objects as go
+import plotly.express as px
+import matplotlib.pyplot as plt
+def graficar_temperatura_clorofila_con_slider(temperatura, clorofila):
+    temperatura.columns = temperatura.columns.str.strip()
+    clorofila.columns = clorofila.columns.str.strip()
+    temperatura['FECHA'] = pd.to_datetime(temperatura['FECHA'])
+    clorofila['FECHA'] = pd.to_datetime(clorofila['FECHA'])
+ 
+    estaciones = [f'Est {i}°' for i in range(1, 18)]
+ 
+    fig = go.Figure()
+ 
+    for i, est in enumerate(estaciones):
+        # Temperatura
+        fig.add_trace(go.Scatter(
+            x=temperatura['FECHA'],
+            y=temperatura[est],
+            name=f'Temperatura - {est}',
+            visible=(i == 0),
+            line=dict(color='red'),
+            yaxis='y1'
+        ))
+ 
+        # Clorofila
+        fig.add_trace(go.Scatter(
+            x=clorofila['FECHA'],
+            y=clorofila[est],
+            name=f'Clorofila - {est}',
+            visible=(i == 0),
+            line=dict(color='green'),
+            yaxis='y2'
+        ))
+ 
+    steps = []
+    for i, est in enumerate(estaciones):
+        visibles = [False] * (2 * len(estaciones))
+        visibles[2*i] = True       # Temperatura
+        visibles[2*i + 1] = True   # Clorofila
+ 
+        step = dict(
+            method='update',
+            args=[
+                {'visible': visibles},
+                {'title': f"Serie de Tiempo - {est}"}
+            ],
+            label=est
+        )
+        steps.append(step)
+ 
+    sliders = [dict(
+        active=0,
+        currentvalue={"prefix": "Estación: "},
+        pad={"t": 50},
+        steps=steps
+    )]
+ 
+    fig.update_layout(
+        sliders=sliders,
+        title=f"Serie de Tiempo - {estaciones[0]}",
+        xaxis=dict(title="Fecha", showgrid=True),
+        yaxis=dict(title="Temperatura", showgrid=True),
+        yaxis2=dict(title="Clorofila", overlaying="y", side="right", showgrid=False),
+        height=500,
+        legend_title="Variable"
+    )
+ 
+    fig.show()
+ 
+ 
+graficar_temperatura_clorofila_con_slider(df_temp_ready, df_cloro_ready)
+```
