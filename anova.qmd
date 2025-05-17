@@ -206,6 +206,8 @@ En particular, se consideraron como factores categóricos:
 
 ![](images/Imagen de WhatsApp 2025-05-17 a las 10.25.09_6a362f84-01.jpg)
 
+![](images/Imagen de WhatsApp 2025-05-17 a las 10.43.44_ea88f0f6.jpg)
+
 ![](images/Imagen de WhatsApp 2025-05-17 a las 10.25.09_d4513f7a.jpg)
 
 Para complementar el análisis estadístico, se generaron visualizaciones que resumen los efectos principales e interacciones identificados mediante el ANOVA trifactorial aplicado a la TSM.
@@ -277,6 +279,8 @@ plt.show()
 ## Resultados del ANOVA Clorofila *a*
 
 ![](images/Imagen de WhatsApp 2025-05-17 a las 10.27.26_e8389dfb.jpg)
+
+![](images/Imagen de WhatsApp 2025-05-17 a las 10.43.43_3442217d.jpg)
 
 ![](images/Imagen de WhatsApp 2025-05-17 a las 10.27.26_2befeb0b.jpg)
 
