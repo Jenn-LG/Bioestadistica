@@ -196,9 +196,9 @@ La tabla siguiente presenta los valores medios de temperatura superficial del ma
 
 Por ejemplo, se puede notar que:
 
--   En las estaciones más al norte (Est. 1° a Est. 6°), la temperatura es consistentemente mayor y la clorofila menor en comparación con las estaciones del sur.
+-   En las estaciones del sur (Est. 1° a Est. 6°), la temperatura es consistentemente mayor y la clorofila menor en comparación con las estaciones del sur.
 
--   En las estaciones del sur (Est. 12° a Est. 17°), los valores de clorofila aumentan notablemente durante eventos **Niña**, lo que puede reflejar una mayor productividad biológica asociada a condiciones más frías.
+-   En las estaciones del norte (Est. 12° a Est. 17°), los valores de clorofila aumentan notablemente durante eventos **Niña**, lo que puede reflejar una mayor productividad biológica asociada a condiciones más frías.
 
 ```{python}
 #| echo: false
