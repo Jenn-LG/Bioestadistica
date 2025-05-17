@@ -202,7 +202,11 @@ En particular, se consideraron como factores categóricos:
 # anova_tri(tsm_long, 'TSM')
 ```
 
-## Visualización de los resultados del ANOVA
+## Resultados del ANOVA TSM
+
+![](images/Imagen de WhatsApp 2025-05-17 a las 10.25.09_6a362f84-01.jpg)
+
+![](images/Imagen de WhatsApp 2025-05-17 a las 10.25.09_d4513f7a.jpg)
 
 Para complementar el análisis estadístico, se generaron visualizaciones que resumen los efectos principales e interacciones identificados mediante el ANOVA trifactorial aplicado a la TSM.
 
@@ -270,7 +274,11 @@ plt.show()
 #anova_tri(chla_long, 'Chla')
 ```
 
-## Visualización clave de los resultados del ANOVA – Clorofila a
+## Resultados del ANOVA Clorofila *a*
+
+![](images/Imagen de WhatsApp 2025-05-17 a las 10.27.26_e8389dfb.jpg)
+
+![](images/Imagen de WhatsApp 2025-05-17 a las 10.27.26_2befeb0b.jpg)
 
 Las siguientes gráficas resumen los efectos principales e interacciones detectados en el análisis de varianza aplicado a la concentración de clorofila a (Chl-a):
 
