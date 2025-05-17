@@ -208,7 +208,7 @@ window.Quarto = {
 <p>Antes de aplicar el análisis de varianza (ANOVA), es necesario identificar grupos de estaciones con características geográficas similares, de modo que el análisis estadístico posterior tenga sentido dentro de contextos homogéneos.</p>
 <p>Para ello, se aplicó una técnica de agrupamiento basada en coordenadas geográficas (latitud y longitud). Específicamente, se estandarizaron las coordenadas de cada estación y se utilizó el algoritmo de <strong>K-means</strong> para explorar diferentes posibles divisiones del espacio en clústeres.</p>
 <p>Como criterio para determinar el número óptimo de grupos, se utilizó el <strong>método del codo</strong>, que evalúa la inercia (suma de distancias al centro del clúster) para distintos valores de <span class="math inline">\(k\)</span>. El punto donde la reducción de inercia comienza a estabilizarse sugiere un número adecuado de clústeres a considerar</p>
-<div id="a72069a6" class="cell" data-execution_count="5">
+<div id="c57f813b" class="cell" data-execution_count="5">
 <div class="cell-output cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
@@ -220,7 +220,7 @@ window.Quarto = {
 <p>A partir del gráfico del método del codo, se observa un punto de inflexión claro en <span class="math inline">\(k=4\)</span>, lo que indica que esta es una buena elección para agrupar las estaciones en función de su ubicación geográfica.</p>
 <p>Con base en este resultado, se aplicó el algoritmo de <strong>K-means</strong> con <span class="math inline">\(k=4\)</span>, y se asignó a cada estación un identificador de clúster. Posteriormente, estos clústeres fueron ordenados de sur a norte según la latitud promedio de las estaciones que los componen, y se les asignaron etiquetas descriptivas: <strong>Sur</strong>, <strong>Centro-Sur</strong>, <strong>Centro-Norte</strong> y <strong>Norte</strong>.</p>
 <p>Las cuales nos generan estas las siguientes regiones</p>
-<div id="d6234704" class="cell" data-execution_count="7">
+<div id="0577cb3d" class="cell" data-execution_count="7">
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -240,7 +240,7 @@ window.Quarto = {
 </ul>
 <p>Se creó una función <code>anova_tri()</code> la cuál implementa este análisis utilizando un modelo lineal con interacciones entre los tres factores (<code>ENSO * ESTACION * REGION</code>). Además del análisis de varianza, se evalúan los supuestos de normalidad (mediante la prueba de <strong>Shapiro-Wilk</strong>) y homogeneidad de varianzas (<strong>Levene</strong>).</p>
 <p>En caso de encontrar diferencias significativas en el factor ENSO, se realiza un análisis <strong>post-hoc de Tukey</strong> para identificar entre qué niveles se presentan las diferencias.</p>
-<div id="882264a7" class="cell" data-execution_count="8">
+<div id="e4385f33" class="cell" data-execution_count="8">
 <div class="cell-output cell-output-stdout">
 <pre><code>
 ==========================================================================================
@@ -338,13 +338,13 @@ group1 group2 meandiff p-adj   lower  upper  reject
 ---------------------------------------------------</code></pre>
 </div>
 </div>
-<p>Los resultados muestran que los tres factores principales tienen un efecto altamente significativo sobre la TSM, con valores de <span class="math inline">\(p&lt;0.001\)</span> para <strong>ENSO</strong>, <strong>ESTACIÓN</strong> y <strong>REGIÓN</strong>. Asimismo, se observaron interacciones significativas entre <strong>ENSO × ESTACIÓN</strong> y <strong>ESTACIÓN × REGIÓN</strong>, lo cual indica que el efecto de una variable depende del nivel de otra. En contraste, la interacción triple <strong>ENSO × ESTACIÓN × REGIÓN</strong> no fue significativa, lo que sugiere que no existe una combinación específica de las tres condiciones que afecte diferencialmente a la TSM más allá de las interacciones dobles.</p>
+<p>Los resultados muestran que los tres factores principales tienen un efecto altamente significativo sobre la TSM, con valores de <span class="math inline">\(p&lt;0.01\)</span> para <strong>ENSO</strong>, <strong>ESTACIÓN</strong> y <strong>REGIÓN</strong>. Asimismo, se observaron interacciones significativas entre <strong>ENSO × ESTACIÓN</strong> y <strong>ESTACIÓN × REGIÓN</strong>, lo cual indica que el efecto de una variable depende del nivel de otra. En contraste, la interacción triple <strong>ENSO × ESTACIÓN × REGIÓN</strong> no fue significativa, lo que sugiere que no existe una combinación específica de las tres condiciones que afecte diferencialmente a la TSM más allá de las interacciones dobles.</p>
 </section>
 <section id="verificación-de-supuestos" class="level2">
 <h2 class="anchored" data-anchor-id="verificación-de-supuestos">Verificación de supuestos</h2>
 <ul>
-<li><p><strong>Normalidad de los residuos:</strong> La prueba de Shapiro-Wilk no fue significativa (<span class="math inline">\(p &gt; 0.05\)</span>), lo cual sugiere que los residuos del modelo siguen una distribución normal.</p></li>
-<li><p><strong>Homocedasticidad:</strong> La prueba de Levene sí fue significativa (<span class="math inline">\(p &lt; 0.05\)</span>), lo que indica que hay variaciones distintas entre los grupos. Aunque esta violación no invalida el análisis, se debe considerar con precaución en la interpretación.</p></li>
+<li><p><strong>Normalidad de los residuos:</strong> La prueba de Shapiro-Wilk fue significativa (<span class="math inline">\(p &lt; 0.01\)</span>), lo cual sugiere que los residuos del modelo siguen una distribución normal.</p></li>
+<li><p><strong>Homocedasticidad:</strong> La prueba de Levene sí fue significativa (<span class="math inline">\(p &lt; 0.01\)</span>), lo que indica que hay variaciones distintas entre los grupos. Aunque esta violación no invalida el análisis, se debe considerar con precaución en la interpretación.</p></li>
 </ul>
 </section>
 <section id="comparaciones-post-hoc-tukey-hsd" class="level2">
@@ -367,7 +367,7 @@ group1 group2 meandiff p-adj   lower  upper  reject
 <li><p>El gráfico inferior central muestra la interacción entre <strong>ENSO y estación</strong>, revelando cómo los efectos de ENSO no son constantes a lo largo del año. Por ejemplo, en verano las diferencias se reducen, mientras que en invierno y primavera se hacen más marcadas.</p></li>
 <li><p>Finalmente, el gráfico de <strong>estación × región</strong> (abajo a la derecha) destaca cómo el ciclo estacional de la TSM varía de una región a otra. La región sur presenta temperaturas consistentemente más altas, mientras que las regiones del norte muestran un rango más amplio de variación estacional.</p></li>
 </ul>
-<div id="c60461da" class="cell" data-execution_count="9">
+<div id="c11d13dc" class="cell" data-execution_count="9">
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -379,7 +379,7 @@ group1 group2 meandiff p-adj   lower  upper  reject
 </section>
 <section id="resultados-del-anova-trifactorial-para-clorofila-a-chl-a" class="level2">
 <h2 class="anchored" data-anchor-id="resultados-del-anova-trifactorial-para-clorofila-a-chl-a">Resultados del ANOVA trifactorial para Clorofila a (Chl-a)</h2>
-<div id="703a4e6a" class="cell" data-execution_count="10">
+<div id="d9f2bd94" class="cell" data-execution_count="10">
 <div class="cell-output cell-output-stdout">
 <pre><code>
 ==========================================================================================
@@ -477,12 +477,12 @@ group1 group2 meandiff p-adj   lower   upper  reject
 ----------------------------------------------------</code></pre>
 </div>
 </div>
-<p>Los resultados muestran que tanto <strong>la estación del año</strong> como <strong>la región</strong> tienen un efecto altamente significativo sobre la Chl-<em>a</em> (<span class="math inline">\(p&lt;0.001\)</span>), lo cual indica que la variación temporal y espacial es un determinante clave en la productividad fitoplanctónica. También se encontraron interacciones significativas entre <strong>ENSO × ESTACIÓN</strong> y <strong>ESTACIÓN × REGIÓN</strong>, lo que sugiere que la influencia de ENSO o la región sobre la Chl-a depende del periodo del año. En cambio, la interacción triple no fue estadísticamente significativa.</p>
+<p>Los resultados muestran que tanto <strong>la estación del año</strong> como <strong>la región</strong> tienen un efecto altamente significativo sobre la Chl-<em>a</em> (<span class="math inline">\(p&lt;0.01\)</span>), lo cual indica que la variación temporal y espacial es un determinante clave en la productividad fitoplanctónica. También se encontraron interacciones significativas entre <strong>ENSO × ESTACIÓN</strong> y <strong>ESTACIÓN × REGIÓN</strong>, lo que sugiere que la influencia de ENSO o la región sobre la Chl-a depende del periodo del año. En cambio, la interacción triple no fue estadísticamente significativa.</p>
 <section id="verificación-de-supuestos-1" class="level4">
 <h4 class="anchored" data-anchor-id="verificación-de-supuestos-1">Verificación de supuestos</h4>
 <ul>
-<li><p><strong>Normalidad de los residuos:</strong> La prueba de Shapiro-Wilk no fue significativa ( <span class="math inline">\(p&gt;0.05\)</span> ), indicando que los residuos del modelo se distribuyen normalmente.</p></li>
-<li><p><strong>Homocedasticidad:</strong> La prueba de Levene fue significativa ( <span class="math inline">\(p&lt;0.001\)</span> ), lo que indica que las varianzas no son homogéneas entre grupos, por lo que los resultados deben interpretarse con cautela.</p></li>
+<li><p><strong>Normalidad de los residuos:</strong> La prueba de Shapiro-Wilk fue significativa ( <span class="math inline">\(p&lt;0.01\)</span> ), indicando que los residuos del modelo se distribuyen normalmente.</p></li>
+<li><p><strong>Homocedasticidad:</strong> La prueba de Levene fue significativa ( <span class="math inline">\(p&lt;0.01\)</span> ), lo que indica que las varianzas no son homogéneas entre grupos, por lo que los resultados deben interpretarse con cautela.</p></li>
 </ul>
 </section>
 <section id="comparaciones-post-hoc-tukey-hsd-1" class="level4">
@@ -500,7 +500,7 @@ group1 group2 meandiff p-adj   lower   upper  reject
 <li><p>El gráfico de líneas de <strong>ENSO × Estación</strong> (centro derecha) muestra que el efecto del evento interanual varía según la estación. En primavera, por ejemplo, los años <strong>Niño</strong> tienden a tener valores de Chl-<em>a</em> más bajos comparados con <strong>La Niña</strong>, lo cual concuerda con los resultados del análisis post-hoc.</p></li>
 <li><p>Finalmente, el gráfico de <strong>contraste estacional por región</strong> (abajo) muestra la diferencia en Chl-<em>a</em> entre invierno y verano. Las regiones <strong>norte y centro-sur</strong> presentan los mayores contrastes, lo que indica una alta variabilidad estacional en estas zonas. La región <strong>centro-norte</strong>, por otro lado, muestra una diferencia estacional muy reducida, lo que podría estar relacionado con condiciones más constantes de mezcla o disponibilidad de nutrientes.</p></li>
 </ul>
-<div id="2e2d43da" class="cell" data-execution_count="11">
+<div id="c1da2bfe" class="cell" data-execution_count="11">
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -522,7 +522,7 @@ group1 group2 meandiff p-adj   lower   upper  reject
 <li><p>Se observa una superposición importante entre grupos, aunque hay variaciones en los rangos de dispersión.</p></li>
 </ul>
 <p>Estos patrones confirman lo evidenciado por el ANOVA, donde ENSO tiene un efecto significativo sobre TSM, especialmente en interacción con la estación.</p>
-<div id="1688748b" class="cell" data-execution_count="13">
+<div id="202435d7" class="cell" data-execution_count="13">
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -540,7 +540,7 @@ group1 group2 meandiff p-adj   lower   upper  reject
 <li><p>Durante la primavera, los años <strong>Niña</strong> tienden a mostrar concentraciones ligeramente más altas que los años <strong>Niño</strong>, lo cual concuerda con los resultados post-hoc del ANOVA.</p></li>
 <li><p>El <strong>verano</strong> es la estación con menor concentración general de Chl-a, independientemente del evento interanual.</p></li>
 </ul>
-<div id="8a8c7473" class="cell" data-execution_count="14">
+<div id="c57a2496" class="cell" data-execution_count="14">
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
