@@ -171,58 +171,36 @@ En particular, se consideraron como factores categóricos:
 
 -   **Región geográfica (REGION_KM)**: corresponde a los clústeres generados previamente mediante K-means, ordenados de sur a norte.
 
-Se creó una función `anova_tri()` la cuál implementa este análisis utilizando un modelo lineal con interacciones entre los tres factores (`ENSO * ESTACION * REGION`). Además del análisis de varianza, se evalúan los supuestos de normalidad (mediante la prueba de **Shapiro-Wilk**) y homogeneidad de varianzas (**Levene**).
-
-En caso de encontrar diferencias significativas en el factor ENSO, se realiza un análisis **post-hoc de Tukey** para identificar entre qué niveles se presentan las diferencias.
-
 ```{python}
 #| echo: false
 #| fig-align: center
-def anova_tri(df_original, respuesta):
-    alias = {
-        'EVENTO INTERANUAL': 'ENSO',
-        'ESTACIÓN DEL AÑO' : 'ESTACION',
-        'REGION_KM'           : 'REGION'
-    }
-    df = df_original.rename(columns=alias).copy()
-    formula = f'{respuesta} ~ C(ENSO) * C(ESTACION) * C(REGION)'
-    print('\n' + '='*90)
-    print(f'ANOVA trifactorial para {respuesta}')
-    print('='*90)
-    modelo = smf.ols(formula, data=df).fit()
-    tabla  = sm.stats.anova_lm(modelo, typ=2)
-    display(tabla)
-    resid = modelo.resid
-    print('· Shapiro normalidad:', shapiro(resid))
-    grupos = [g[respuesta].dropna() for _, g in
-              df.groupby(['ENSO','ESTACION','REGION'])]
-    print('· Levene homocedasticidad:', levene(*grupos))
-    if tabla.loc['C(ENSO)', 'PR(>F)'] < 0.05:
-        print('\nPost-hoc Tukey para EVENTO INTERANUAL:')
-        tmp = df[['ENSO', respuesta]].dropna(subset=['ENSO', respuesta]).copy()
-        tmp['ENSO'] = tmp['ENSO'].astype(str)
-        print(pairwise_tukeyhsd(tmp[respuesta], tmp['ENSO']).summary())
-        
-anova_tri(tsm_long, 'TSM')
+# def anova_tri(df_original, respuesta):
+#     alias = {
+#         'EVENTO INTERANUAL': 'ENSO',
+#         'ESTACIÓN DEL AÑO' : 'ESTACION',
+#         'REGION_KM'           : 'REGION'
+#     }
+#     df = df_original.rename(columns=alias).copy()
+#     formula = f'{respuesta} ~ C(ENSO) * C(ESTACION) * C(REGION)'
+#     print('\n' + '='*90)
+#     print(f'ANOVA trifactorial para {respuesta}')
+#     print('='*90)
+#     modelo = smf.ols(formula, data=df).fit()
+#     tabla  = sm.stats.anova_lm(modelo, typ=2)
+#     display(tabla)
+#     resid = modelo.resid
+#     print('· Shapiro normalidad:', shapiro(resid))
+#     grupos = [g[respuesta].dropna() for _, g in
+#               df.groupby(['ENSO','ESTACION','REGION'])]
+#     print('· Levene homocedasticidad:', levene(*grupos))
+#     if tabla.loc['C(ENSO)', 'PR(>F)'] < 0.05:
+#         print('\nPost-hoc Tukey para EVENTO INTERANUAL:')
+#         tmp = df[['ENSO', respuesta]].dropna(subset=['ENSO', respuesta]).copy()
+#         tmp['ENSO'] = tmp['ENSO'].astype(str)
+#         print(pairwise_tukeyhsd(tmp[respuesta], tmp['ENSO']).summary())
+#         
+# anova_tri(tsm_long, 'TSM')
 ```
-
-Los resultados muestran que los tres factores principales tienen un efecto altamente significativo sobre la TSM, con valores de $p<0.01$ para **ENSO**, **ESTACIÓN** y **REGIÓN**. Asimismo, se observaron interacciones significativas entre **ENSO × ESTACIÓN** y **ESTACIÓN × REGIÓN**, lo cual indica que el efecto de una variable depende del nivel de otra. En contraste, la interacción triple **ENSO × ESTACIÓN × REGIÓN** no fue significativa, lo que sugiere que no existe una combinación específica de las tres condiciones que afecte diferencialmente a la TSM más allá de las interacciones dobles.
-
-## Verificación de supuestos
-
--   **Normalidad de los residuos:** La prueba de Shapiro-Wilk fue significativa ($p < 0.01$), lo cual sugiere que los residuos del modelo siguen una distribución normal.
-
--   **Homocedasticidad:** La prueba de Levene sí fue significativa ($p < 0.01$), lo que indica que hay variaciones distintas entre los grupos. Aunque esta violación no invalida el análisis, se debe considerar con precaución en la interpretación.
-
-## Comparaciones post-hoc (Tukey HSD)
-
-Se realizó un análisis post-hoc para el factor **ENSO**, dado que fue estadísticamente significativo. Los resultados indican que:
-
--   Existen diferencias significativas entre los años **Niña** y **Niño**, así como entre **Niña** y **Normal**.
-
--   No se encontraron diferencias significativas entre los años **Niño** y **Normal**.
-
-Esto sugiere que las condiciones asociadas al fenómeno **La Niña** impactan de forma diferencial la TSM respecto a los otros dos eventos.
 
 ## Visualización de los resultados del ANOVA
 
@@ -285,24 +263,12 @@ plt.tight_layout(rect=[0,0.03,1,0.97])
 plt.show()
 ```
 
-## Resultados del ANOVA trifactorial para Clorofila a (Chl-a)
+## 
 
 ```{python}
 #| echo: false
-anova_tri(chla_long, 'Chla')
+#anova_tri(chla_long, 'Chla')
 ```
-
-Los resultados muestran que tanto **la estación del año** como **la región** tienen un efecto altamente significativo sobre la Chl-*a* ($p<0.01$), lo cual indica que la variación temporal y espacial es un determinante clave en la productividad fitoplanctónica. También se encontraron interacciones significativas entre **ENSO × ESTACIÓN** y **ESTACIÓN × REGIÓN**, lo que sugiere que la influencia de ENSO o la región sobre la Chl-a depende del periodo del año. En cambio, la interacción triple no fue estadísticamente significativa.
-
-#### Verificación de supuestos
-
--   **Normalidad de los residuos:** La prueba de Shapiro-Wilk fue significativa ( $p<0.01$ ), indicando que los residuos del modelo se distribuyen normalmente.
-
--   **Homocedasticidad:** La prueba de Levene fue significativa ( $p<0.01$ ), lo que indica que las varianzas no son homogéneas entre grupos, por lo que los resultados deben interpretarse con cautela.
-
-#### Comparaciones post-hoc (Tukey HSD)
-
-El análisis post-hoc realizado para el factor ENSO reveló diferencias estadísticamente significativas únicamente entre los años **Niña** y **Niño**, con una diferencia negativa en la media, lo que sugiere una ligera disminución en la concentración de clorofila a durante eventos **Niña** respecto a **Niño**. No se encontraron diferencias significativas entre los años **Niña–Normal** ni **Niño–Normal**.
 
 ## Visualización clave de los resultados del ANOVA – Clorofila a
 
